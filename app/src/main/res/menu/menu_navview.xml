@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_menu_item_home"
+            android:checked="true"
+            android:icon="@drawable/ic_menu_home"
+            android:title="@string/navigation_menu_item_home" />
+        <item
+            android:id="@+id/navigation_menu_item_my_store"
+            android:checked="true"
+            android:icon="@drawable/ic_menu_store"
+            android:title="@string/navigation_menu_item_my_store" />
+        <item
+            android:id="@+id/navigation_menu_item_chat"
+            android:checked="true"
+            android:icon="@drawable/ic_chat"
+            android:title="@string/navigation_menu_item_chat" />
+        <item
+            android:id="@+id/navigation_menu_item_logout"
+            android:checked="true"
+            android:icon="@drawable/ic_menu_exit"
+            android:title="@string/navigation_menu_item_logout" />
+
+    </group>
+
+</menu>

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Promoya</string>
+
+    <string name="navigation_menu_item_home">Inicio</string>
+    <string name="navigation_menu_item_my_store">Mi Tienda</string>
+    <string name="navigation_menu_item_logout">Salir</string>
+
+    <string name="fui_progress_dialog_signing_up">Creating your shiny new account...</string>
+    <!-- Facebook -->
+    <string name="facebook_application_id" translatable="false">698103023722365</string>
+    <!-- Facebook Application ID, prefixed by 'fb'.  Enables Chrome Custom tabs. -->
+    <string name="facebook_login_protocol_scheme" translatable="false">fb698103023722365</string>
+    <string name="action_settings">Menu</string>
+    <!--
+    <string name="facebook_app_id">698103023722365</string>
+    <string name="fb_login_protocol_scheme">fb698103023722365</string>-->
+
+    <!--//TESTING-->
+    <string name="title_section1">Teléfonos</string>
+    <string name="title_section2">Tablets</string>
+    <string name="title_section3">Portátiles</string>
+    <string name="action_shop">Carrito De Compras</string>
+    <string name="navigation_menu_item_chat">Mensajes</string>
+
+    <!--//message-->
+    <string name="sign_out">Sign Out</string>
+    <string name="send_button_label">Send</string>
+
+    <!--navigation drawer-->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_test">Test</string>
+    <string name="press_again_exit_app">Presiona una ves mas para salir</string>
+</resources>

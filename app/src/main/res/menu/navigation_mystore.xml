@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottonNavigation_home"
+        android:icon="@drawable/ic_menu_home"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/bottonNavigation_category"
+        android:icon="@drawable/ic_view_category_black_24dp"
+        android:title="Categorias" />
+
+    <item
+        android:id="@+id/bottonNavigation_promotion"
+        android:icon="@drawable/ic_chat"
+        android:title="Ofertas" />
+
+</menu>

@@ -1,0 +1,246 @@
+{
+  "project_info": {
+    "project_number": "267485496363",
+    "firebase_url": "https://uagrm420031149.firebaseio.com",
+    "project_id": "uagrm420031149",
+    "storage_bucket": "uagrm420031149.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267485496363:android:df27590751f01e00",
+        "android_client_info": {
+          "package_name": "kelvinapps.com.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267485496363-4ovh02n1pp8itnm0u5fvkkrf5sdl5nae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kelvinapps.com.sample",
+            "certificate_hash": "71b037fd96af782c0c652d0809e5b6c5fe1bab03"
+          }
+        },
+        {
+          "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8q5T8t43D6Z0blrrvxDbzBgZWTdyV9E"
+        },
+        {
+          "current_key": "AIzaSyDRsfdi0O2xzQU2HKpNqZn2SwgnbaoX_OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267485496363:android:64e58dacc0483faa",
+        "android_client_info": {
+          "package_name": "com.google.firebase.udacity.friendlychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267485496363-a3cn77si9t0r1sccj1vq54j2nji572uo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.google.firebase.udacity.friendlychat",
+            "certificate_hash": "71b037fd96af782c0c652d0809e5b6c5fe1bab03"
+          }
+        },
+        {
+          "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8q5T8t43D6Z0blrrvxDbzBgZWTdyV9E"
+        },
+        {
+          "current_key": "AIzaSyDRsfdi0O2xzQU2HKpNqZn2SwgnbaoX_OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267485496363:android:bb4b5041dd001003",
+        "android_client_info": {
+          "package_name": "uagrm.opstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267485496363-goh21jijgl0fqsrr3na6k2s2hkifo69l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uagrm.opstore",
+            "certificate_hash": "71b037fd96af782c0c652d0809e5b6c5fe1bab03"
+          }
+        },
+        {
+          "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8q5T8t43D6Z0blrrvxDbzBgZWTdyV9E"
+        },
+        {
+          "current_key": "AIzaSyDRsfdi0O2xzQU2HKpNqZn2SwgnbaoX_OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267485496363:android:6d7d160511e27a92",
+        "android_client_info": {
+          "package_name": "com.app.sample.fchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267485496363-dluc00n7mufuc2ebdvrg4v16rb4f6v5c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.sample.fchat",
+            "certificate_hash": "71b037fd96af782c0c652d0809e5b6c5fe1bab03"
+          }
+        },
+        {
+          "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8q5T8t43D6Z0blrrvxDbzBgZWTdyV9E"
+        },
+        {
+          "current_key": "AIzaSyDRsfdi0O2xzQU2HKpNqZn2SwgnbaoX_OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267485496363:android:d5a8f773287d0c94",
+        "android_client_info": {
+          "package_name": "uagrm.promoya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267485496363-i2tpvpr32sd2iqaumncmg8tvredh70j0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uagrm.promoya",
+            "certificate_hash": "71b037fd96af782c0c652d0809e5b6c5fe1bab03"
+          }
+        },
+        {
+          "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8q5T8t43D6Z0blrrvxDbzBgZWTdyV9E"
+        },
+        {
+          "current_key": "AIzaSyDRsfdi0O2xzQU2HKpNqZn2SwgnbaoX_OY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267485496363-b6i3mpca7378qgprm9gctk4dgs4glc4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
