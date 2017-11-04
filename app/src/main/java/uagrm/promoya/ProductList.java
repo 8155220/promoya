@@ -41,6 +41,7 @@ import java.util.UUID;
 
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
+import uagrm.promoya.Model.Category;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ViewHolder.ProductViewHolder;
 
@@ -60,6 +61,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
     StorageReference storageReference;
 
     String categoryId="";
+    Category currentCategory;
     String key;
 
     FirebaseRecyclerAdapter<Product,ProductViewHolder> adapter;
@@ -90,7 +92,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         storage = FirebaseStorage.getInstance();
         storageReference =storage.getReference();
 
-
         //Init
         recyclerView = (RecyclerView)findViewById(R.id.recycler_food);
         recyclerView.setHasFixedSize(true);
@@ -101,8 +102,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,9 +111,13 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         //Get intent here
 
         if(getIntent()!=null)
-            categoryId = getIntent().getStringExtra("CategoryId");
-        if(!categoryId.isEmpty()){
-            loadListFood(categoryId);
+        {
+            //categoryId = getIntent().getStringExtra("CategoryId");
+            currentCategory = (Category) getIntent().getExtras().getSerializable("currentCategory");
+        }
+
+        if(!currentCategory.getCategoryId().isEmpty()){
+            loadListFood(currentCategory.getCategoryId());
         }
 
     }
@@ -176,7 +179,8 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setDescription(edtDescription.getText().toString());
                         newProduct.setPrice(edtPrice.getText().toString());
                         newProduct.setDiscount(edtDiscount.getText().toString());
-                        newProduct.setMenuId(categoryId);
+                        newProduct.setMenuId(currentCategory.getCategoryId());
+                        newProduct.setPrincipalCategory(currentCategory.getPrincipalCategory());
                         newProduct.setProductId(key);
                         foodList.child(key).setValue(newProduct);
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
@@ -248,6 +252,57 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                                         {
                                             uploadAtLeastonePhoto=true;
                                             newProduct.addUrlImg(uri.toString());
+                                            //foodList.child(key).child("listImage").setValue(newProduct.getListImage());
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                mDialog.dismiss();
+                                Toast.makeText(ProductList.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress =(100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                //mDialog.setMessage("Upload"+progress+"%");
+                                //mDialog.setMessage("Subido "+ finalI+"/" +listUri.size());
+                            }
+                        })
+                ;
+            }
+        }
+        else {
+            Snackbar.make(getWindow().getDecorView(), "Selecciona al menos una imagen", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+    private void uploadImage(final Product item) {
+        if(listUri.size()>0){
+            final ProgressDialog mDialog = new ProgressDialog(this);
+            mDialog.setMessage("Subiendo...");
+            mDialog.show();
+
+            for (int i = 0; i < listUri.size(); i++) {
+                String imageName = UUID.randomUUID().toString();
+                final StorageReference imageFolder = storageReference.child("images/"+imageName);
+                final int finalI = i;
+                imageFolder.putFile(listUri.get(i))
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                mDialog.dismiss();
+                                imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        if(item!=null)
+                                        {
+                                            uploadAtLeastonePhoto=true;
+                                            item.addUrlImg(uri.toString());
                                             //foodList.child(key).child("listImage").setValue(newProduct.getListImage());
                                         }
                                     }
@@ -354,9 +409,16 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
     }
 
     private void showUpdateFoodDialog(final String key, final Product item) {
+        //REMOVER la lista de urls aunque no se deberia
+        item.clearUrl();
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductList.this);
         alertDialog.setTitle("Editar Producto");
-        alertDialog.setMessage("Porfavor llenar toda la informacion");
+        //alertDialog.setMessage("Porfavor llenar toda la informacion");
+
+        listUri = new ArrayList<>();
+        listaImageView = new ArrayList<>();
+        uploadAtLeastonePhoto=false;
 
         LayoutInflater inflater = this.getLayoutInflater();
         View add_menu_layout = inflater.inflate(R.layout.add_new_product_layout,null);
@@ -365,6 +427,20 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtDescription = add_menu_layout.findViewById(R.id.edtDescription);
         edtPrice = add_menu_layout.findViewById(R.id.edtPrice);
         edtDiscount = add_menu_layout.findViewById(R.id.edtDiscount);
+
+        //Binding MultipleImg
+        img1 = (ImageView) add_menu_layout.findViewById(R.id.img1);
+        img2 = (ImageView) add_menu_layout.findViewById(R.id.img2);
+        img3 = (ImageView) add_menu_layout.findViewById(R.id.img3);
+        img4 = (ImageView) add_menu_layout.findViewById(R.id.img4);
+        img_remove_last = (ImageView) add_menu_layout.findViewById(R.id.img_remove_last);
+        layout_img = (LinearLayout) add_menu_layout.findViewById(R.id.layout_img);
+        listaImageView.add(img1);
+        listaImageView.add(img2);
+        listaImageView.add(img3);
+        listaImageView.add(img4);
+        layout_img.setOnClickListener(this);
+        img_remove_last.setOnClickListener(this);
 
 
         //Set default value for view
@@ -380,7 +456,8 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeImage(item); //Let user select image from gallery and save Uri of this image
+                //changeImage(item); //Let user select image from gallery and save Uri of this image
+                uploadImage(item);
             }
         });
 
@@ -396,13 +473,19 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                 dialogInterface.dismiss();
 
                 //update Information
+                if(validate())
+                {
                     item.setName(edtName.getText().toString());
                     item.setPrice(edtPrice.getText().toString());
                     item.setDiscount(edtDiscount.getText().toString());
                     item.setDescription(edtDescription.getText().toString());
+                    //item.setMenuId(currentCategory.getCategoryId());
+                    //item.setPrincipalCategory(currentCategory.getPrincipalCategory());
+                    item.setProductId(key);
                     foodList.child(key).setValue(item);
                     Snackbar.make(rootLayout,"Producto" + item.getName() +"fue editada", Snackbar.LENGTH_SHORT)
                             .show();
+                }
 
 
 

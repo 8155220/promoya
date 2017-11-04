@@ -68,5 +68,7 @@ dependencies {
 
     //imgcroper
     compile 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
+    //Spinner
+    compile 'com.jaredrummler:material-spinner:1.2.1'
 }
 apply plugin: 'com.google.gms.google-services'

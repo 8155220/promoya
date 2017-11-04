@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,9 +52,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import info.hoang8f.widget.FButton;
@@ -80,6 +86,8 @@ public class CategoryStoreFragment extends Fragment{
     //AlertDialog
     MaterialEditText edtName;
     Button btnUpload,btnSelect;
+    MaterialSpinner spinner;
+    View add_category_layout;
 
     //Model
     Category newCategory;
@@ -154,7 +162,7 @@ public class CategoryStoreFragment extends Fragment{
                 categories
         ) {
             @Override
-            protected void populateViewHolder(CategoryViewHolder viewHolder, Category model, int position) {
+            protected void populateViewHolder(CategoryViewHolder viewHolder, final Category model, int position) {
                 viewHolder.txtMenuName.setText(model.getName());
                 Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
                         .into(viewHolder.imageView);
@@ -165,7 +173,8 @@ public class CategoryStoreFragment extends Fragment{
                         //Get CategoryId and send to new Activity
                         Intent productList = new Intent(getContext(),ProductList.class);
                         //Because CategoryId is key, so we just get key of this item
-                        productList.putExtra("CategoryId",adapter.getRef(position).getKey());
+                       // productList.putExtra("CategoryId",adapter.getRef(position).getKey());//ORIGINAL
+                        productList.putExtra("currentCategory",model);
                         startActivity(productList);
                     }
                 });
@@ -182,11 +191,25 @@ public class CategoryStoreFragment extends Fragment{
         alertDialog.setMessage("Porfavor llenar toda la informacion");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View add_category_layout = inflater.inflate(R.layout.add_new_category_layout, null);
+        add_category_layout = inflater.inflate(R.layout.add_new_category_layout, null);
 
         edtName = add_category_layout.findViewById(R.id.edtName);
         btnSelect = add_category_layout.findViewById(R.id.btnSelect);
         btnUpload = add_category_layout.findViewById(R.id.btnUpload);
+
+        spinner = (MaterialSpinner)add_category_layout.findViewById(R.id.spinner);
+        spinner.setItems(
+                "camaras digitales y fotografia"
+                ,"computacion"
+                ,"consolas y videojuegos"
+                ,"electronica y audio video"
+                ,"hogar y electrodomesticos"
+        );
+//        spinner.setArrowColor(R.color.colorAccent);
+        spinner.setArrowColor(getResources().getColor(R.color.colorAccent));
+        spinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        spinner.setTextColor(getResources().getColor(R.color.white));
+
 
         //Event for button
         btnSelect.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +221,12 @@ public class CategoryStoreFragment extends Fragment{
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImage(); //Let user select image from gallery and save Uri of this image
+                if(saveUri==null)
+                {
+                    Snackbar.make(add_category_layout, "Debe Seleccionar Al menos una imagen", Snackbar.LENGTH_SHORT).show();
+                     //Let user select image from gallery and save Uri of this image
+                } else uploadImage();
+
             }
         });
 
@@ -211,11 +239,14 @@ public class CategoryStoreFragment extends Fragment{
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
 
-                dialogInterface.dismiss();
+                if(validate())
+                    dialogInterface.dismiss();
 
                 //HERE , just create new category
                 if (newCategory != null) {
-                    categories.push().setValue(newCategory);
+                    String key = categories.push().getKey();
+                    newCategory.setCategoryId(key);
+                    categories.child(key).setValue(newCategory);
                     /*Snackbar.make(drawer, "Nueva Categoria" + newCategory.getName() + "fue Aniadida", Snackbar.LENGTH_SHORT)
                             .show();*/
                 }
@@ -230,6 +261,24 @@ public class CategoryStoreFragment extends Fragment{
             }
         });
         alertDialog.show();
+    }
+
+    private boolean validate() {
+        if(edtName.getText().toString().isEmpty())
+        {
+            Snackbar.make(getActivity().getWindow().getDecorView(), "Complete : Nombre Categoria", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if(saveUri!=null)
+        {
+            Snackbar.make(getActivity().getWindow().getDecorView(), "Debe Seleccionar Al menos una imagen", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        /*if(!uploadAtLeastonePhoto){
+            Snackbar.make(getWindow().getDecorView(), "Debe Seleccionar Subir Imagen", Snackbar.LENGTH_SHORT).show();
+            return false;
+        }*/
+        return true;
     }
 
 
@@ -266,7 +315,10 @@ public class CategoryStoreFragment extends Fragment{
                             imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    newCategory = new Category(edtName.getText().toString(),uri.toString());
+                                    newCategory = new Category();
+                                    newCategory.setName(edtName.getText().toString());
+                                    newCategory.setImage(uri.toString());
+                                    newCategory.setPrincipalCategory(spinner.getItems().get(spinner.getSelectedIndex()).toString());
                                 }
                             });
                         }
@@ -348,6 +400,20 @@ public class CategoryStoreFragment extends Fragment{
         btnSelect = add_menu_layout.findViewById(R.id.btnSelect);
         btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
 
+        //Spinner
+        spinner = (MaterialSpinner)add_menu_layout.findViewById(R.id.spinner);
+        spinner.setItems(
+                "camaras digitales y fotografia"
+                ,"computacion"
+                ,"consolas y videojuegos"
+                ,"electronica y audio video"
+                ,"hogar y electrodomesticos"
+        );
+//        spinner.setArrowColor(R.color.colorAccent);
+        spinner.setArrowColor(getResources().getColor(R.color.colorAccent));
+        spinner.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        spinner.setTextColor(getResources().getColor(R.color.white));
+
         //Set default name
         edtName.setText(item.getName());
 
@@ -361,7 +427,12 @@ public class CategoryStoreFragment extends Fragment{
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeImage(item); //Let user select image from gallery and save Uri of this image
+                if(saveUri==null)
+                {
+                    Snackbar.make(add_category_layout, "Debe Seleccionar Al menos una imagen", Snackbar.LENGTH_SHORT).show();
+                    //Let user select image from gallery and save Uri of this image
+                } else changeImage(item);
+                 //Let user select image from gallery and save Uri of this image
             }
         });
 

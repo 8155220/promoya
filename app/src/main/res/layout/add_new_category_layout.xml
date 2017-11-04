@@ -29,6 +29,11 @@
             app:met_primaryColor="@color/colorPrimary"
             app:met_singleLineEllipsis="true"
             />
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:weightSum="2"
             android:orientation="horizontal"
@@ -52,11 +57,7 @@
             app:shadowHeight="5dp"
             app:cornerRadius="4dp"-->
             />
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-            </Spinner>
 
             <Button
                 android:id="@+id/btnUpload"
