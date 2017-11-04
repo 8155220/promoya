@@ -52,6 +52,11 @@
             app:shadowHeight="5dp"
             app:cornerRadius="4dp"-->
             />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </Spinner>
 
             <Button
                 android:id="@+id/btnUpload"

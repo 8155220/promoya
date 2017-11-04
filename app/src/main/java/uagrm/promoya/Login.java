@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
+                                    .setLogo(R.mipmap.promoyalogowhite)
                                     .setAvailableProviders(
                                             Arrays.asList(
                                                     //new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
@@ -55,7 +56,7 @@ public class Login extends AppCompatActivity {
                                                     new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build())
                                             //  new AuthUI.IdpConfig.Builder(AuthUI.TWITTER_PROVIDER).build())
                                     )
-                                    .setTheme(R.style.AppTheme)
+                                    .setTheme(R.style.GreenTheme)
                                     .build(),
                             RC_SIGN_IN);
                 }
