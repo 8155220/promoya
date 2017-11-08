@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.stepstone.apprating.listener.RatingDialogListener;
 
 import java.util.Arrays;
 
+import cn.iwgang.countdownview.CountdownView;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Common.ImageSlider.ViewPagerAdapter;
 import uagrm.promoya.Model.Product;
@@ -54,6 +56,9 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     private ImageView[] dots;
     private ViewPagerAdapter mAdapter;
 
+    //countdown
+    CountdownView mCvCountdownView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,25 +68,22 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         database = FirebaseDatabase.getInstance().getInstance();
         products = database.getReference(PRODUCT_CHILD);
 
-        //init view
-        numberButton = (ElegantNumberButton) findViewById(R.id.number_button);
-        //tool
-
         //getIntent
         if (getIntent() != null)
             currentProduct = (Product) getIntent().getExtras().getSerializable(KEY_PRODUCT);
 
         initToolbar();
 
-
+        numberButton = (ElegantNumberButton) findViewById(R.id.number_button);
         product_description = (TextView) findViewById(R.id.product_description);
         product_name = (TextView) findViewById(R.id.product_name);
         product_price = (TextView) findViewById(R.id.product_price);
         product_date =  (TextView) findViewById(R.id.product_date);
-        //product_image = (ImageView) findViewById(R.id.img_product);
+        mCvCountdownView = (CountdownView)findViewById(R.id.count_down);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.transparentBlack));
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
 
         //Get Product Id from Intent
@@ -102,6 +104,16 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                 return;
             }
         }
+        //escuchador
+        numberButton.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
+            @Override
+            public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
+                //product_price
+                int precio = Integer.parseInt(currentProduct.getPrice());
+                product_price.setText(String.valueOf(precio*newValue));
+                //Log.d("PRODUCDETAIL", String.format("oldValue: %d   newValue: %d", oldValue, newValue));
+            }
+        });
     }
 
     private void setUiPageViewController() {
@@ -123,29 +135,6 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     }
 
 
-    /*private void getDetailProduct(String productId) {
-        products.child(productId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                currentProduct = dataSnapshot.getValue(Product.class);
-
-                //Set Image
-                *//*Picasso.with(getBaseContext()).load(currentProduct.getImage())
-                        .into(product_image);*//*
-                collapsingToolbarLayout.setTitle(currentProduct.getName());
-
-                product_price.setText(currentProduct.getPrice());
-                product_name.setText(currentProduct.getName());
-
-                product_description.setText(currentProduct.getDescription());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
     private void getDetailProduct() {
 
 
@@ -155,7 +144,12 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_name.setText(currentProduct.getName());
         product_date.setText(Common.getTiempoTranscurrido(Long.parseLong(currentProduct.getDate())));
         product_description.setText(currentProduct.getDescription());
+        if(Long.parseLong(currentProduct.getOfferExpire())>System.currentTimeMillis())
+        {
+            long tiempoRestante = Long.parseLong(currentProduct.getOfferExpire()) - System.currentTimeMillis();
+            mCvCountdownView.start(tiempoRestante);
 
+        }
     }
 
     public void initToolbar() {
