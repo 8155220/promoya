@@ -36,7 +36,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     public static String KEY_PRODUCT = "PRODUCT";
     private ActionBar actionBar;
 
-    TextView product_name, product_price, product_description;
+    TextView product_name, product_price, product_description,product_date;
     ImageView product_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
@@ -77,6 +77,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_description = (TextView) findViewById(R.id.product_description);
         product_name = (TextView) findViewById(R.id.product_name);
         product_price = (TextView) findViewById(R.id.product_price);
+        product_date =  (TextView) findViewById(R.id.product_date);
         //product_image = (ImageView) findViewById(R.id.img_product);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
@@ -152,7 +153,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
 
         product_price.setText(currentProduct.getPrice());
         product_name.setText(currentProduct.getName());
-
+        product_date.setText(Common.getTiempoTranscurrido(Long.parseLong(currentProduct.getDate())));
         product_description.setText(currentProduct.getDescription());
 
     }

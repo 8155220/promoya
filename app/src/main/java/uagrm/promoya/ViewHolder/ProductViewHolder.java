@@ -47,5 +47,6 @@ public class ProductViewHolder extends RecyclerView.ViewHolder
 
         contextMenu.add(0,0,getAdapterPosition(), Common.UPDATE);
         contextMenu.add(0,1,getAdapterPosition(), Common.DELETE);
+        contextMenu.add(0,2,getAdapterPosition(), Common.OFFER);
     }
 }

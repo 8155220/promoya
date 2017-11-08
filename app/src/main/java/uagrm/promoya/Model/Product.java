@@ -9,24 +9,34 @@ import java.util.List;
  */
 
 public class Product implements Serializable{
-    private String Name,Image,Description,Price,Discount,MenuId,ProductId,principalCategory;
+    private String Name,Image,Description,Price,MenuId,ProductId,principalCategory,date,offerExpire;
     private List<String> listImage;
 
     public Product() {
+
         listImage=new ArrayList<>();
+        this.offerExpire = "0";
     }
 
 
-    public Product(String name, String image, String description, String price, String discount, String menuId, String productId, String principalCategory, List<String> listImage) {
+    public Product(String name, String image, String description, String price, String menuId, String productId, String principalCategory, String date, List<String> listImage) {
         Name = name;
         Image = image;
         Description = description;
         Price = price;
-        Discount = discount;
         MenuId = menuId;
         ProductId = productId;
         this.principalCategory = principalCategory;
+        this.date = date;
         this.listImage = listImage;
+    }
+
+    public String getOfferExpire() {
+        return offerExpire;
+    }
+
+    public void setOfferExpire(String offerExpire) {
+        this.offerExpire = offerExpire;
     }
 
     public String getName() {
@@ -61,13 +71,6 @@ public class Product implements Serializable{
         Price = price;
     }
 
-    public String getDiscount() {
-        return Discount;
-    }
-
-    public void setDiscount(String discount) {
-        Discount = discount;
-    }
 
     public String getMenuId() {
         return MenuId;
@@ -99,6 +102,14 @@ public class Product implements Serializable{
 
     public void setListImage(List<String> listImage) {
         this.listImage = listImage;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void addUrlImg(String url)

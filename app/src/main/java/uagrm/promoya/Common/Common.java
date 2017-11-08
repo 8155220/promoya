@@ -11,6 +11,9 @@ import android.net.NetworkInfo;
 import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 /*import uagrm.promoya.Model.Request;
 import uagrm.promoya.Model.User;
 import uagrm.promoya.Remote.APIService;
@@ -28,6 +31,7 @@ public class Common {
     private static final String BASE_URL = "https://fcm.googleapis.com/";
     public static final String UPDATE ="Actualizar";
     public static final String DELETE ="Eliminar";
+    public static final String OFFER = "Ofertar";
     public static final int PICK_IMAGE_REQUEST = 71;
 
     public static final String baseUrl = "https://maps.googleapis.com";
@@ -83,6 +87,49 @@ public class Common {
             }
         }
         return false;
+    }
+
+    public static String getTiempoTranscurrido(long date)
+    {
+        if(System.currentTimeMillis()-date<3600000)
+        {
+            return "hace "+(System.currentTimeMillis()-date)/60000+" minutos";
+        }
+        else if(System.currentTimeMillis()-date<86400000){
+            return "hace "+(System.currentTimeMillis()-date)/3600000+" Horas";
+        }
+        else if(System.currentTimeMillis()-date<604800000){
+            return "hace "+(System.currentTimeMillis()-date)/86400000+" Dias";
+        }
+        else {
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTimeInMillis(date);
+            int year = calendar.get(calendar.YEAR);
+            int month = calendar.get(calendar.MONTH);
+            int dia = calendar.get(calendar.DATE);
+            return "el "+dia+"/"+month+"/"+year;
+        }
+    }
+    public static String getTiempoOferta(long date)
+    {
+        if(date-System.currentTimeMillis()<3600000)
+        {
+            return "hace "+(System.currentTimeMillis()-date)/60000+" minutos";
+        }
+        else if(date-System.currentTimeMillis()<86400000){
+            return "hace "+(date -System.currentTimeMillis())/3600000+" Horas";
+        }
+        else if(date -System.currentTimeMillis()<604800000){
+            return "hace "+(date-System.currentTimeMillis())/86400000+" Dias";
+        }
+        else {
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTimeInMillis(date);
+            int year = calendar.get(calendar.YEAR);
+            int month = calendar.get(calendar.MONTH);
+            int dia = calendar.get(calendar.DATE);
+            return "el "+dia+"/"+month+"/"+year;
+        }
     }
 
 

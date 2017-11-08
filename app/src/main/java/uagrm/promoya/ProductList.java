@@ -12,15 +12,19 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,7 +71,9 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
     FirebaseRecyclerAdapter<Product,ProductViewHolder> adapter;
 
     //Add new food
-    MaterialEditText edtName,edtDescription,edtPrice,edtDiscount;
+    ElegantNumberButton daysButton;
+    EditText edt_discount;
+    MaterialEditText edtName,edtDescription,edtPrice;
     Button btnUpload;
     Boolean uploadAtLeastonePhoto;
     Product newProduct;
@@ -137,7 +143,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtName = add_menu_layout.findViewById(R.id.edtName);
         edtDescription = add_menu_layout.findViewById(R.id.edtDescription);
         edtPrice = add_menu_layout.findViewById(R.id.edtPrice);
-        edtDiscount = add_menu_layout.findViewById(R.id.edtDiscount);
 
         //Binding MultipleImg
         img1 = (ImageView) add_menu_layout.findViewById(R.id.img1);
@@ -178,9 +183,9 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setName(edtName.getText().toString());
                         newProduct.setDescription(edtDescription.getText().toString());
                         newProduct.setPrice(edtPrice.getText().toString());
-                        newProduct.setDiscount(edtDiscount.getText().toString());
                         newProduct.setMenuId(currentCategory.getCategoryId());
                         newProduct.setPrincipalCategory(currentCategory.getPrincipalCategory());
+                        newProduct.setDate(String.valueOf(System.currentTimeMillis()));
                         newProduct.setProductId(key);
                         foodList.child(key).setValue(newProduct);
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
@@ -399,10 +404,13 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
             showUpdateFoodDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
         } else if (item.getTitle().equals(Common.DELETE)){
             deleteFood(adapter.getRef(item.getOrder()).getKey());
-
+        } else if (item.getTitle().equals(Common.OFFER)){
+            showOfferProductDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
         }
         return super.onContextItemSelected(item);
     }
+
+
 
     private void deleteFood(String key) {
         foodList.child(key).removeValue();
@@ -426,7 +434,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtName = add_menu_layout.findViewById(R.id.edtName);
         edtDescription = add_menu_layout.findViewById(R.id.edtDescription);
         edtPrice = add_menu_layout.findViewById(R.id.edtPrice);
-        edtDiscount = add_menu_layout.findViewById(R.id.edtDiscount);
 
         //Binding MultipleImg
         img1 = (ImageView) add_menu_layout.findViewById(R.id.img1);
@@ -447,7 +454,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtName.setText(item.getName());
         edtDescription.setText(item.getDescription());
         edtPrice.setText(item.getPrice());
-        edtDiscount.setText(item.getDiscount())
 
         ;
         btnUpload = add_menu_layout.findViewById(R.id.btnUpload);
@@ -477,7 +483,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                 {
                     item.setName(edtName.getText().toString());
                     item.setPrice(edtPrice.getText().toString());
-                    item.setDiscount(edtDiscount.getText().toString());
                     item.setDescription(edtDescription.getText().toString());
                     //item.setMenuId(currentCategory.getCategoryId());
                     //item.setPrincipalCategory(currentCategory.getPrincipalCategory());
@@ -497,6 +502,86 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
             }
         });
         alertDialog.show();
+    }
+
+    private void showOfferProductDialog(final String key, final Product item) {
+        //REMOVER la lista de urls aunque no se deberia
+        item.clearUrl();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductList.this);
+        alertDialog.setTitle("Ofertar Producto");
+        //alertDialog.setMessage("Porfavor llenar toda la informacion");
+
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view_dialog = inflater.inflate(R.layout.add_new_offer_layout,null);
+
+        edt_discount = view_dialog.findViewById(R.id.edt_discount);
+        daysButton = (ElegantNumberButton) view_dialog.findViewById(R.id.days_button);
+
+
+        //valite number discount
+        edt_discount.addTextChangedListener(new TextWatcher(){
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count){
+                String strEnteredVal = edt_discount.getText().toString();
+
+                edt_discount.removeTextChangedListener(this);
+                if(!strEnteredVal.equals("")){
+                    int num=Integer.parseInt(strEnteredVal);
+                    if(num<99 && num>0){
+                        edt_discount.setText(""+num);
+                        int pos = edt_discount.getText().length();
+                        edt_discount.setSelection(pos);
+                    }else{
+                        Snackbar.make(view_dialog,"El rango es de 1-99", Snackbar.LENGTH_SHORT)
+                                .show();
+                        edt_discount.setText("");
+                    }
+                }
+                edt_discount.addTextChangedListener(this);
+
+            }
+        });
+
+            //Set default value for view
+
+
+        alertDialog.setView(view_dialog);
+        alertDialog.setIcon(R.drawable.ic_menu);
+
+        //Set button
+        //alertDialog.show();
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+
+                dialogInterface.dismiss();
+
+                //update Information
+                if(validateOffer())
+                {
+                    long actualTime= System.currentTimeMillis()+ (Integer.parseInt(daysButton.getNumber())*86400000);
+                    foodList.child(key).child("offerExpire").setValue(String.valueOf(actualTime));
+                    foodList.child(key).child("discount").setValue(edt_discount.getText().toString());
+                    Snackbar.make(rootLayout,"Producto " + item.getName() +"fue ofertado", Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+
+            }
+        });alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private boolean validateOffer() {
+        return true;
     }
 
     private void changeImage(final Product item) {
