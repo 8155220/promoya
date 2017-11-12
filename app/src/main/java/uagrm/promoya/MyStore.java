@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import uagrm.promoya.Fragment.CategoryStoreFragment;
 import uagrm.promoya.Fragment.HomeStoreFragment;
+import uagrm.promoya.Fragment.OfferStoreFragment;
 import uagrm.promoya.Model.Category;
 
 public class MyStore extends BaseActivity {
@@ -48,11 +49,17 @@ public class MyStore extends BaseActivity {
                         fragmentTransaction.commit();
                         return true;
                     case R.id.bottonNavigation_category:
-                        System.out.println("Entro aqui");
                         CategoryStoreFragment categoryStoreFragment = new CategoryStoreFragment();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content,
                                 categoryStoreFragment,"Categorias");
+                        fragmentTransaction.commit();
+                        return true;
+                        case R.id.bottonNavigation_offer:
+                        OfferStoreFragment offerStoreFragment = new OfferStoreFragment();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.content,
+                                offerStoreFragment,"Ofertas");
                         fragmentTransaction.commit();
                         return true;
                 }

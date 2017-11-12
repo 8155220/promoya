@@ -12,7 +12,7 @@
         android:title="Categorias" />
 
     <item
-        android:id="@+id/bottonNavigation_promotion"
+        android:id="@+id/bottonNavigation_offer"
         android:icon="@drawable/ic_chat"
         android:title="Ofertas" />
 
