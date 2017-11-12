@@ -144,11 +144,10 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_name.setText(currentProduct.getName());
         product_date.setText(Common.getTiempoTranscurrido(Long.parseLong(currentProduct.getDate())));
         product_description.setText(currentProduct.getDescription());
-        if(Long.parseLong(currentProduct.getOfferExpire())>System.currentTimeMillis())
+        if(currentProduct.getOfferExpire()>System.currentTimeMillis())
         {
-            long tiempoRestante = Long.parseLong(currentProduct.getOfferExpire()) - System.currentTimeMillis();
+            long tiempoRestante = currentProduct.getOfferExpire() - System.currentTimeMillis();
             mCvCountdownView.start(tiempoRestante);
-
         }
     }
 

@@ -205,7 +205,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         alertDialog.show();
 
     }
-
     private boolean validate() {
         if(edtName.getText().toString().isEmpty())
         {
@@ -233,7 +232,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         }
         return true;
     }
-
     private void uploadImage() {
         if(listUri.size()>0){
             final ProgressDialog mDialog = new ProgressDialog(this);
@@ -336,7 +334,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
             Snackbar.make(getWindow().getDecorView(), "Selecciona al menos una imagen", Snackbar.LENGTH_SHORT).show();
         }
     }
-
     private void loadListFood(String categoryId) {
         adapter = new FirebaseRecyclerAdapter<Product,ProductViewHolder>(
                 Product.class
@@ -509,7 +506,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         item.clearUrl();
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ProductList.this);
         alertDialog.setTitle("Ofertar Producto");
-        //alertDialog.setMessage("Porfavor llenar toda la informacion");
 
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -564,7 +560,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                 if(validateOffer())
                 {
                     long actualTime= System.currentTimeMillis()+ (Integer.parseInt(daysButton.getNumber())*86400000);
-                    foodList.child(key).child("offerExpire").setValue(String.valueOf(actualTime));
+                    foodList.child(key).child("offerExpire").setValue(actualTime);
                     foodList.child(key).child("discount").setValue(edt_discount.getText().toString());
                     Snackbar.make(rootLayout,"Producto " + item.getName() +"fue ofertado", Snackbar.LENGTH_SHORT)
                             .show();

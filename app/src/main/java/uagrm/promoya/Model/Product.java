@@ -9,17 +9,18 @@ import java.util.List;
  */
 
 public class Product implements Serializable{
-    private String Name,Image,Description,Price,MenuId,ProductId,principalCategory,date,offerExpire;
+    private String Name,Image,Description,Price,MenuId,ProductId,principalCategory,date;
+    private long offerExpire;
     private List<String> listImage;
 
     public Product() {
 
         listImage=new ArrayList<>();
-        this.offerExpire = "0";
+        this.offerExpire = 0;
     }
 
 
-    public Product(String name, String image, String description, String price, String menuId, String productId, String principalCategory, String date, List<String> listImage) {
+    public Product(String name, String image, String description, String price, String menuId, String productId, String principalCategory, String date, long offerExpire, List<String> listImage) {
         Name = name;
         Image = image;
         Description = description;
@@ -28,14 +29,15 @@ public class Product implements Serializable{
         ProductId = productId;
         this.principalCategory = principalCategory;
         this.date = date;
+        this.offerExpire = offerExpire;
         this.listImage = listImage;
     }
 
-    public String getOfferExpire() {
+    public long getOfferExpire() {
         return offerExpire;
     }
 
-    public void setOfferExpire(String offerExpire) {
+    public void setOfferExpire(long offerExpire) {
         this.offerExpire = offerExpire;
     }
 
