@@ -99,7 +99,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         storageReference =storage.getReference();
 
         //Init
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_food);
+        recyclerView = (RecyclerView)findViewById(R.id.recycler_product);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -343,10 +343,10 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
             @Override
             protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
-                viewHolder.food_name.setText(model.getName());
+                viewHolder.product_name.setText(model.getName());
                 Picasso.with(getBaseContext())
                         .load(model.getListImage().get(0))
-                        .into(viewHolder.food_image);
+                        .into(viewHolder.product_image);
 
                 //final Product local = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
