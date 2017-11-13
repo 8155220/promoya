@@ -20,6 +20,7 @@ import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.R;
+import uagrm.promoya.StoreDetail;
 import uagrm.promoya.ViewHolder.ProductViewHolder;
 import uagrm.promoya.ViewHolder.StoreViewHolder;
 
@@ -146,6 +147,9 @@ public class HomeStoresFragment extends Fragment{
                         //producDetail.putExtra("PRODUCT",model);
                         //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
                         //startActivity(producDetail);
+                        Intent storeDetail = new Intent(getContext(), StoreDetail.class);
+                        storeDetail.putExtra("STORE",model);
+                        startActivity(storeDetail);
                     }
                 });
             }

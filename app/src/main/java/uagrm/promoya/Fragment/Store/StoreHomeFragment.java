@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,6 +35,8 @@ import uagrm.promoya.Model.Store;
  */
 public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
 
+    //REQUIERO EL ID DE LA TIENDA
+
     TextView storeName;
     TextView storeDescription;
     ImageView backgroundImg;
@@ -42,14 +46,15 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap mGoogleMap;
     MapView mMapView;
 
-    private static StoreHomeFragment singleton = new StoreHomeFragment();
+    Store currentStore;
+
 
     public StoreHomeFragment() {
 
     }
 
-    public static StoreHomeFragment getInstance( ) {
-        return singleton;
+    public StoreHomeFragment(Store currentStore) {
+        this.currentStore = currentStore;
     }
 
     @Nullable
@@ -66,28 +71,47 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
         storeDescription = (TextView)view.findViewById(R.id.store_description);
         backgroundImg = (ImageView) view.findViewById(R.id.background_img);
         logoImg = (ImageView) view.findViewById(R.id.logo_img);
-        db = FirebaseDatabase.getInstance().getReference().child("stores").child(Common.currentUser.getUid());
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Store store = dataSnapshot.getValue(Store.class);
-                storeName.setText(store.getDisplayName());
-                storeDescription.setText(store.getDescription());
-                Picasso.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
-                        .into(backgroundImg);
-                Picasso.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl())
-                        .into(logoImg);
+        if(currentStore!=null)
+        {
+            db = FirebaseDatabase.getInstance().getReference().child("stores").child(currentStore.getStoreId());
+        } else {
+            db = FirebaseDatabase.getInstance().getReference().child("stores").child(Common.currentUser.getUid());
+        }
+        //SI QUISIERA QUE FUERA EN TIEMPO REAL
+        if(currentStore==null)
+        {
+            db.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Store store = dataSnapshot.getValue(Store.class);
+                    storeName.setText(store.getDisplayName());
+                    storeDescription.setText(store.getDescription());
+                    Picasso.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
+                            .into(backgroundImg);
+                    /*Picasso.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl())
+                            .into(logoImg);*/
+                    Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
+                            .into(logoImg);
 
-                /*Glide.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
-                        .into(backgroundImg);
-                Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
-                        .into(logoImg);*/
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+        else {
+            storeName.setText(currentStore.getDisplayName());
+            storeDescription.setText(currentStore.getDescription());
+            /*Picasso.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl())
+                    .into(backgroundImg);*/
+            Glide.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
+                    .into(logoImg);
+
+            Picasso.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl())
+                    .into(logoImg);
+        }
+        //pero como ya tenemos los datos
 
         mMapView = (MapView) view.findViewById(R.id.map);
         if (mMapView!=null)

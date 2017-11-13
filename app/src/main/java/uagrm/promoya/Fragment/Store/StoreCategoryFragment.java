@@ -71,6 +71,7 @@ import uagrm.promoya.MyStore;
 import uagrm.promoya.ProductList;
 import uagrm.promoya.R;
 import uagrm.promoya.ViewHolder.CategoryViewHolder;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientCategoryViewHolder;
 
 /**
  * Created by Mako on 1/13/2017.
@@ -98,6 +99,7 @@ public class StoreCategoryFragment extends Fragment{
     FirebaseStorage storage;
     StorageReference storageReference;
     FirebaseRecyclerAdapter<Category, CategoryViewHolder> adapter;
+    FirebaseRecyclerAdapter<Category, ClientCategoryViewHolder> clientAdapter;
 
     //Recycler
     RecyclerView recycler_menu;
@@ -107,7 +109,13 @@ public class StoreCategoryFragment extends Fragment{
 
     View rootView;
 
+    //
+    Store currentStore;
     public StoreCategoryFragment() {
+    }
+
+    public StoreCategoryFragment(Store currentStore) {
+        this.currentStore =currentStore;
     }
 
 
@@ -125,23 +133,31 @@ public class StoreCategoryFragment extends Fragment{
         rootView=view;
         //Init Firebase
         db = FirebaseDatabase.getInstance();
-        categories = db.getReference(PRODUCT_CHILD).child(Common.currentUser.getUid());
+        if(currentStore==null)
+        {
+            categories = db.getReference(PRODUCT_CHILD).child(Common.currentUser.getUid());
+        } else {
+            categories = db.getReference(PRODUCT_CHILD).child(currentStore.getStoreId());
+        }
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
         //tolbar
-        setToolBar(view);
-        setHasOptionsMenu(true);
+        /*setToolBar(view);
+        setHasOptionsMenu(true);*/
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
-                showDialog();
-            }
-        });
+
+        if (currentStore==null){
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    //        .setAction("Action", null).show();
+                    showDialog();
+                }
+            });
+        } else fab.hide();
 
         //Init View
         recycler_menu = (RecyclerView)view.findViewById(R.id.recycler_menu);
@@ -154,33 +170,69 @@ public class StoreCategoryFragment extends Fragment{
 
     }
     private void loadMenu() {
-        adapter=new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(
-                Category.class,
-                R.layout.category_item,
-                CategoryViewHolder.class,
-                categories
-        ) {
-            @Override
-            protected void populateViewHolder(CategoryViewHolder viewHolder, final Category model, int position) {
-                viewHolder.txtMenuName.setText(model.getName());
-                Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
-                        .into(viewHolder.imageView);
-                //final  Category clickItem =model;
-                viewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        //Get CategoryId and send to new Activity
-                        Intent productList = new Intent(getContext(),ProductList.class);
-                        //Because CategoryId is key, so we just get key of this item
-                       // productList.putExtra("CategoryId",adapter.getRef(position).getKey());//ORIGINAL
-                        productList.putExtra("currentCategory",model);
-                        startActivity(productList);
-                    }
-                });
-            }
-        };
-        adapter.notifyDataSetChanged();
-        recycler_menu.setAdapter(adapter);
+        if(currentStore==null)
+        {
+            adapter=new FirebaseRecyclerAdapter<Category, CategoryViewHolder>(
+                    Category.class,
+                    R.layout.category_item,
+                    CategoryViewHolder.class,
+                    categories
+            ) {
+                @Override
+                protected void populateViewHolder(CategoryViewHolder viewHolder, final Category model, int position) {
+                    viewHolder.txtMenuName.setText(model.getName());
+                    Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
+                            .into(viewHolder.imageView);
+                    /*Glide.with(getActivity().getApplicationContext()).load(Common.currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
+                            .into(viewHolder.imageView);*/
+                    //final  Category clickItem =model;
+                    viewHolder.setItemClickListener(new ItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //Get CategoryId and send to new Activity
+                            Intent productList = new Intent(getContext(),ProductList.class);
+                            //Because CategoryId is key, so we just get key of this item
+                            // productList.putExtra("CategoryId",adapter.getRef(position).getKey());//ORIGINAL
+                            productList.putExtra("currentCategory",model);
+                            productList.putExtra("STORE",currentStore);
+                            startActivity(productList);
+                        }
+                    });
+                }
+            };
+            adapter.notifyDataSetChanged();
+            recycler_menu.setAdapter(adapter);
+        }else {
+            clientAdapter =new FirebaseRecyclerAdapter<Category, ClientCategoryViewHolder>(
+                    Category.class,
+                    R.layout.category_item,
+                    ClientCategoryViewHolder.class,
+                    categories
+            ) {
+                @Override
+                protected void populateViewHolder(ClientCategoryViewHolder viewHolder, final Category model, int position) {
+                    viewHolder.txtMenuName.setText(model.getName());
+                    Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
+                            .into(viewHolder.imageView);
+                    /*Glide.with(getActivity().getApplicationContext()).load(Common.currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
+                            .into(viewHolder.imageView);*/
+                    //final  Category clickItem =model;
+                    viewHolder.setItemClickListener(new ItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //Get CategoryId and send to new Activity
+                            Intent productList = new Intent(getContext(),ProductList.class);
+                            productList.putExtra("currentCategory",model);
+                            productList.putExtra("STORE",currentStore);
+                            startActivity(productList);
+                        }
+                    });
+                }
+            };
+            clientAdapter.notifyDataSetChanged();
+            recycler_menu.setAdapter(clientAdapter);
+        }
+
     }
 
 
@@ -353,11 +405,13 @@ public class StoreCategoryFragment extends Fragment{
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle().equals(Common.UPDATE)){
-            showUpdatDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
-        }
-        else if(item.getTitle().equals(Common.DELETE)){
-            deleteCategory(adapter.getRef(item.getOrder()).getKey());
+        if(currentStore==null){
+            if(item.getTitle().equals(Common.UPDATE)){
+                showUpdatDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
+            }
+            else if(item.getTitle().equals(Common.DELETE)){
+                deleteCategory(adapter.getRef(item.getOrder()).getKey());
+            }
         }
         return super.onContextItemSelected(item);
     }

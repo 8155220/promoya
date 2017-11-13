@@ -1,4 +1,4 @@
-package uagrm.promoya.ViewHolder;
+package uagrm.promoya.ViewHolder.ClientViewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +12,7 @@ import uagrm.promoya.R;
  * Created by Shep on 11/13/2017.
  */
 
-public class NormalProductViewHolder extends RecyclerView.ViewHolder
+public class ClientProductViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
         public TextView product_name;
         public ImageView product_image;
@@ -20,7 +20,7 @@ public class NormalProductViewHolder extends RecyclerView.ViewHolder
         private ItemClickListener itemClickListener;
 
 
-        public NormalProductViewHolder(View itemView) {
+        public ClientProductViewHolder(View itemView) {
             super(itemView);
             product_name = (TextView)itemView.findViewById(R.id.product_name);
             product_image = (ImageView)itemView.findViewById(R.id.product_image);

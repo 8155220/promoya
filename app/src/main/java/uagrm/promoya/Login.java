@@ -123,20 +123,20 @@ public class Login extends AppCompatActivity {
         });
         return flag[0];
     }*/
-    private void userRegistered() {
+
+    public void userRegistered() {
         final ProgressDialog mDialog = new ProgressDialog(Login.this);
         mDialog.setMessage("Por favor espere....");
         mDialog.show();
         //final boolean[] flag = {false};
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
-        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+        mUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mDialog.dismiss();
-                if(dataSnapshot.hasChild(firebaseUser.getUid()))
-                {
-                    Common.user = dataSnapshot.getValue(User.class);
+                if (dataSnapshot.hasChild(firebaseUser.getUid())) {
+                    Common.user = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
+                    mDialog.dismiss();
                     //flag[0] = true;
                 } else {
                     Utils.sendNewUserInfoDatabase();
@@ -149,7 +149,7 @@ public class Login extends AppCompatActivity {
             }
         });
         //return flag[0];
-    }
+    } //Esta pele falta modificar , tambien de loginactivity
 
 
 }

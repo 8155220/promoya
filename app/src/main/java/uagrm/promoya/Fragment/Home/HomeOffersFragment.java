@@ -15,15 +15,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import uagrm.promoya.Adapter.ProductAdapter;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.R;
-import uagrm.promoya.ViewHolder.NormalProductViewHolder;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
 
 /**
  * Created by Mako on 1/13/2017.
@@ -35,7 +31,7 @@ public class HomeOffersFragment extends Fragment{
     //FIREBASE
     FirebaseDatabase db;
     DatabaseReference products;
-    FirebaseRecyclerAdapter<Product, NormalProductViewHolder> adapter;
+    FirebaseRecyclerAdapter<Product, ClientProductViewHolder> adapter;
 
     //Recycler
     RecyclerView recycler_menu;
@@ -78,14 +74,14 @@ public class HomeOffersFragment extends Fragment{
     }
     private void loadMenu() {
 
-        adapter=new FirebaseRecyclerAdapter<Product, NormalProductViewHolder>(
+        adapter=new FirebaseRecyclerAdapter<Product, ClientProductViewHolder>(
                 Product.class,
                 R.layout.product_item,
-                NormalProductViewHolder.class,
+                ClientProductViewHolder.class,
                 products.orderByChild("offerExpire").startAt(System.currentTimeMillis())
         ) {
             @Override
-            protected void populateViewHolder(NormalProductViewHolder viewHolder, final Product model, int position) {
+            protected void populateViewHolder(ClientProductViewHolder viewHolder, final Product model, int position) {
                 viewHolder.product_name.setText(model.getName());
                 Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);

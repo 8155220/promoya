@@ -14,15 +14,14 @@ import java.util.List;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ProductDetail;
-import uagrm.promoya.ProductList;
 import uagrm.promoya.R;
-import uagrm.promoya.ViewHolder.ProductViewHolder;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
 
 /**
  * Created by Shep on 11/12/2017.
  */
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ClientProductViewHolder> {
 
     private List<Product> list;
     Context mContext;
@@ -33,12 +32,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
     }
 
     @Override
-    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ProductViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item,parent,false));
+    public ClientProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ClientProductViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(ProductViewHolder holder, int position) {
+    public void onBindViewHolder(ClientProductViewHolder holder, int position) {
         final Product model = list.get(position);
 
         holder.product_name.setText(model.getName());

@@ -47,6 +47,9 @@ import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Category;
 import uagrm.promoya.Model.Product;
+import uagrm.promoya.Model.Store;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientCategoryViewHolder;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
 import uagrm.promoya.ViewHolder.ProductViewHolder;
 import uagrm.promoya.utils.Utils;
 
@@ -67,9 +70,11 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
     String categoryId="";
     Category currentCategory;
+    Store currentStore;
     String key;
 
     FirebaseRecyclerAdapter<Product,ProductViewHolder> adapter;
+    FirebaseRecyclerAdapter<Product,ClientProductViewHolder> clientAdapter;
 
     //Add new food
     ElegantNumberButton daysButton;
@@ -92,7 +97,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-
+        loadExtras();
         //FIrebase
         db = FirebaseDatabase.getInstance();
         foodList = db.getReference(PRODUCT_CHILD);
@@ -109,24 +114,37 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddFoodDialog();
-            }
-        });
-        //Get intent here
+        if (currentStore==null){
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAddFoodDialog();
+                }
+            });
+        } else fab.hide();
 
-        if(getIntent()!=null)
-        {
-            //categoryId = getIntent().getStringExtra("CategoryId");
-            currentCategory = (Category) getIntent().getExtras().getSerializable("currentCategory");
-        }
 
         if(!currentCategory.getCategoryId().isEmpty()){
             loadListFood(currentCategory.getCategoryId());
         }
 
+    }
+
+    private void loadExtras() {
+        if(getIntent()!=null)
+        {
+            Bundle extras = getIntent().getExtras();
+            if(extras.containsKey("currentCategory"))
+            {
+                //categoryId = getIntent().getStringExtra("CategoryId");
+                currentCategory = (Category) getIntent().getExtras().getSerializable("currentCategory");
+            }
+            if(extras.containsKey("STORE"))
+            {
+                //categoryId = getIntent().getStringExtra("CategoryId");
+                currentStore = (Store) getIntent().getExtras().getSerializable("STORE");
+            }
+        }
     }
 
     private void showAddFoodDialog() {
@@ -274,8 +292,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                                 double progress =(100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                                //mDialog.setMessage("Upload"+progress+"%");
-                                //mDialog.setMessage("Subido "+ finalI+"/" +listUri.size());
+
                             }
                         })
                 ;
@@ -337,39 +354,76 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         }
     }
     private void loadListFood(String categoryId) {
-        adapter = new FirebaseRecyclerAdapter<Product,ProductViewHolder>(
-                Product.class
-                ,R.layout.product_item,
-                ProductViewHolder.class,
-                foodList.orderByChild("categoryId").equalTo(categoryId)) { // like : select * from foods where menuid =
+        if(currentStore==null)
+        {
+            adapter = new FirebaseRecyclerAdapter<Product,ProductViewHolder>(
+                    Product.class
+                    ,R.layout.product_item,
+                    ProductViewHolder.class,
+                    foodList.orderByChild("categoryId").equalTo(categoryId)) { // like : select * from foods where menuid =
 
-            @Override
-            protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
-                viewHolder.product_name.setText(model.getName());
-                Picasso.with(getBaseContext())
-                        .load(model.getListImage().get(0))
-                        .into(viewHolder.product_image);
+                @Override
+                protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
+                    viewHolder.product_name.setText(model.getName());
+                    Picasso.with(getBaseContext())
+                            .load(model.getListImage().get(0))
+                            .into(viewHolder.product_image);
 
-                //final Product local = model;
-                viewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position, boolean isLongClick) {
-                        //start new activity
-                        //Toast.makeText(ProductList.this,local.getName(),Toast.LENGTH_SHORT).show();
+                    //final Product local = model;
+                    viewHolder.setItemClickListener(new ItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //start new activity
+                            //Toast.makeText(ProductList.this,local.getName(),Toast.LENGTH_SHORT).show();
 
-                        Intent producDetail = new Intent(ProductList.this,ProductDetail.class);
-                        //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
-                        producDetail.putExtra("PRODUCT",model);
-                        //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
-                        startActivity(producDetail);
-                    }
-                });
-            }
+                            Intent producDetail = new Intent(ProductList.this,ProductDetail.class);
+                            //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
+                            producDetail.putExtra("PRODUCT",model);
+                            //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
+                            startActivity(producDetail);
+                        }
+                    });
+                }
 
-        };
+            };
 
-        adapter.notifyDataSetChanged();
-        recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            recyclerView.setAdapter(adapter);
+        } else {
+            clientAdapter = new FirebaseRecyclerAdapter<Product,ClientProductViewHolder>(
+                    Product.class
+                    ,R.layout.product_item,
+                    ClientProductViewHolder.class,
+                    foodList.orderByChild("categoryId").equalTo(categoryId)) { // like : select * from foods where menuid =
+
+                @Override
+                protected void populateViewHolder(ClientProductViewHolder viewHolder, final Product model, int position) {
+                    viewHolder.product_name.setText(model.getName());
+                    Picasso.with(getBaseContext())
+                            .load(model.getListImage().get(0))
+                            .into(viewHolder.product_image);
+
+                    //final Product local = model;
+                    viewHolder.setItemClickListener(new ItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, boolean isLongClick) {
+                            //start new activity
+                            //Toast.makeText(ProductList.this,local.getName(),Toast.LENGTH_SHORT).show();
+
+                            Intent producDetail = new Intent(ProductList.this,ProductDetail.class);
+                            //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
+                            producDetail.putExtra("PRODUCT",model);
+                            //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
+                            startActivity(producDetail);
+                        }
+                    });
+                }
+
+            };
+
+            clientAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(clientAdapter);
+        }
     }
 
     @Override
@@ -398,14 +452,16 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if(item.getTitle().equals(Common.UPDATE))
-        {
-            showUpdateFoodDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
-        } else if (item.getTitle().equals(Common.DELETE)){
-            deleteFood(adapter.getRef(item.getOrder()).getKey());
-        } else if (item.getTitle().equals(Common.OFFER)){
-            showOfferProductDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
-        }
+
+            if(item.getTitle().equals(Common.UPDATE))
+            {
+                showUpdateFoodDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
+            } else if (item.getTitle().equals(Common.DELETE)){
+                deleteFood(adapter.getRef(item.getOrder()).getKey());
+            } else if (item.getTitle().equals(Common.OFFER)){
+                showOfferProductDialog(adapter.getRef(item.getOrder()).getKey(),adapter.getItem(item.getOrder()));
+            }
+
         return super.onContextItemSelected(item);
     }
 

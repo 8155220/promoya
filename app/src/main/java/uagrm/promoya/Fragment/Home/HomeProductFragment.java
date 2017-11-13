@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -22,17 +20,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import uagrm.promoya.Adapter.ProductAdapter;
 import uagrm.promoya.Interface.ItemClickListener;
-import uagrm.promoya.Model.Category;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ProductDetail;
-import uagrm.promoya.ProductList;
 import uagrm.promoya.R;
-import uagrm.promoya.ViewHolder.CategoryViewHolder;
-import uagrm.promoya.ViewHolder.NormalProductViewHolder;
-import uagrm.promoya.ViewHolder.ProductViewHolder;
-import uagrm.promoya.utils.Utils;
+import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
 
 /**
  * Created by Mako on 1/13/2017.
@@ -46,7 +38,7 @@ public class HomeProductFragment extends Fragment{
     //FIREBASE
     FirebaseDatabase db;
     DatabaseReference products;
-    FirebaseRecyclerAdapter<Product, NormalProductViewHolder> adapter;
+    FirebaseRecyclerAdapter<Product, ClientProductViewHolder> adapter;
 
     //Recycler
     RecyclerView recycler_menu;
@@ -86,7 +78,8 @@ public class HomeProductFragment extends Fragment{
 
         recycler_menu = (RecyclerView)view.findViewById(R.id.recycler_product);
         recycler_menu.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager = new LinearLayoutManager(getContext()); //original
+        layoutManager = new GridLayoutManager(getContext(),2);
         recycler_menu.setLayoutManager(layoutManager);
 
         loadMenu();
@@ -95,14 +88,14 @@ public class HomeProductFragment extends Fragment{
     }
     private void loadMenu() {
 
-        adapter=new FirebaseRecyclerAdapter<Product, NormalProductViewHolder>(
+        adapter=new FirebaseRecyclerAdapter<Product, ClientProductViewHolder>(
                 Product.class,
                 R.layout.product_item,
-                NormalProductViewHolder.class,
+                ClientProductViewHolder.class,
                 products
         ) {
             @Override
-            protected void populateViewHolder(NormalProductViewHolder viewHolder, final Product model, int position) {
+            protected void populateViewHolder(ClientProductViewHolder viewHolder, final Product model, int position) {
                 viewHolder.product_name.setText(model.getName());
                 Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);

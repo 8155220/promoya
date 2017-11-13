@@ -1,10 +1,12 @@
 package uagrm.promoya.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Shep on 10/17/2017.
  */
 
-public class Store {
+public class Store implements Serializable{
     String backgroundImgUrl;
     String description;
     String displayName;
