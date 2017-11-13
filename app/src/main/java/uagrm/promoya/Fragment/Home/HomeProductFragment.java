@@ -104,7 +104,7 @@ public class HomeProductFragment extends Fragment{
             @Override
             protected void populateViewHolder(NormalProductViewHolder viewHolder, final Product model, int position) {
                 viewHolder.product_name.setText(model.getName());
-                Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
+                Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);
                 //final  Category clickItem =model;
                 viewHolder.setItemClickListener(new ItemClickListener() {

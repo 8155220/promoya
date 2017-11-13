@@ -1,5 +1,6 @@
 package uagrm.promoya;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,13 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.SQLOutput;
 import java.util.Arrays;
 
 import uagrm.promoya.Common.Common;
@@ -83,13 +90,43 @@ public class Login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Utils.sendUserInfoDatabase();
-                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+                if(!userRegistered())
+                {
+                    System.out.println("ENTROAQUIASDJFLASJDF;LADJKSFL");
+                    Utils.sendNewUserInfoDatabase();
+                }
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "SIgn in canceled", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
+
+    private boolean userRegistered() {
+        final ProgressDialog mDialog = new ProgressDialog(Login.this);
+        mDialog.setMessage("Por favor espere....");
+        mDialog.show();
+        final boolean[] flag = {false};
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(firebaseUser.getUid()))
+                {
+                    Common.user = dataSnapshot.getValue(User.class);
+                    mDialog.dismiss();
+                    flag[0] = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mDialog.dismiss();
+            }
+        });
+        return flag[0];
+    }
+
 
 }

@@ -12,24 +12,29 @@ public class User {
             ,photoUrl
             ,uid
             ,token;
+    int     hasStore;
 
     public User() {
     }
+
+    public User(String displayName, String email, String photoUrl, String uid, String token, int hasStore) {
+        this.displayName = displayName;
+        this.email = email;
+        this.photoUrl = photoUrl;
+        this.uid = uid;
+        this.token = token;
+        this.hasStore = hasStore;
+    }
+
     public User(FirebaseUser firebaseUser){
         this.displayName = firebaseUser.getDisplayName();
         this.email = firebaseUser.getEmail();
         this.photoUrl = firebaseUser.getPhotoUrl().toString();
         this.token = "";
         this.uid = firebaseUser.getUid();
+        this.hasStore=0;
     }
 
-    public User(String displayName, String email, String photoUrl, String uid, String token) {
-        this.displayName = displayName;
-        this.email = email;
-        this.photoUrl = photoUrl;
-        this.uid = uid;
-        this.token = token;
-    }
 
     public String getDisplayName() {
         return displayName;
@@ -69,5 +74,13 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getHasStore() {
+        return hasStore;
+    }
+
+    public void setHasStore(int hasStore) {
+        this.hasStore = hasStore;
     }
 }

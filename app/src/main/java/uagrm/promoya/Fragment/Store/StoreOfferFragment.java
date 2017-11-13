@@ -207,5 +207,4 @@ public class StoreOfferFragment extends Fragment{
         }
         return index;
     }
-
 }

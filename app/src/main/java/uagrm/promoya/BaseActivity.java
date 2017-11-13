@@ -4,27 +4,44 @@ package uagrm.promoya;
  * Created by ravi on 3/8/2017.
  */
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Model.Product;
+import uagrm.promoya.Model.User;
+import uagrm.promoya.utils.Utils;
 
 
 public class BaseActivity extends AppCompatActivity {
@@ -45,24 +62,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        //cargando item selected
-        /*if(getIntent()!= null)
-        {
-            itemSelected = getIntent().getIntExtra("itemSelected",0);
-            navigationView.getMenu().getItem(itemSelected).setChecked(true);
-        }*/ /*else {
-            itemSelected = 0;
-            navigationView.getMenu().getItem(itemSelected).setChecked(true);
-        }*/
-
-        //toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
         loadUserData();
+        if (Common.user!=null) userRegistered(); //Obtiene los datos del usuario registrado dela db
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -70,11 +74,10 @@ public class BaseActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.navigation_menu_item_home:
-                        if(itemSelected==1)
-                        {
+                        if (itemSelected == 1) {
                             Intent dash = new Intent(getApplicationContext(), Home.class);
                             //item.setChecked(true);
-                            dash.putExtra("itemSelected",0);
+                            dash.putExtra("itemSelected", 0);
                             dash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(dash);
                             finish();
@@ -82,22 +85,26 @@ public class BaseActivity extends AppCompatActivity {
                             return true;
                         }
                         break;
-                        case R.id.navigation_menu_item_my_store:
-                        if(itemSelected==0)
-                        {
-                            Intent myStore = new Intent(getApplicationContext(), MyStore.class);
-                            //item.setChecked(true);
-                            myStore.putExtra("itemSelected",1);
-                            myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            startActivity(myStore);
-                            finish();
-                            drawerLayout.closeDrawers();
+                    case R.id.navigation_menu_item_my_store:
+                        if (itemSelected == 0) {
+                            //if (Common.user.getHasStore() == 1) {
+                                Intent myStore = new Intent(getApplicationContext(), MyStore.class);
+                                //item.setChecked(true);
+                                myStore.putExtra("itemSelected", 1);
+                                myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(myStore);
+                                finish();
+                                drawerLayout.closeDrawers();
+                            /*} else {
+                                showEnableStoreDialog();
+                            }*/
+
                             return true;
                         }
                         break;
                     case R.id.navigation_menu_item_logout:
-                        Toast.makeText(getBaseContext(),"Touch",Toast.LENGTH_SHORT).show();
-                        Intent login = new Intent(getApplicationContext(),Login.class);
+                        Toast.makeText(getBaseContext(), "Touch", Toast.LENGTH_SHORT).show();
+                        Intent login = new Intent(getApplicationContext(), Login.class);
                         startActivity(login);
                         logout();
                         finish();
@@ -118,6 +125,36 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    private void showEnableStoreDialog() {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(BaseActivity.this);
+        alertDialog.setTitle("Habilitar Tienda");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialog_enable_store = inflater.inflate(R.layout.dialog_enable_store, null);
+
+        alertDialog.setView(dialog_enable_store);
+        alertDialog.setIcon(R.drawable.ic_menu_store); //cambiar
+
+        alertDialog.setPositiveButton("Crear Tienda", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+
+                Snackbar.make(getWindow().getDecorView(), "Click En Aceptar", Snackbar.LENGTH_SHORT)
+                        .show();
+
+            }
+
+        });
+        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+
+                dialogInterface.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     private void loadUserData() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navHeader = navigationView.getHeaderView(0);
@@ -130,7 +167,7 @@ public class BaseActivity extends AppCompatActivity {
         navHeaderEmail.setText(Common.currentUser.getEmail());
     }
 
-    public void logout(){
+    public void logout() {
         AuthUI.getInstance().signOut(this);
     }
 
@@ -182,4 +219,31 @@ public class BaseActivity extends AppCompatActivity {
             finish();
         }
     }
+
+    private boolean userRegistered() {
+        final ProgressDialog mDialog = new ProgressDialog(BaseActivity.this);
+        mDialog.setMessage("Por favor espere....");
+        mDialog.show();
+        final boolean[] flag = {false};
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(firebaseUser.getUid()))
+                {
+                    Common.user = dataSnapshot.getValue(User.class);
+                    mDialog.dismiss();
+                    flag[0] = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mDialog.dismiss();
+            }
+        });
+        return flag[0];
+    }
+
 }

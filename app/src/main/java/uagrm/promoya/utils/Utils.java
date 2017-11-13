@@ -1,5 +1,6 @@
 package uagrm.promoya.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -9,9 +10,14 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import uagrm.promoya.Common.Common;
+import uagrm.promoya.Login;
 import uagrm.promoya.Model.User;
 
 
@@ -60,7 +66,7 @@ public class Utils<Data> {
         return intent ;
     }*/
 
-    public static void sendUserInfoDatabase(){
+    public static void sendNewUserInfoDatabase(){
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
         mUser.child(firebaseUser.getUid()).setValue(new User(firebaseUser));
@@ -69,6 +75,5 @@ public class Utils<Data> {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         return firebaseUser;
     }
-
 
 }

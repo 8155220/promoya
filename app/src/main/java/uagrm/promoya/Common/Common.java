@@ -33,6 +33,7 @@ public class Common {
     public static final String DELETE ="Eliminar";
     public static final String OFFER = "Ofertar";
     public static final int PICK_IMAGE_REQUEST = 71;
+    public static uagrm.promoya.Model.User user;
 
     public static final String baseUrl = "https://maps.googleapis.com";
 
