@@ -10,6 +10,8 @@ import android.net.NetworkInfo;
 
 import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -34,6 +36,8 @@ public class Common {
     public static final String OFFER = "Ofertar";
     public static final int PICK_IMAGE_REQUEST = 71;
     public static uagrm.promoya.Model.User user;
+    public static DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
+    public static DatabaseReference DBSTORES = FirebaseDatabase.getInstance().getReference().child("stores");
 
     public static final String baseUrl = "https://maps.googleapis.com";
 

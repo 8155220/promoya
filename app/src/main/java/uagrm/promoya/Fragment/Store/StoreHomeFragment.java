@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import uagrm.promoya.Common.Common;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
 
@@ -65,7 +66,7 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
         storeDescription = (TextView)view.findViewById(R.id.store_description);
         backgroundImg = (ImageView) view.findViewById(R.id.background_img);
         logoImg = (ImageView) view.findViewById(R.id.logo_img);
-        db = FirebaseDatabase.getInstance().getReference().child("stores").child("GtfoxqmB6yXRCuKuGk62aInYrJF3");
+        db = FirebaseDatabase.getInstance().getReference().child("stores").child(Common.currentUser.getUid());
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

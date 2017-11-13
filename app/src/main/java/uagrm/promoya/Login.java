@@ -90,11 +90,7 @@ public class Login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                if(!userRegistered())
-                {
-                    System.out.println("ENTROAQUIASDJFLASJDF;LADJKSFL");
-                    Utils.sendNewUserInfoDatabase();
-                }
+                userRegistered(); //verifica que este en la base de datos y si no esta lo envia
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "SIgn in canceled", Toast.LENGTH_SHORT).show();
                 finish();
@@ -102,7 +98,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private boolean userRegistered() {
+    /*private boolean userRegistered() {
         final ProgressDialog mDialog = new ProgressDialog(Login.this);
         mDialog.setMessage("Por favor espere....");
         mDialog.show();
@@ -126,6 +122,33 @@ public class Login extends AppCompatActivity {
             }
         });
         return flag[0];
+    }*/
+    private void userRegistered() {
+        final ProgressDialog mDialog = new ProgressDialog(Login.this);
+        mDialog.setMessage("Por favor espere....");
+        mDialog.show();
+        //final boolean[] flag = {false};
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
+        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mDialog.dismiss();
+                if(dataSnapshot.hasChild(firebaseUser.getUid()))
+                {
+                    Common.user = dataSnapshot.getValue(User.class);
+                    //flag[0] = true;
+                } else {
+                    Utils.sendNewUserInfoDatabase();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mDialog.dismiss();
+            }
+        });
+        //return flag[0];
     }
 
 

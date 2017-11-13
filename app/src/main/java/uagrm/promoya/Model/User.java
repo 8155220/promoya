@@ -32,7 +32,7 @@ public class User {
         this.photoUrl = firebaseUser.getPhotoUrl().toString();
         this.token = "";
         this.uid = firebaseUser.getUid();
-        this.hasStore=0;
+        //this.hasStore=0;
     }
 
 
@@ -82,5 +82,17 @@ public class User {
 
     public void setHasStore(int hasStore) {
         this.hasStore = hasStore;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "displayName='" + displayName + '\'' +
+                ", email='" + email + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
+                ", uid='" + uid + '\'' +
+                ", token='" + token + '\'' +
+                ", hasStore=" + hasStore +
+                '}';
     }
 }

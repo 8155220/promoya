@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import uagrm.promoya.BaseActivity;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Login;
 import uagrm.promoya.Model.User;
@@ -75,5 +76,7 @@ public class Utils<Data> {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         return firebaseUser;
     }
+
+
 
 }
