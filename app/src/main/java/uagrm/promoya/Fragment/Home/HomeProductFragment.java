@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,10 @@ public class HomeProductFragment extends Fragment{
         recycler_menu = (RecyclerView)view.findViewById(R.id.recycler_product);
         recycler_menu.setHasFixedSize(true);
 //        layoutManager = new LinearLayoutManager(getContext()); //original
-        layoutManager = new GridLayoutManager(getContext(),2);
+        layoutManager = new GridLayoutManager(getContext(),2);//Cudrado
+       // layoutManager = new StaggeredGridLayoutManager(getContext(),StaggeredGridLayoutManager.VERTICAL,);//Cudrado
+        //layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);//Cudrado
+
         recycler_menu.setLayoutManager(layoutManager);
 
         loadMenu();
