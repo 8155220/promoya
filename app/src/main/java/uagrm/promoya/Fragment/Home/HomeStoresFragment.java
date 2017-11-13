@@ -1,4 +1,4 @@
-package uagrm.promoya.Fragment;
+package uagrm.promoya.Fragment.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,35 +11,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
+import uagrm.promoya.Model.Store;
 import uagrm.promoya.ProductDetail;
-import uagrm.promoya.ProductList;
 import uagrm.promoya.R;
 import uagrm.promoya.ViewHolder.ProductViewHolder;
+import uagrm.promoya.ViewHolder.StoreViewHolder;
 
 /**
  * Created by Mako on 1/13/2017.
  */
-public class OfferStoreFragment extends Fragment{
-    public static final String PRODUCT_CHILD = "Products";
+public class HomeStoresFragment extends Fragment{
+    public static final String STORES_CHILD = "stores";
 
     //Model
-    Product newProduct;
 
     //FIREBASE
     FirebaseDatabase db;
-    DatabaseReference products;
-    FirebaseRecyclerAdapter<Product, ProductViewHolder> adapter;
+    DatabaseReference stores;
+    FirebaseRecyclerAdapter<Store, StoreViewHolder> adapter;
 
     //Recycler
     RecyclerView recycler_menu;
@@ -47,15 +42,14 @@ public class OfferStoreFragment extends Fragment{
 
     View rootView;
 
-    public OfferStoreFragment() {
+    public HomeStoresFragment() {
     }
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.activity_offer_list, container, false);
+        return inflater.inflate(R.layout.activity_store_list, container, false);
     }
 
     @Override
@@ -65,8 +59,8 @@ public class OfferStoreFragment extends Fragment{
         rootView=view;
         //Init Firebase
         db = FirebaseDatabase.getInstance();
-        //products = db.getReference(PRODUCT_CHILD).child(Common.currentUser.getUid());
-        products = db.getReference(PRODUCT_CHILD);
+        //stores = db.getReference(STORES_CHILD).child(Common.currentUser.getUid());
+        stores = db.getReference(STORES_CHILD);
 
         //tolbar
         //setHasOptionsMenu(true);
@@ -82,8 +76,7 @@ public class OfferStoreFragment extends Fragment{
 
     }
     private void loadMenu() {
-        Query query = products;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        /*query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -98,29 +91,20 @@ public class OfferStoreFragment extends Fragment{
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
 
-        adapter=new FirebaseRecyclerAdapter<Product, ProductViewHolder>(
+       /* adapter=new FirebaseRecyclerAdapter<Product, ProductViewHolder>(
                 Product.class,
                 R.layout.product_item,
                 ProductViewHolder.class,
-                products
+                stores.orderByChild("storeId").equalTo(Utils.getFirebaseUser().getUid())
+                .orderByChild("offerExpire").startAt(System.currentTimeMillis())
         ) {
 
-            @Override
-            public void onBindViewHolder(ProductViewHolder viewHolder, int position) {
-                long offerExpire = Long.parseLong(adapter.getItem(position).getOfferExpire());
-                if(offerExpire>System.currentTimeMillis())
-                {
-                    adapter.getRef(position).removeValue();
-                    super.onBindViewHolder(viewHolder, position);
-                }
-            }
 
             @Override
             protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
-                long offerExpire = Long.parseLong(model.getOfferExpire());
-                System.out.println("POPULANDO-> offerExpire:"+offerExpire +"CurrentTimeMs :"+System.currentTimeMillis());
+                long offerExpire = model.getOfferExpire();
                 if(offerExpire>System.currentTimeMillis())
                 {
                     viewHolder.product_name.setText(model.getName());
@@ -140,9 +124,36 @@ public class OfferStoreFragment extends Fragment{
                     });
                 }
             }
+        };*/
+        adapter=new FirebaseRecyclerAdapter<Store, StoreViewHolder>(
+                Store.class,
+                R.layout.store_item,
+                StoreViewHolder.class,
+                stores
+        ) {
+            @Override
+            protected void populateViewHolder(StoreViewHolder viewHolder, final Store model, int position) {
+                viewHolder.product_name.setText(model.getDisplayName());
+                Picasso.with(getActivity().getApplicationContext()).load(model.getLogoImgUrl())
+                        .into(viewHolder.product_image);
+                //final  Category clickItem =model;
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        //Get CategoryId and send to new Activity
+                        //Intent producDetail = new Intent(getContext(),ProductDetail.class);
+                        //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
+                        //producDetail.putExtra("PRODUCT",model);
+                        //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
+                        //startActivity(producDetail);
+                    }
+                });
+            }
         };
         adapter.notifyDataSetChanged();
         recycler_menu.setAdapter(adapter);
     }
+
+
 
 }

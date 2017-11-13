@@ -1,4 +1,4 @@
-package uagrm.promoya.Fragment;
+package uagrm.promoya.Fragment.Store;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -75,7 +75,7 @@ import uagrm.promoya.ViewHolder.CategoryViewHolder;
 /**
  * Created by Mako on 1/13/2017.
  */
-public class CategoryStoreFragment extends Fragment{
+public class StoreCategoryFragment extends Fragment{
     public static final String PRODUCT_CHILD = "Category";
 
     Toolbar toolbar;
@@ -107,7 +107,7 @@ public class CategoryStoreFragment extends Fragment{
 
     View rootView;
 
-    public CategoryStoreFragment() {
+    public StoreCategoryFragment() {
     }
 
 
@@ -126,7 +126,6 @@ public class CategoryStoreFragment extends Fragment{
         //Init Firebase
         db = FirebaseDatabase.getInstance();
         categories = db.getReference(PRODUCT_CHILD).child(Common.currentUser.getUid());
-        System.out.println("Current User :" +Common.currentUser.getUid() );
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 

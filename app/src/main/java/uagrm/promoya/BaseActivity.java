@@ -47,11 +47,14 @@ public class BaseActivity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         //cargando item selected
-        if(getIntent()!= null)
+        /*if(getIntent()!= null)
         {
             itemSelected = getIntent().getIntExtra("itemSelected",0);
             navigationView.getMenu().getItem(itemSelected).setChecked(true);
-        }
+        }*/ /*else {
+            itemSelected = 0;
+            navigationView.getMenu().getItem(itemSelected).setChecked(true);
+        }*/
 
         //toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -64,17 +67,30 @@ public class BaseActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                final String appPackageName = getPackageName();
 
                 switch (item.getItemId()) {
-                    case R.id.navigation_menu_item_my_store:
-                        if(itemSelected!=1)
+                    case R.id.navigation_menu_item_home:
+                        if(itemSelected==1)
                         {
-                            Intent dash = new Intent(getApplicationContext(), MyStore.class);
-                            dash.putExtra("itemSelected",1);
+                            Intent dash = new Intent(getApplicationContext(), Home.class);
+                            //item.setChecked(true);
+                            dash.putExtra("itemSelected",0);
                             dash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(dash);
-                            //finish();
+                            finish();
+                            drawerLayout.closeDrawers();
+                            return true;
+                        }
+                        break;
+                        case R.id.navigation_menu_item_my_store:
+                        if(itemSelected==0)
+                        {
+                            Intent myStore = new Intent(getApplicationContext(), MyStore.class);
+                            //item.setChecked(true);
+                            myStore.putExtra("itemSelected",1);
+                            myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(myStore);
+                            finish();
                             drawerLayout.closeDrawers();
                             return true;
                         }

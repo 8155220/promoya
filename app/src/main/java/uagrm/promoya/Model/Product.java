@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class Product implements Serializable{
-    private String Name,Image,Description,Price,MenuId,ProductId,principalCategory,date;
+    private String Name,Image,Description,Price, CategoryId,ProductId,principalCategory,date,storeId;
     private long offerExpire;
     private List<String> listImage;
 
@@ -20,15 +20,16 @@ public class Product implements Serializable{
     }
 
 
-    public Product(String name, String image, String description, String price, String menuId, String productId, String principalCategory, String date, long offerExpire, List<String> listImage) {
+    public Product(String name, String image, String description, String price, String categoryId, String productId, String principalCategory, String date, String storeId, long offerExpire, List<String> listImage) {
         Name = name;
         Image = image;
         Description = description;
         Price = price;
-        MenuId = menuId;
+        CategoryId = categoryId;
         ProductId = productId;
         this.principalCategory = principalCategory;
         this.date = date;
+        this.storeId = storeId;
         this.offerExpire = offerExpire;
         this.listImage = listImage;
     }
@@ -73,13 +74,20 @@ public class Product implements Serializable{
         Price = price;
     }
 
-
-    public String getMenuId() {
-        return MenuId;
+    public String getStoreId() {
+        return storeId;
     }
 
-    public void setMenuId(String menuId) {
-        MenuId = menuId;
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getCategoryId() {
+        return CategoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        CategoryId = categoryId;
     }
 
     public String getProductId() {

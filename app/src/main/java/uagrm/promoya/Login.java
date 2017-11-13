@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Model.User;
+import uagrm.promoya.utils.Utils;
 
 public class Login extends AppCompatActivity {
 
@@ -35,11 +37,11 @@ public class Login extends AppCompatActivity {
                 if (user != null) {
                     //onSignedInInitialize(user.getDisplayName());
                     Common.currentUser = user;
-                    Intent myStore = new Intent(Login.this,MyStore.class);
+                    Intent myStore = new Intent(Login.this,Home.class);
                     myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(myStore);
                     finish();
-                    Toast.makeText(Login.this,"your are now sign in ",Toast.LENGTH_SHORT);
+                    //Toast.makeText(Login.this,"your are now sign in ",Toast.LENGTH_SHORT);
                 }else  {
                     //onSignedOutCleanedup();
                     startActivityForResult(
@@ -81,6 +83,7 @@ public class Login extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
+                Utils.sendUserInfoDatabase();
                 Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "SIgn in canceled", Toast.LENGTH_SHORT).show();

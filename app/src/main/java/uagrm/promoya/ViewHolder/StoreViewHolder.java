@@ -14,20 +14,19 @@ import uagrm.promoya.R;
  * Created by Shep on 10/26/2017.
  */
 
-public class ProductViewHolder extends RecyclerView.ViewHolder
-        implements View.OnClickListener
-        ,View.OnCreateContextMenuListener {
+public class StoreViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener {
 
     public TextView product_name;
     public ImageView product_image;
 
     private ItemClickListener itemClickListener;
-
-    public ProductViewHolder(View itemView) {
+    public StoreViewHolder(View itemView) {
         super(itemView);
         product_name = (TextView)itemView.findViewById(R.id.product_name);
         product_image = (ImageView)itemView.findViewById(R.id.product_image);
-        itemView.setOnCreateContextMenuListener(this);
+
+        //itemView.setOnCreateContextMenuListener(this);
         itemView.setOnClickListener(this);
 
     }
@@ -41,11 +40,4 @@ public class ProductViewHolder extends RecyclerView.ViewHolder
         itemClickListener.onClick(view,getAdapterPosition(),false);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu contextMenu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        contextMenu.setHeaderTitle("Seleccionar accion");
-        contextMenu.add(0,0,getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0,1,getAdapterPosition(), Common.DELETE);
-        contextMenu.add(0,2,getAdapterPosition(), Common.OFFER);
-    }
 }

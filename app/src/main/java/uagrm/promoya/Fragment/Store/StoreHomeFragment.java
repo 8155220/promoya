@@ -1,4 +1,4 @@
-package uagrm.promoya.Fragment;
+package uagrm.promoya.Fragment.Store;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -32,7 +30,7 @@ import uagrm.promoya.Model.Store;
 /**
  * Created by Mako on 1/13/2017.
  */
-public class HomeStoreFragment extends Fragment implements OnMapReadyCallback {
+public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
 
     TextView storeName;
     TextView storeDescription;
@@ -43,13 +41,13 @@ public class HomeStoreFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap mGoogleMap;
     MapView mMapView;
 
-    private static HomeStoreFragment singleton = new HomeStoreFragment();
+    private static StoreHomeFragment singleton = new StoreHomeFragment();
 
-    private HomeStoreFragment() {
+    public StoreHomeFragment() {
 
     }
 
-    public static HomeStoreFragment getInstance( ) {
+    public static StoreHomeFragment getInstance( ) {
         return singleton;
     }
 

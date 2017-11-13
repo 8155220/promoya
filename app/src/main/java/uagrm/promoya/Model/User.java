@@ -1,0 +1,73 @@
+package uagrm.promoya.Model;
+
+import com.google.firebase.auth.FirebaseUser;
+
+/**
+ * Created by Shep on 11/12/2017.
+ */
+
+public class User {
+    String displayName
+            ,email
+            ,photoUrl
+            ,uid
+            ,token;
+
+    public User() {
+    }
+    public User(FirebaseUser firebaseUser){
+        this.displayName = firebaseUser.getDisplayName();
+        this.email = firebaseUser.getEmail();
+        this.photoUrl = firebaseUser.getPhotoUrl().toString();
+        this.token = "";
+        this.uid = firebaseUser.getUid();
+    }
+
+    public User(String displayName, String email, String photoUrl, String uid, String token) {
+        this.displayName = displayName;
+        this.email = email;
+        this.photoUrl = photoUrl;
+        this.uid = uid;
+        this.token = token;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+}

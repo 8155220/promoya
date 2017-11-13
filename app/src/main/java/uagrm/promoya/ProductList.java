@@ -48,6 +48,7 @@ import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Category;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ViewHolder.ProductViewHolder;
+import uagrm.promoya.utils.Utils;
 
 public class ProductList extends AppCompatActivity implements  View.OnClickListener{
     public static final String PRODUCT_CHILD = "Products";
@@ -183,9 +184,10 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setName(edtName.getText().toString());
                         newProduct.setDescription(edtDescription.getText().toString());
                         newProduct.setPrice(edtPrice.getText().toString());
-                        newProduct.setMenuId(currentCategory.getCategoryId());
+                        newProduct.setCategoryId(currentCategory.getCategoryId());
                         newProduct.setPrincipalCategory(currentCategory.getPrincipalCategory());
                         newProduct.setDate(String.valueOf(System.currentTimeMillis()));
+                        newProduct.setStoreId(Utils.getFirebaseUser().getUid());
                         newProduct.setProductId(key);
                         foodList.child(key).setValue(newProduct);
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
@@ -339,7 +341,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                 Product.class
                 ,R.layout.product_item,
                 ProductViewHolder.class,
-                foodList.orderByChild("menuId").equalTo(categoryId)) { // like : select * from foods where menuid =
+                foodList.orderByChild("categoryId").equalTo(categoryId)) { // like : select * from foods where menuid =
 
             @Override
             protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
@@ -481,7 +483,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                     item.setName(edtName.getText().toString());
                     item.setPrice(edtPrice.getText().toString());
                     item.setDescription(edtDescription.getText().toString());
-                    //item.setMenuId(currentCategory.getCategoryId());
+                    //item.setCategoryId(currentCategory.getCategoryId());
                     //item.setPrincipalCategory(currentCategory.getPrincipalCategory());
                     item.setProductId(key);
                     foodList.child(key).setValue(item);

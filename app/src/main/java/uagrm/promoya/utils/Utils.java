@@ -7,6 +7,13 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import uagrm.promoya.Model.User;
+
 
 /**
  * Created by DhytoDev on 3/12/17.
@@ -52,6 +59,16 @@ public class Utils<Data> {
         context.startActivity(intent);
         return intent ;
     }*/
+
+    public static void sendUserInfoDatabase(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
+        mUser.child(firebaseUser.getUid()).setValue(new User(firebaseUser));
+    }
+    public static FirebaseUser getFirebaseUser(){
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        return firebaseUser;
+    }
 
 
 }
