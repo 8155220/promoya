@@ -15,6 +15,7 @@ import uagrm.promoya.R;
 public class ClientProductViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
         public TextView product_name;
+        public TextView product_price;
         public ImageView product_image;
 
         private ItemClickListener itemClickListener;
@@ -23,6 +24,7 @@ public class ClientProductViewHolder extends RecyclerView.ViewHolder
         public ClientProductViewHolder(View itemView) {
             super(itemView);
             product_name = (TextView)itemView.findViewById(R.id.product_name);
+            product_price = (TextView)itemView.findViewById(R.id.product_price);
             product_image = (ImageView)itemView.findViewById(R.id.product_image);
             itemView.setOnClickListener(this);
 

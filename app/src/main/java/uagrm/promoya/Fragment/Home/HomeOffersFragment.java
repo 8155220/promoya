@@ -85,6 +85,7 @@ public class HomeOffersFragment extends Fragment{
                 viewHolder.product_name.setText(model.getName());
                 Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);
+                viewHolder.product_price.setText(model.getPrice()+ " Bs");
                 //final  Category clickItem =model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
