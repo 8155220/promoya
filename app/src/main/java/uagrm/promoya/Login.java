@@ -28,7 +28,7 @@ public class Login extends AppCompatActivity {
     public static final int RC_SIGN_IN = 1;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-
+    ProgressDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +125,8 @@ public class Login extends AppCompatActivity {
     }*/
 
     public void userRegistered() {
-        final ProgressDialog mDialog = new ProgressDialog(Login.this);
+        if(mDialog==null)mDialog = new ProgressDialog(Login.this);
+
         mDialog.setMessage("Por favor espere....");
         mDialog.show();
         //final boolean[] flag = {false};

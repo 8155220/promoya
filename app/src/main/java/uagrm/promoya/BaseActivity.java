@@ -50,6 +50,7 @@ import uagrm.promoya.Common.Common;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
 import uagrm.promoya.Model.User;
+import uagrm.promoya.Watson.Conversation.ChatBotActivity;
 import uagrm.promoya.utils.Utils;
 
 
@@ -132,6 +133,14 @@ public class BaseActivity extends AppCompatActivity {
                             }
                             return true;
                         }
+                        break;
+                        case R.id.navigation_menu_item_chatbot:
+                                    Intent myStore = new Intent(getApplicationContext(), ChatBotActivity.class);
+                                    //item.setChecked(true);
+                                    //myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startActivity(myStore);
+                                    //finish();
+                                    drawerLayout.closeDrawers();
                         break;
                     case R.id.navigation_menu_item_logout:
                         Toast.makeText(getBaseContext(), "Touch", Toast.LENGTH_SHORT).show();
