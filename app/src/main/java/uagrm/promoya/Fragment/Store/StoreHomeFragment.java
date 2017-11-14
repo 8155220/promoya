@@ -86,10 +86,12 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
                     Store store = dataSnapshot.getValue(Store.class);
                     storeName.setText(store.getDisplayName());
                     storeDescription.setText(store.getDescription());
-                    Picasso.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
-                            .into(backgroundImg);
+                    /*Picasso.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
+                            .into(backgroundImg);*/
                     /*Picasso.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl())
                             .into(logoImg);*/
+                    Glide.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
+                            .into(backgroundImg);
                     Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                             .into(logoImg);
 
@@ -105,11 +107,13 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
             storeDescription.setText(currentStore.getDescription());
             /*Picasso.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl())
                     .into(backgroundImg);*/
-            Glide.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
-                    .into(logoImg);
+            Glide.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl())
+                    .into(backgroundImg);
 
-            Picasso.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl())
+            Glide.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                     .into(logoImg);
+            /*Picasso.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl())
+                    .into(logoImg);*/
         }
         //pero como ya tenemos los datos
 
@@ -126,10 +130,10 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(40.689247,-74.044502))
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(-17.781822,-63.181690))
                 .title("Estatua libertad")
                 .snippet("I hope something pass"));
-        CameraPosition Liberty =  CameraPosition.builder().target(new LatLng(40.689247,-74.044502))
+        CameraPosition Liberty =  CameraPosition.builder().target(new LatLng(-17.781822,-63.181690))
                 .zoom(16).bearing(0).tilt(45).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
     }

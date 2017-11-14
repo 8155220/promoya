@@ -74,6 +74,7 @@ public class StoreDetail extends AppCompatActivity {
                         fragmentTransaction.commit();
                         return true;
                         case R.id.bottonNavigation_offer:
+                            //FALTAMODIFICAR OFERTAS PARA CATEGORIA ESPECIFICA
                         StoreOfferFragment storeOfferFragment = new StoreOfferFragment();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content,

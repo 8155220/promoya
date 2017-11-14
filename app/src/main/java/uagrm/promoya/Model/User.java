@@ -11,8 +11,10 @@ public class User {
             ,email
             ,photoUrl
             ,uid
-            ,token;
+            ,token
+            ,storeName;
     int     hasStore;
+
 
     public User() {
     }
@@ -82,6 +84,14 @@ public class User {
 
     public void setHasStore(int hasStore) {
         this.hasStore = hasStore;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     @Override

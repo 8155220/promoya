@@ -252,6 +252,7 @@ public class BaseActivity extends AppCompatActivity {
                     newStore.setStoreId(Common.currentUser.getUid());
                     Common.DB.child("stores").child(Common.currentUser.getUid()).setValue(newStore);
                     Common.DB.child("users").child(Common.currentUser.getUid()).child("hasStore").setValue(1);
+                    Common.DB.child("users").child(Common.currentUser.getUid()).child("storeName").setValue(newStore.getDisplayName());
                     dialogInterface.dismiss();
                 }
             }
@@ -470,7 +471,7 @@ public class BaseActivity extends AppCompatActivity {
             //Subiendo Logo
             imageName = UUID.randomUUID().toString();
             final StorageReference imageFolder2 = storageReference.child("images/" + imageName);
-            imageFolder2.putFile(uriLogoImg)
+            imageFolder2.putFile(uriBackgroundImg)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
 

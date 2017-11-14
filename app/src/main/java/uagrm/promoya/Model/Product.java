@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class Product implements Serializable{
-    private String Name,Image,Description,Price, CategoryId,ProductId,principalCategory,date,storeId;
+    private String Name,Image,Description,Price, CategoryId,ProductId,principalCategory,date,storeId,storeName;
     private long offerExpire;
     private List<String> listImage;
 
@@ -20,7 +20,7 @@ public class Product implements Serializable{
     }
 
 
-    public Product(String name, String image, String description, String price, String categoryId, String productId, String principalCategory, String date, String storeId, long offerExpire, List<String> listImage) {
+    public Product(String name, String image, String description, String price, String categoryId, String productId, String principalCategory, String date, String storeId, String storeName, long offerExpire, List<String> listImage) {
         Name = name;
         Image = image;
         Description = description;
@@ -30,6 +30,7 @@ public class Product implements Serializable{
         this.principalCategory = principalCategory;
         this.date = date;
         this.storeId = storeId;
+        this.storeName = storeName;
         this.offerExpire = offerExpire;
         this.listImage = listImage;
     }
@@ -127,4 +128,12 @@ public class Product implements Serializable{
         this.listImage.add(url);
     }
     public void clearUrl(){ this.listImage.clear();}
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
 }

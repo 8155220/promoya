@@ -34,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -92,6 +93,8 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
     ImageView img1,img2,img3,img4,img_remove_last;
 
     private static final int GALLERY_REQUEST = 1;
+
+    MaterialSearchBar materialSearchBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +130,9 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         if(!currentCategory.getCategoryId().isEmpty()){
             loadListFood(currentCategory.getCategoryId());
         }
+
+        materialSearchBar = (MaterialSearchBar)findViewById(R.id.searchBar);
+        materialSearchBar.disableSearch();
 
     }
 
@@ -207,6 +213,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setDate(String.valueOf(System.currentTimeMillis()));
                         newProduct.setStoreId(Utils.getFirebaseUser().getUid());
                         newProduct.setProductId(key);
+                        newProduct.setStoreName(Common.user.getStoreName());
                         foodList.child(key).setValue(newProduct);
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
                                 .show();
