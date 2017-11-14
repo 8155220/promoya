@@ -189,9 +189,9 @@ public class ChatBotActivity extends AppCompatActivity {
                             streamPlayer = new StreamPlayer();
                             if(audioMessage != null && !audioMessage.getMessage().isEmpty())
                                 //Change the Voice format and choose from the available choices
-                                streamPlayer.playStream(textToSpeech.synthesize(audioMessage.getMessage(), Voice.EN_LISA).execute());
+                                streamPlayer.playStream(textToSpeech.synthesize(audioMessage.getMessage(), Voice.ES_LAURA).execute());
                             else
-                                streamPlayer.playStream(textToSpeech.synthesize("No Text Specified", Voice.EN_LISA).execute());
+                                streamPlayer.playStream(textToSpeech.synthesize("No Text Specified", Voice.ES_LAURA).execute());
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -406,7 +406,8 @@ public class ChatBotActivity extends AppCompatActivity {
         return new RecognizeOptions.Builder()
                 .continuous(true)
                 .contentType(ContentType.OPUS.toString())
-                //.model("en-UK_NarrowbandModel")
+                //.model("en-UK_NarrowbandModel")//ORIGINAL
+                .model("es-ES_NarrowbandModel")
                 .interimResults(true)
                 .inactivityTimeout(2000)
                 //TODO: Uncomment this to enable Speaker Diarization
