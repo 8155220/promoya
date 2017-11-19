@@ -70,7 +70,7 @@ public class ChatHomeActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserSelected(DatabaseReference selectedRef) {
         Intent thread = new Intent(this, ThreadActivity.class);
-        thread.putExtra(Common.USER_ID_EXTRA, selectedRef.getKey());
+        thread.putExtra(Common.USER_ID_EXTRA, selectedRef.getKey()); //selectedRef.getKey() == a quien quiero hablarle
         startActivity(thread);
     }
 

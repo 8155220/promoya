@@ -1,5 +1,6 @@
 package uagrm.promoya;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
@@ -7,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import cn.iwgang.countdownview.CountdownView;
+import uagrm.promoya.Chat.ChatDetail.ThreadActivity;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Common.ImageSlider.ViewPagerAdapter;
 import uagrm.promoya.Model.Product;
@@ -27,6 +30,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     private ActionBar actionBar;
 
     TextView product_name, product_price, product_description,product_date;
+    Button btn_message;
     ImageView product_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
@@ -68,6 +72,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_price = (TextView) findViewById(R.id.product_price);
         product_date =  (TextView) findViewById(R.id.product_date);
         mCvCountdownView = (CountdownView)findViewById(R.id.count_down);
+        btn_message = (Button)findViewById(R.id.btn_message);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
@@ -93,6 +98,16 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
             }
         }
         //escuchador
+        btn_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("CLICKONE");
+                Intent thread = new Intent(ProductDetail.this, ThreadActivity.class);
+                thread.putExtra(Common.USER_ID_EXTRA, currentProduct.getStoreId()); //selectedRef.getKey() == a quien quiero hablarle
+                startActivity(thread);
+            }
+        });
+
         numberButton.setOnValueChangeListener(new ElegantNumberButton.OnValueChangeListener() {
             @Override
             public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
@@ -102,6 +117,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                 //Log.d("PRODUCDETAIL", String.format("oldValue: %d   newValue: %d", oldValue, newValue));
             }
         });
+
     }
 
     private void setUiPageViewController() {
