@@ -14,7 +14,7 @@
             android:icon="@drawable/ic_menu_store"
             android:title="@string/navigation_menu_item_my_store" />
         <item
-            android:id="@+id/navigation_menu_item_chat"
+            android:id="@+id/navigation_menu_item_message"
             android:checked="true"
             android:icon="@drawable/ic_chat"
             android:title="@string/navigation_menu_item_chat" />

@@ -84,5 +84,13 @@ dependencies {
     compile 'com.ibm.watson.developer_cloud:speech-to-text:3.8.1-SNAPSHOT'
     compile 'com.ibm.watson.developer_cloud:android-sdk:0.4.2'
     compile 'com.ibm.mobilefirstplatform.clientsdk.android:analytics:1.1.0'
+    //grenRobotEventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    //icepick
+    compile 'frankiesardo:icepick:3.2.0'
+    provided 'frankiesardo:icepick-processor:3.2.0'
+    //time
+    compile 'joda-time:joda-time:2.9.7'
 }
 apply plugin: 'com.google.gms.google-services'

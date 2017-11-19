@@ -28,6 +28,10 @@ import uagrm.promoya.Remote.RetrofitClient;*/
  */
 
 public class Common {
+    //CHAT
+    public static final String USER_ID_EXTRA = "userIdExtra";
+    //ENDCHAT
+
     public static FirebaseUser currentUser;
     //public static Request currentRequest;
     private static final String BASE_URL = "https://fcm.googleapis.com/";

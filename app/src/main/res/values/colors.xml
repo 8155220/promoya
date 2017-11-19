@@ -27,4 +27,12 @@
     <!--chatbot watson-->
     <color name="bg_bubble_self">#009688</color>
     <color name="bg_bubble_watbot">#FFC107</color>
+
+    <!--theme colors-->
+    <color name="colorShadow">#41000000</color>
+    <color name="colorBackground">#2b2b2b</color>
+    <color name="colorForeground">#3A3A3A</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorGrey">#BDBDBD</color>
+    <!--fab colors-->
 </resources>

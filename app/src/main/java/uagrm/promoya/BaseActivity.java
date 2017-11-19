@@ -46,7 +46,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.UUID;
 
+import uagrm.promoya.Chat.HomeChat.ChatHomeActivity;
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Common.FirebaseDatabaseHelper;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
 import uagrm.promoya.Model.User;
@@ -86,6 +88,11 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
+        //LoadFirebaseDatabaseHelper
+        FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelper.getInstance();
+
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -134,14 +141,25 @@ public class BaseActivity extends AppCompatActivity {
                             return true;
                         }
                         break;
-                        case R.id.navigation_menu_item_chatbot:
+                    case R.id.navigation_menu_item_message:
+                            if (Common.user != null) {
+                                    Intent message = new Intent(getApplicationContext(), ChatHomeActivity.class);
+                                    //item.setChecked(true);
+                                    message.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startActivity(message);
+                                    //finish();
+                                    drawerLayout.closeDrawers();
+                                    return true;
+                            }
+                            else break;
+                    case R.id.navigation_menu_item_chatbot:
                                     Intent myStore = new Intent(getApplicationContext(), ChatBotActivity.class);
                                     //item.setChecked(true);
                                     //myStore.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                     startActivity(myStore);
                                     //finish();
                                     drawerLayout.closeDrawers();
-                        break;
+                    break;
                     case R.id.navigation_menu_item_logout:
                         Toast.makeText(getBaseContext(), "Touch", Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(getApplicationContext(), Login.class);

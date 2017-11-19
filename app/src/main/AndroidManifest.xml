@@ -37,6 +37,10 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ProductDetail"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Chat.HomeChat.ChatHomeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Chat.ChatDetail.ThreadActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
