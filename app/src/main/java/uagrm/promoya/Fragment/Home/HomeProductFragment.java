@@ -92,7 +92,8 @@ public class HomeProductFragment extends Fragment{
         recycler_menu = (RecyclerView)view.findViewById(R.id.recycler_product);
         recycler_menu.setHasFixedSize(true);
 //        layoutManager = new LinearLayoutManager(getContext()); //original
-        layoutManager = new GridLayoutManager(getContext(),2);//Cudrado
+        //layoutManager = new GridLayoutManager(getContext(),2);//Cudrado ORIGINAL
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);//Cudrado
        // layoutManager = new StaggeredGridLayoutManager(getContext(),StaggeredGridLayoutManager.VERTICAL,);//Cudrado
         //layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);//Cudrado
 
@@ -269,6 +270,8 @@ public class HomeProductFragment extends Fragment{
                 Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);
                 viewHolder.product_price.setText(model.getPrice()+ " Bs");
+                viewHolder.product_store.setText("#"+model.getStoreName());
+
                 //viewHOlder.
                 //final  Category clickItem =model;
                 viewHolder.setItemClickListener(new ItemClickListener() {

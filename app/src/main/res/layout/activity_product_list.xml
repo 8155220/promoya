@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorGrey"
     android:layout_height="match_parent"
     android:id="@+id/rootLayout">
     <LinearLayout
@@ -34,7 +35,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:backgroundTint="@android:color/white"
         app:srcCompat="@drawable/ic_playlist_add_black_24dp"
         />
 </RelativeLayout>

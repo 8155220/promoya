@@ -27,7 +27,6 @@ import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
 public class HomeOffersFragment extends Fragment{
     public static final String PRODUCT_CHILD = "Products";
 
-
     //FIREBASE
     FirebaseDatabase db;
     DatabaseReference products;
@@ -46,7 +45,7 @@ public class HomeOffersFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.activity_product_list, container, false);
+        return inflater.inflate(R.layout.activity_offer_list, container, false);
     }
 
     @Override

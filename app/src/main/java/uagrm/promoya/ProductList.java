@@ -215,6 +215,8 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setProductId(key);
                         newProduct.setStoreName(Common.user.getStoreName());
                         foodList.child(key).setValue(newProduct);
+                        System.out.println("STORENAME :"+Common.user.getStoreName());
+                        System.out.println("setStoreId :"+Utils.getFirebaseUser().getUid());
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
                                 .show();
                         dialogInterface.dismiss();
@@ -407,14 +409,9 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                     Picasso.with(getBaseContext())
                             .load(model.getListImage().get(0))
                             .into(viewHolder.product_image);
-
-                    //final Product local = model;
                     viewHolder.setItemClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(View view, int position, boolean isLongClick) {
-                            //start new activity
-                            //Toast.makeText(ProductList.this,local.getName(),Toast.LENGTH_SHORT).show();
-
                             Intent producDetail = new Intent(ProductList.this,ProductDetail.class);
                             //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
                             producDetail.putExtra("PRODUCT",model);

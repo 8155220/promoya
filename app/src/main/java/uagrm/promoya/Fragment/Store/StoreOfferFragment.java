@@ -27,6 +27,7 @@ import uagrm.promoya.Adapter.ProductAdapter;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
+import uagrm.promoya.Model.Store;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.ProductList;
 import uagrm.promoya.R;
@@ -55,8 +56,11 @@ public class StoreOfferFragment extends Fragment{
     View rootView;
     List<Product> listProducts;
 
+    Store currentStore;
+
     public StoreOfferFragment() {
     }
+
 
 
     @Nullable
@@ -74,7 +78,6 @@ public class StoreOfferFragment extends Fragment{
         rootView=view;
         //Init Firebase
         db = FirebaseDatabase.getInstance();
-        //products = db.getReference(STORES_CHILD).child(Common.currentUser.getUid());
         products = db.getReference(PRODUCT_CHILD);
 
         //tolbar
@@ -91,55 +94,7 @@ public class StoreOfferFragment extends Fragment{
 
     }
     private void loadMenu() {
-        /*query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // dataSnapshot is the "issue" node with all children with id 0
-                    for (DataSnapshot issue : dataSnapshot.getChildren()) {
-                    // dataSnapshot.getValue(Product.class).getOfferExpire()
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-       /* adapter=new FirebaseRecyclerAdapter<Product, ProductViewHolder>(
-                Product.class,
-                R.layout.product_item,
-                ProductViewHolder.class,
-                products.orderByChild("storeId").equalTo(Utils.getFirebaseUser().getUid())
-                .orderByChild("offerExpire").startAt(System.currentTimeMillis())
-        ) {
-
-
-            @Override
-            protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
-                long offerExpire = model.getOfferExpire();
-                if(offerExpire>System.currentTimeMillis())
-                {
-                    viewHolder.product_name.setText(model.getName());
-                    Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
-                            .into(viewHolder.product_image);
-                    viewHolder.setItemClickListener(new ItemClickListener() {
-                        @Override
-                        public void onClick(View view, int position, boolean isLongClick) {
-                            //Get ProductId and send to new Activity
-                            Intent producDetail = new Intent(getContext(),ProductDetail.class);
-                            //Because ProductId is key, so we just get key of this item
-                            // productList.putExtra("ProductId",adapter.getRef(position).getKey());//ORIGINAL
-                            producDetail.putExtra("PRODUCT",model);
-                            //productList.putExtra("currentProduct",model);
-                            startActivity(producDetail);
-                        }
-                    });
-                }
-            }
-        };*/
         productAdapter = new ProductAdapter(listProducts,this.getContext());
                 //adapter.notifyDataSetChanged();
         recycler_menu.setAdapter(productAdapter);
