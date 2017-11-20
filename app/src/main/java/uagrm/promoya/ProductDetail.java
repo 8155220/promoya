@@ -6,23 +6,34 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import cn.iwgang.countdownview.CountdownView;
 import uagrm.promoya.Chat.ChatDetail.ThreadActivity;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Common.ImageSlider.ViewPagerAdapter;
+import uagrm.promoya.Interface.ItemClickListener;
+import uagrm.promoya.Model.Comment;
 import uagrm.promoya.Model.Product;
+import uagrm.promoya.ViewHolder.CommentViewHolder;
+import uagrm.promoya.ViewHolder.ProductViewHolder;
 
 public class ProductDetail extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     public static final String PRODUCT_CHILD = "Products";
@@ -36,7 +47,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     ElegantNumberButton numberButton;
 
     FirebaseDatabase database;
-    DatabaseReference products;
+    DatabaseReference productsComments;
 
     Product currentProduct;
 
@@ -51,6 +62,19 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     //countdown
     CountdownView mCvCountdownView;
 
+    //Comments
+    private RecyclerView recyclerView;
+    private FirebaseRecyclerAdapter<Comment,CommentViewHolder> commentAdapter;
+
+    private TextView mAuthorView;
+    private TextView mTitleView;
+    private TextView mBodyView;
+    private EditText mCommentField;
+    private Button mCommentButton;
+    private RecyclerView mCommentsRecycler;
+    private Button button_post_comment;
+    private EditText field_comment_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +82,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
 
         //Firebase
         database = FirebaseDatabase.getInstance().getInstance();
-        products = database.getReference(PRODUCT_CHILD);
+        productsComments = database.getReference("product-comments");
 
         //getIntent
         if (getIntent() != null)
@@ -73,6 +97,17 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_date =  (TextView) findViewById(R.id.product_date);
         mCvCountdownView = (CountdownView)findViewById(R.id.count_down);
         btn_message = (Button)findViewById(R.id.btn_message);
+
+        //commets
+        recyclerView = (RecyclerView)findViewById(R.id.recycler_comments);
+        button_post_comment = (Button)findViewById(R.id.button_post_comment);
+        field_comment_text = (EditText)findViewById(R.id.field_comment_text);
+
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
@@ -117,6 +152,45 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                 //Log.d("PRODUCDETAIL", String.format("oldValue: %d   newValue: %d", oldValue, newValue));
             }
         });
+        button_post_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!field_comment_text.getText().toString().isEmpty()){
+                    Comment comment = new Comment();
+                    comment.setAuthor(Common.user.getDisplayName());
+                    comment.setPhotoUrl(Common.user.getPhotoUrl());
+                    comment.setText(field_comment_text.getText().toString());
+                    productsComments.child(currentProduct.getProductId()).push().setValue(comment);
+                    field_comment_text.setText("");
+                    System.out.println("COMENT CANTIDAD :"+commentAdapter.getItemCount());
+                    recyclerView.scrollToPosition(commentAdapter.getItemCount());
+                }
+            }
+        });
+        loadComments();
+
+
+    }
+
+    private void loadComments() {
+            commentAdapter = new FirebaseRecyclerAdapter<Comment,CommentViewHolder>(
+                    Comment.class
+                    ,R.layout.comment_item,
+                    CommentViewHolder.class,
+                    productsComments.child(currentProduct.getProductId())) {
+
+                @Override
+                protected void populateViewHolder(CommentViewHolder viewHolder, final Comment model, int position) {
+                    viewHolder.authorView.setText(model.getAuthor());
+                    Glide.with(getBaseContext()).load(model.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
+                            .into(viewHolder.photoUrl);
+                    viewHolder.bodyView.setText(model.getText());
+                }
+
+            };
+
+            commentAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(commentAdapter);
 
     }
 
