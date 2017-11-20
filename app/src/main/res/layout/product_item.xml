@@ -63,13 +63,17 @@ android:foreground="?android:attr/selectableItemBackground">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ImageButton
-        android:id="@+id/favorite_button"
-        style="?android:attr/actionButtonStyle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <com.like.LikeButton
+        android:id="@+id/heart_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:minWidth="48dp"
-        app:srcCompat="@drawable/ic_favorite_border_vd_theme_24"/>
+        app:icon_size="18dp"
+        app:circle_start_color="@color/redHeart"
+        app:dots_primary_color="@color/redHeart"
+        app:dots_secondary_color="@color/redHeart"
+        app:circle_end_color="@color/redHeart"
+        app:anim_scale_factor="2"
+        app:icon_type="heart" />
 </LinearLayout>
 </android.support.v7.widget.CardView>

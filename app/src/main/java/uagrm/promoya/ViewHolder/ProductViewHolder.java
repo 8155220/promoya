@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.like.LikeButton;
+
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.R;
@@ -20,13 +22,15 @@ public class ProductViewHolder extends RecyclerView.ViewHolder
 
     public TextView product_name;
     public ImageView product_image;
-
+    public LikeButton heart_button;
     private ItemClickListener itemClickListener;
 
     public ProductViewHolder(View itemView) {
         super(itemView);
         product_name = (TextView)itemView.findViewById(R.id.product_name);
         product_image = (ImageView)itemView.findViewById(R.id.product_image);
+        heart_button = (LikeButton)itemView.findViewById(R.id.heart_button);
+
         itemView.setOnCreateContextMenuListener(this);
         itemView.setOnClickListener(this);
 

@@ -92,5 +92,7 @@ dependencies {
     provided 'frankiesardo:icepick-processor:3.2.0'
     //time
     compile 'joda-time:joda-time:2.9.7'
+    //button animation
+    compile 'com.github.jd-alexander:LikeButton:0.2.3'
 }
 apply plugin: 'com.google.gms.google-services'
