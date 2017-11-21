@@ -34,6 +34,7 @@ import uagrm.promoya.Chat.BaseActivity;
 import uagrm.promoya.Chat.HomeChat.EmptyStateRecyclerView;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Model.Message;
+import uagrm.promoya.Model.Notification.Notification;
 import uagrm.promoya.Model.User;
 import uagrm.promoya.R;
 
@@ -179,8 +180,10 @@ public class ThreadActivity extends BaseActivity implements TextWatcher {
                     .push()
                     .setValue(message);
         }
-        System.out.println("ENTRO A SENDNOTIFICATION");
-        Common.sendNotification(user.getToken());
+        Notification notification = new Notification(
+                owner.getDisplayName() +" (Mensaje)"
+                ,message.getBody(),ownerUid);
+        Common.sendNotification(user.getToken(),notification);
         inputEditText.setText("");
     }
 

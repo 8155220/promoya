@@ -98,23 +98,17 @@ public class Common {
         return RetrofitClient.getClient(BASE_URL).create(APIService.class);
     }
 
-    public static void sendNotification(String token) {
-        Notification notification = new Notification("SHEP", "Tienes una nueva orden :");
+    public static void sendNotification(String token,Notification notification) {
+
         Sender content = new Sender(token, notification);
 
         mService.sendNotification(content)
                 .enqueue(new Callback<MyResponse>() {
                     @Override
                     public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                        //only run when get result
-                        //System.out.println("RESPONSE :"+call.());
                         if(response.code()==200)
                         {
-                            System.out.println("ENTRO DESPUES DE NOTIFICACION");
-
                             if (response.body().success == 1) {
-                                //Toast.makeText(Cart.this, "Gracias , Orden ingresada", Toast.LENGTH_SHORT).show();
-                                //finish();
                             }
                             else
                             {
@@ -126,7 +120,6 @@ public class Common {
                     @Override
                     public void onFailure(Call<MyResponse> call, Throwable t) {
                         Log.e("ERRORNOTIFICATION",t.getMessage());
-
                     }
                 });
     }

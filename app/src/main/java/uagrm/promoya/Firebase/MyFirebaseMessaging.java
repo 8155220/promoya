@@ -1,5 +1,6 @@
 package uagrm.promoya.Firebase;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -23,7 +24,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService{
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        System.out.println("LLEGONOTIFICACION");
         sendNotification(remoteMessage);
     }
 
@@ -38,7 +38,9 @@ public class MyFirebaseMessaging extends FirebaseMessagingService{
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_face)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(R.drawable.ic_notification_icon)
+                .setColor(getResources().getColor(R.color.primary))
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
                 .setAutoCancel(true)

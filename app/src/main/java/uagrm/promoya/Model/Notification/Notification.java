@@ -7,10 +7,12 @@ package uagrm.promoya.Model.Notification;
 public class Notification {
     public String title;
     public String body;
+    public String tag;
 
-    public Notification(String title, String body ) {
+    public Notification(String title, String body,String tag) {
         this.title = title;
         this.body = body;
+        this.tag= tag;
     }
 
     public String getBody() {
@@ -29,11 +31,20 @@ public class Notification {
         this.title = title;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "Notification{" +
                 "title='" + title + '\'' +
                 ", body='" + body + '\'' +
+                ", tag='" + tag + '\'' +
                 '}';
     }
 }
