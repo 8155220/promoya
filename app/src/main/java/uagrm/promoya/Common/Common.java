@@ -7,21 +7,29 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.User;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-/*import uagrm.promoya.Model.Request;
-import uagrm.promoya.Model.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import uagrm.promoya.Model.Notification.MyResponse;
+import uagrm.promoya.Model.Notification.Notification;
+import uagrm.promoya.Model.Notification.Sender;
 import uagrm.promoya.Remote.APIService;
-import uagrm.promoya.Remote.FCMRetrofitClient;
-import uagrm.promoya.Remote.IGeoCoordinates;
-import uagrm.promoya.Remote.RetrofitClient;*/
+import uagrm.promoya.Remote.RetrofitClient;
 
 /**
  * Created by Shep on 10/25/2017.
@@ -44,43 +52,8 @@ public class Common {
     public static DatabaseReference DBSTORES = FirebaseDatabase.getInstance().getReference().child("stores");
 
     public static final String baseUrl = "https://maps.googleapis.com";
+    public static final APIService mService = Common.getFCMService();
 
-    public static String convertCodeToStatus(String code)
-    {
-       if(code.equals("0"))
-           return "Pendiente";
-        else if(code.equals("1"))
-           return "En camino";
-       else
-           return "Enviado";
-    }
-    /*public static IGeoCoordinates getGeoCodeService(){
-        return RetrofitClient.getClient(baseUrl).create(IGeoCoordinates.class);
-    }*/
-
-    public static Bitmap scaleBitmap(Bitmap bitmap,int newWidth,int newHeight)
-    {
-        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth,newHeight,Bitmap.Config.ARGB_8888);
-
-        float scaleX = newWidth/(float)bitmap.getWidth();
-        float scaleY = newHeight/(float)bitmap.getHeight();
-        float pivotX=0,pivotY=0;
-
-        Matrix scaleMatrix= new Matrix();
-        scaleMatrix.setScale(scaleX,scaleY,pivotX,pivotY);
-
-        Canvas canvas = new Canvas(scaledBitmap);
-        canvas.setMatrix(scaleMatrix);
-        canvas.drawBitmap(bitmap,0,0,new Paint(Paint.FILTER_BITMAP_FLAG));
-
-        return scaledBitmap;
-
-
-    }
-    /*public static APIService getFCMService()
-    {
-        return FCMRetrofitClient.getClient(BASE_URL).create(APIService.class);
-    }*/
     public static boolean isConnectedToInternet(Context context){
         ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -119,26 +92,43 @@ public class Common {
             return "el "+dia+"/"+month+"/"+year;
         }
     }
-    public static String getTiempoOferta(long date)
+
+    public static APIService getFCMService()
     {
-        if(date-System.currentTimeMillis()<3600000)
-        {
-            return "hace "+(System.currentTimeMillis()-date)/60000+" minutos";
-        }
-        else if(date-System.currentTimeMillis()<86400000){
-            return "hace "+(date -System.currentTimeMillis())/3600000+" Horas";
-        }
-        else if(date -System.currentTimeMillis()<604800000){
-            return "hace "+(date-System.currentTimeMillis())/86400000+" Dias";
-        }
-        else {
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.setTimeInMillis(date);
-            int year = calendar.get(calendar.YEAR);
-            int month = calendar.get(calendar.MONTH);
-            int dia = calendar.get(calendar.DATE);
-            return "el "+dia+"/"+month+"/"+year;
-        }
+        return RetrofitClient.getClient(BASE_URL).create(APIService.class);
+    }
+
+    public static void sendNotification(String token) {
+        Notification notification = new Notification("SHEP", "Tienes una nueva orden :");
+        Sender content = new Sender(token, notification);
+
+        mService.sendNotification(content)
+                .enqueue(new Callback<MyResponse>() {
+                    @Override
+                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                        //only run when get result
+                        //System.out.println("RESPONSE :"+call.());
+                        if(response.code()==200)
+                        {
+                            System.out.println("ENTRO DESPUES DE NOTIFICACION");
+
+                            if (response.body().success == 1) {
+                                //Toast.makeText(Cart.this, "Gracias , Orden ingresada", Toast.LENGTH_SHORT).show();
+                                //finish();
+                            }
+                            else
+                            {
+                                //Toast.makeText(Cart.this, "Fallo !!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                        Log.e("ERRORNOTIFICATION",t.getMessage());
+
+                    }
+                });
     }
 
 

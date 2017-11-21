@@ -76,6 +76,9 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        if(mDialog!=null){
+            mDialog.dismiss();
+        }
         if(mAuthStateListener!=null){
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
@@ -98,35 +101,8 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    /*private boolean userRegistered() {
-        final ProgressDialog mDialog = new ProgressDialog(Login.this);
-        mDialog.setMessage("Por favor espere....");
-        mDialog.show();
-        final boolean[] flag = {false};
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference mUser = FirebaseDatabase.getInstance().getReference().child("users");
-        mUser.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(firebaseUser.getUid()))
-                {
-                    Common.user = dataSnapshot.getValue(User.class);
-                    mDialog.dismiss();
-                    flag[0] = true;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                mDialog.dismiss();
-            }
-        });
-        return flag[0];
-    }*/
-
     public void userRegistered() {
         if(mDialog==null)mDialog = new ProgressDialog(Login.this);
-
         mDialog.setMessage("Por favor espere....");
         mDialog.show();
         //final boolean[] flag = {false};

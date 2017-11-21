@@ -55,6 +55,18 @@
             android:name=".Watson.Conversation.ChatBotActivity"
             android:screenOrientation="portrait">
         </activity>
+        <!--Firebase-->
+        <service android:name=".Firebase.MyFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".Firebase.MyFirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!--EndFirebase-->
     </application>
 
 </manifest>

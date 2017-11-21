@@ -1,6 +1,7 @@
 package uagrm.promoya.Model;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 /**
  * Created by Shep on 11/12/2017.
@@ -32,9 +33,9 @@ public class User {
         this.displayName = firebaseUser.getDisplayName();
         this.email = firebaseUser.getEmail();
         this.photoUrl = firebaseUser.getPhotoUrl().toString();
-        this.token = "";
+        this.token = FirebaseInstanceId.getInstance().getToken();
         this.uid = firebaseUser.getUid();
-        //this.hasStore=0;
+        this.hasStore=0;
     }
 
 

@@ -1,8 +1,6 @@
 package uagrm.promoya.Chat.ChatDetail;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -182,6 +179,8 @@ public class ThreadActivity extends BaseActivity implements TextWatcher {
                     .push()
                     .setValue(message);
         }
+        System.out.println("ENTRO A SENDNOTIFICATION");
+        Common.sendNotification(user.getToken());
         inputEditText.setText("");
     }
 
