@@ -133,8 +133,6 @@ public class BaseActivity extends AppCompatActivity {
                                     finish();
                                     drawerLayout.closeDrawers();
                                 } else {
-                                    System.out.println("USER :"+Common.user.toString());
-                                    System.out.println("HASTORE :"+Common.user.getHasStore());
                                     showEnableStoreDialog();
                                 }
                             }
@@ -187,6 +185,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void showEnableStoreDialog() {
+
+
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(BaseActivity.this);
         alertDialog.setTitle("Habilitar Tienda");
 

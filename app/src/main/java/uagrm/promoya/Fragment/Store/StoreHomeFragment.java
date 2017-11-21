@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import uagrm.promoya.Common.Common;
@@ -41,6 +43,7 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
     TextView storeDescription;
     ImageView backgroundImg;
     ImageView logoImg;
+    Button store_button_suscribe;
     DatabaseReference db;
 
     GoogleMap mGoogleMap;
@@ -70,6 +73,8 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
         storeName = (TextView)view.findViewById(R.id.store_name);
         storeDescription = (TextView)view.findViewById(R.id.store_description);
         backgroundImg = (ImageView) view.findViewById(R.id.background_img);
+        store_button_suscribe = (Button) view.findViewById(R.id.store_button_suscribe);
+
         logoImg = (ImageView) view.findViewById(R.id.logo_img);
         if(currentStore!=null)
         {
@@ -86,15 +91,10 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
                     Store store = dataSnapshot.getValue(Store.class);
                     storeName.setText(store.getDisplayName());
                     storeDescription.setText(store.getDescription());
-                    /*Picasso.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl())
-                            .into(backgroundImg);*/
-                    /*Picasso.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl())
-                            .into(logoImg);*/
                     Glide.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
                             .into(backgroundImg);
                     Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                             .into(logoImg);
-
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -115,6 +115,15 @@ public class StoreHomeFragment extends Fragment implements OnMapReadyCallback {
             /*Picasso.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl())
                     .into(logoImg);*/
         }
+
+        store_button_suscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentStore!=null){
+                    FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
+                }
+            }
+        });
         //pero como ya tenemos los datos
 
         mMapView = (MapView) view.findViewById(R.id.map);
