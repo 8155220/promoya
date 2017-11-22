@@ -29,7 +29,6 @@ public class FirebaseDatabaseHelper {
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
             User usuario=ds.getValue(User.class);
-            System.out.println("EN FECTHUSERDATA :"+usuario.toString());
             users.add(usuario);
         }
     }

@@ -128,9 +128,9 @@ public class Common {
     }
     public static void sendNotificationTopic(String token,Data message) {
 
-        SenderTopic content = new SenderTopic(token, message);
+        SenderTopic content = new SenderTopic("/topics/"+token, message);
 
-        System.out.println("SENDERTOPIC :"+content.toString());
+        //System.out.println("SENDERTOPIC :"+content.toString());
         mService.sendNotificationTopic(content)
                 .enqueue(new Callback<TopicResponse>() {
                     @Override

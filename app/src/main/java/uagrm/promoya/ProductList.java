@@ -47,6 +47,7 @@ import java.util.UUID;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Category;
+import uagrm.promoya.Model.Notification.SenderTopic.Data;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
 import uagrm.promoya.ViewHolder.ClientViewHolder.ClientCategoryViewHolder;
@@ -215,8 +216,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         newProduct.setProductId(key);
                         newProduct.setStoreName(Common.user.getStoreName());
                         foodList.child(key).setValue(newProduct);
-                        System.out.println("STORENAME :"+Common.user.getStoreName());
-                        System.out.println("setStoreId :"+Utils.getFirebaseUser().getUid());
+                        sendNotificationToSuscriptors();
                         Snackbar.make(rootLayout,"El producto se añadira en breve", Snackbar.LENGTH_SHORT)
                                 .show();
                         dialogInterface.dismiss();
@@ -234,6 +234,15 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         alertDialog.show();
 
     }
+
+    private void sendNotificationToSuscriptors() {
+        Data data = new Data();
+        data.setTitle("Tienda :"+newProduct.getStoreName());
+        data.setBody("Agrego un nuevo producto");
+        data.setImage(newProduct.getListImage().get(0));
+        Common.sendNotificationTopic(Common.currentUser.getUid(),data);
+    }
+
     private boolean validate() {
         if(edtName.getText().toString().isEmpty())
         {

@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +30,12 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.sql.SQLOutput;
+import java.util.HashMap;
+import java.util.Map;
+
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Model.MapStringBoolean;
 import uagrm.promoya.Model.Notification.SenderTopic.Data;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
@@ -89,76 +95,56 @@ public class StoreHomeFragment extends Fragment
         //SI QUISIERA QUE FUERA EN TIEMPO REAL
         if(currentStore==null)
         {
-            db.addValueEventListener(new ValueEventListener() {
+            //db.addValueEventListener(new ValueEventListener() {
+            db.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Store store = dataSnapshot.getValue(Store.class);
                     storeName.setText(store.getDisplayName());
                     storeDescription.setText(store.getDescription());
-                    Glide.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
-                            .into(backgroundImg);
-                    Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
-                            .into(logoImg);
+                    if(getActivity().getApplicationContext()!=null)
+                    {
+                        Glide.with(getActivity().getApplicationContext()).load(store.getBackgroundImgUrl()).apply(RequestOptions.circleCropTransform())
+                                .into(backgroundImg);
+                        Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
+                                .into(logoImg);
+                    }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
-            store_button_suscribe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Common.sendNotificationTopic(Common.currentUser.getUid(),new Data("Hello World"));
-                }
-            });
+            store_button_suscribe.setVisibility(View.GONE);
         }
         else {
             storeName.setText(currentStore.getDisplayName());
             storeDescription.setText(currentStore.getDescription());
-            /*Picasso.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl())
-                    .into(backgroundImg);*/
             Glide.with(getActivity().getApplicationContext()).load(currentStore.getBackgroundImgUrl())
                     .into(backgroundImg);
-
             Glide.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                     .into(logoImg);
-
+            db.child("suscripciones").addChildEventListener(getChildEventlistenerSuscriptions());
             if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
                 store_button_suscribe.setText("Suscrito");
-                //store_button_suscribe.setBackground(getResources().getColor(R.color.colorAccent));
-                //store_button_suscribe.setBackground(getResources().getColor(R.color.colorAccent));
             }else{
                 store_button_suscribe.setText("Suscribirse");
             }
             store_button_suscribe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(currentStore!=null){
+                    /*if(currentStore.suscripciones.containsKey(Common.currentUser.getUid()))
                         FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
+                    //else FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
+                    else
+                    {
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
+                        System.out.println("else topic :"+currentStore.getStoreId());
+                    }*/
                         onClickSuscribe(db);
-                    }
                 }
             });
 
-            /*viewHolder.enlazarPregunta(model, new View.OnClickListener(){
-                @Override
-                public void onClick(View puntosView) {
-                    DatabaseReference preguntasRef = bdReferencia.child("Preguntas").child(preguntaRef.getKey());
-
-                    System.out.println(preguntaRef);
-                    System.out.println(preguntaRef +"gguwu");
-                    //DatabaseReference usuariosRef = bdReferencia.child("Usuarios-Preguntas").child(model.id).child(preguntaRef.getKey());
-
-                    //Ejecutar las 2 transacciones
-                    onClickSuscribe(preguntasRef);
-                    //onClickSuscribe(usuariosRef);
-                }
-            });*/
-
         }
-
-
-
         /*mMapView = (MapView) view.findViewById(R.id.map);
         if (mMapView!=null)
         {
@@ -167,28 +153,77 @@ public class StoreHomeFragment extends Fragment
             mMapView.getMapAsync(this);
         }*/
     }
+    public ChildEventListener getChildEventlistenerSuscriptions(){
+        return new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                System.out.println("datasnapshot added :"+dataSnapshot.toString());
+                Boolean booleanValue = dataSnapshot.getValue(Boolean.class);
+                if (dataSnapshot.getKey().equals(Common.currentUser.getUid())) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
+                }
+                currentStore.suscripciones.put(dataSnapshot.getKey(), booleanValue);
+                updateSuscriptionButton();
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Boolean booleanValue = snapshot.getValue(Boolean.class);
+                    currentStore.suscripciones.put(snapshot.getKey(), booleanValue);
+                }
+                updateSuscriptionButton();
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getKey().equals(Common.currentUser.getUid())) {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
+                }
+                currentStore.suscripciones.remove(dataSnapshot.getKey());
+                updateSuscriptionButton();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+    public void updateSuscriptionButton(){
+
+        if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
+            store_button_suscribe.setText("Suscrito");
+        }else{
+            store_button_suscribe.setText("Suscribirse");
+        }
+    }
     private void onClickSuscribe(DatabaseReference preguntasRef) {
         preguntasRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                Store p = mutableData.getValue(Store.class);
-                if (p==null){
+                currentStore = mutableData.getValue(Store.class);
+                if (currentStore==null){
                     return Transaction.success(mutableData);
+                    //return Transaction.abort();
                 }
-                if (p.suscripciones.containsKey(Common.currentUser.getUid())){
+                if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
                     //Si ya le habia dado Encorazona entonces ya me toca quitarle al clickearlo xD
                     //p.puntosContador = p.puntosContador -1;
-                    p.suscripciones.remove(Common.currentUser.getUid());
-                    store_button_suscribe.setText("Suscribirse");
+                    currentStore.suscripciones.remove(Common.currentUser.getUid());
+                    //store_button_suscribe.setText("Suscribirse");
                 }else{
                     //Si no le he dado me Encorazona, entonces me toca aumentar un punto
                     //p.puntosContador = p.puntosContador +1;
-                    p.suscripciones.put(Common.currentUser.getUid(), true);
-                    store_button_suscribe.setText("Suscrito");
+                    currentStore.suscripciones.put(Common.currentUser.getUid(), true);
+                    //store_button_suscribe.setText("Suscrito");
                 }
 
                 //Ahora toca guardar el valor en la nube y reportar que fue exitoso :v
-                mutableData.setValue(p);
+                mutableData.setValue(currentStore);
                 return Transaction.success(mutableData);
             }
             @Override
