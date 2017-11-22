@@ -28,6 +28,9 @@ import retrofit2.Response;
 import uagrm.promoya.Model.Notification.MyResponse;
 import uagrm.promoya.Model.Notification.Notification;
 import uagrm.promoya.Model.Notification.Sender;
+import uagrm.promoya.Model.Notification.SenderTopic.Data;
+import uagrm.promoya.Model.Notification.SenderTopic.SenderTopic;
+import uagrm.promoya.Model.Notification.SenderTopic.TopicResponse;
 import uagrm.promoya.Remote.APIService;
 import uagrm.promoya.Remote.RetrofitClient;
 
@@ -119,6 +122,35 @@ public class Common {
 
                     @Override
                     public void onFailure(Call<MyResponse> call, Throwable t) {
+                        Log.e("ERRORNOTIFICATION",t.getMessage());
+                    }
+                });
+    }
+    public static void sendNotificationTopic(String token,Data message) {
+
+        SenderTopic content = new SenderTopic(token, message);
+
+        System.out.println("SENDERTOPIC :"+content.toString());
+        mService.sendNotificationTopic(content)
+                .enqueue(new Callback<TopicResponse>() {
+                    @Override
+                    public void onResponse(Call<TopicResponse> call, Response<TopicResponse> response) {
+                        if(response.code()==200)
+                        {
+                            System.out.println("exito :" +response.body());
+
+                            if (response.isSuccessful()) {
+                                System.out.println("exito :" +response.body());
+                            }
+                            else
+                            {
+                                //Toast.makeText(Cart.this, "Fallo !!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        System.out.println("RESPONSE : "+response.code());
+                    }
+                    @Override
+                    public void onFailure(Call<TopicResponse> call, Throwable t) {
                         Log.e("ERRORNOTIFICATION",t.getMessage());
                     }
                 });

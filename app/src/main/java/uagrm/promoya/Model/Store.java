@@ -1,6 +1,8 @@
 package uagrm.promoya.Model;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Shep on 10/17/2017.
@@ -13,6 +15,7 @@ public class Store implements Serializable{
     String logoImgUrl;
     String storeId;
     String title;
+    public Map<String, Boolean> suscripciones = new HashMap<>(); //cambiar nombre suscripciones->suscripciones
 
     public Store() {
     }
