@@ -37,17 +37,17 @@
     <string name="navigation_menu_item_chatbot">Asistente</string>
 
     <!--Chat-->
-    <string name="error_google_sign_in">Can\'t sign in using Google</string>
+    <string name="error_google_sign_in">No se pudo iniciar usando google</string>
     <string name="placeholder">Placeholder</string>
-    <string name="empty_view_home">Oh oh! Looks like you\'re all alone</string>
-    <string name="button_invite">Invite</string>
-    <string name="hint_message">Type your message..</string>
-    <string name="error_loading_user">Couldn\'t load user</string>
-    <string name="today">Today</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="empty_view_thread">Send the first message!</string>
-    <string name="error_sending_messages">Couldn\'t send message, please retry</string>
-    <string name="message_message_copied">Copied to clipboard</string>
-    <string name="clipboard_title_copied_message">Copied message</string>
+    <string name="empty_view_home">Oh oh! parace que te encuentras solo </string>
+    <string name="button_invite">Invitar</string>
+    <string name="hint_message">Escribe tu mensaje</string>
+    <string name="error_loading_user">nose pudo cargar usuario</string>
+    <string name="today">Hoy</string>
+    <string name="yesterday">Ayer</string>
+    <string name="empty_view_thread">Envia el primer mensaje !</string>
+    <string name="error_sending_messages">Nose pudo enviar tu mensaje por favor intenta otra ves</string>
+    <string name="message_message_copied">copiado al portapapeles</string>
+    <string name="clipboard_title_copied_message">Mensaje copiado</string>
     <!--EndChat-->
 </resources>
