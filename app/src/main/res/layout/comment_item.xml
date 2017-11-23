@@ -8,8 +8,8 @@
     <ImageView
         android:id="@+id/comment_photoUrl"
         android:layout_marginLeft="12dp"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         app:srcCompat="@drawable/ic_face"/>
 
@@ -25,6 +25,7 @@
             android:id="@+id/comment_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15dp"
             android:textStyle="bold"
             tools:text="John Doe" />
 
@@ -32,8 +33,17 @@
             android:id="@+id/comment_body"
             style="@style/TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
+            android:textSize="15dp"
             android:layout_height="wrap_content"
             tools:text="This is the comment text.."/>
+        <TextView
+            android:id="@+id/comment_time"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textSize="13dp"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="hace un momento"/>
 
     </LinearLayout>
 

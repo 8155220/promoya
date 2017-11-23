@@ -22,13 +22,7 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.sql.SQLOutput;
-import java.util.HashMap;
-import java.util.Map;
-
 import uagrm.promoya.Common.Common;
-import uagrm.promoya.Model.MapStringBoolean;
-import uagrm.promoya.Model.Notification.SenderTopic.Data;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
 
@@ -115,8 +109,8 @@ public class StoreHomeFragment extends Fragment
                     .into(backgroundImg);
             Glide.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                     .into(logoImg);
-            db.child("suscripciones").addChildEventListener(getChildEventlistenerSuscriptions());
-            if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
+            db.child("subscriptions").addChildEventListener(getChildEventlistenerSuscriptions());
+            if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
                 store_button_suscribe.setText("Suscrito");
             }else{
                 store_button_suscribe.setText("Suscribirse");
@@ -124,15 +118,7 @@ public class StoreHomeFragment extends Fragment
             store_button_suscribe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*if(currentStore.suscripciones.containsKey(Common.currentUser.getUid()))
-                        FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
-                    //else FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
-                    else
-                    {
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
-                        System.out.println("else topic :"+currentStore.getStoreId());
-                    }*/
-                        onClickSuscribe(db);
+                     onClickSuscribe(db);
                 }
             });
 
@@ -154,14 +140,15 @@ public class StoreHomeFragment extends Fragment
                 if (dataSnapshot.getKey().equals(Common.currentUser.getUid())) {
                     FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
                 }
-                currentStore.suscripciones.put(dataSnapshot.getKey(), booleanValue);
+                currentStore.subscriptions.put(dataSnapshot.getKey(), booleanValue);
+                registerKeySubscriptionInStatistics();
                 updateSuscriptionButton();
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     Boolean booleanValue = snapshot.getValue(Boolean.class);
-                    currentStore.suscripciones.put(snapshot.getKey(), booleanValue);
+                    currentStore.subscriptions.put(snapshot.getKey(), booleanValue);
                 }
                 updateSuscriptionButton();
             }
@@ -170,7 +157,8 @@ public class StoreHomeFragment extends Fragment
                 if (dataSnapshot.getKey().equals(Common.currentUser.getUid())) {
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
                 }
-                currentStore.suscripciones.remove(dataSnapshot.getKey());
+                currentStore.subscriptions.remove(dataSnapshot.getKey());
+                removeKeySubscriptionInStatistics();
                 updateSuscriptionButton();
             }
 
@@ -187,7 +175,7 @@ public class StoreHomeFragment extends Fragment
     }
     public void updateSuscriptionButton(){
 
-        if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
+        if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
             store_button_suscribe.setText("Suscrito");
         }else{
             store_button_suscribe.setText("Suscribirse");
@@ -202,15 +190,15 @@ public class StoreHomeFragment extends Fragment
                     return Transaction.success(mutableData);
                     //return Transaction.abort();
                 }
-                if (currentStore.suscripciones.containsKey(Common.currentUser.getUid())){
+                if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
                     //Si ya le habia dado Encorazona entonces ya me toca quitarle al clickearlo xD
-                    //p.puntosContador = p.puntosContador -1;
-                    currentStore.suscripciones.remove(Common.currentUser.getUid());
+                    currentStore.subscriptionsCount = currentStore.subscriptionsCount -1;
+                    currentStore.subscriptions.remove(Common.currentUser.getUid());
                     //store_button_suscribe.setText("Suscribirse");
                 }else{
                     //Si no le he dado me Encorazona, entonces me toca aumentar un punto
-                    //p.puntosContador = p.puntosContador +1;
-                    currentStore.suscripciones.put(Common.currentUser.getUid(), true);
+                    currentStore.subscriptionsCount = currentStore.subscriptionsCount +1;
+                    currentStore.subscriptions.put(Common.currentUser.getUid(), true);
                     //store_button_suscribe.setText("Suscrito");
                 }
 
@@ -223,6 +211,20 @@ public class StoreHomeFragment extends Fragment
                 //Log.d("onClickSuscribe", databaseError.toString());
             }
         });
+    }
+    public void registerKeySubscriptionInStatistics(){
+        DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
+        statistics.child("statistics")
+                .child("suscriptions")
+                .child(currentStore.getStoreId())
+                .setValue(System.currentTimeMillis());
+    }
+    public void removeKeySubscriptionInStatistics(){
+        DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
+        statistics.child("statistics")
+                .child("suscriptions")
+                .child(currentStore.getStoreId()).setValue(null);
+
     }
 /*
     @Override

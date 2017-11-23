@@ -312,8 +312,9 @@ public class BaseActivity extends AppCompatActivity {
         navHeaderProfilePhoto = (ImageView) navHeader.findViewById(R.id.img_profile);
         navHeaderName = (TextView) navHeader.findViewById(R.id.name);
         navHeaderEmail = (TextView) navHeader.findViewById(R.id.email);
-        Glide.with(this.getBaseContext()).load(Common.currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
-                .into(navHeaderProfilePhoto);
+        if(this.getBaseContext()!=null)
+            Glide.with(this.getBaseContext()).load(Common.currentUser.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
+                    .into(navHeaderProfilePhoto);
         navHeaderName.setText(Common.currentUser.getDisplayName());
         navHeaderEmail.setText(Common.currentUser.getEmail());
     }

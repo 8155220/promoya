@@ -15,7 +15,8 @@ public class Store implements Serializable{
     String logoImgUrl;
     String storeId;
     String title;
-    public Map<String, Boolean> suscripciones = new HashMap<>(); //cambiar nombre suscripciones->suscripciones
+    public int subscriptionsCount;
+    public Map<String, Boolean> subscriptions = new HashMap<>(); //cambiar nombre subscriptions->subscriptions
 
     public Store() {
     }
@@ -26,6 +27,22 @@ public class Store implements Serializable{
 
     public void setBackgroundImgUrl(String backgroundImgUrl) {
         this.backgroundImgUrl = backgroundImgUrl;
+    }
+
+    public int getSubscriptionsCount() {
+        return subscriptionsCount;
+    }
+
+    public void setSubscriptionsCount(int subscriptionsCount) {
+        this.subscriptionsCount = subscriptionsCount;
+    }
+
+    public Map<String, Boolean> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Map<String, Boolean> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
     public String getDescription() {

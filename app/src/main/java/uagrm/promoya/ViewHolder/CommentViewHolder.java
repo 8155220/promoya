@@ -15,12 +15,14 @@ public class CommentViewHolder extends RecyclerView.ViewHolder {
 
     public TextView authorView;
     public TextView bodyView;
+    public TextView comment_time;
     public ImageView photoUrl;
 
     public CommentViewHolder(View itemView) {
         super(itemView);
         authorView = (TextView) itemView.findViewById(R.id.comment_author);
         bodyView = (TextView) itemView.findViewById(R.id.comment_body);
+        comment_time = (TextView) itemView.findViewById(R.id.comment_time);
         photoUrl = (ImageView) itemView.findViewById(R.id.comment_photoUrl);
     }
 }

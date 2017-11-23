@@ -21,19 +21,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import cn.iwgang.countdownview.CountdownView;
 import uagrm.promoya.Chat.ChatDetail.ThreadActivity;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Common.ImageSlider.ViewPagerAdapter;
-import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Comment;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ViewHolder.CommentViewHolder;
-import uagrm.promoya.ViewHolder.ProductViewHolder;
 
 public class ProductDetail extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     public static final String PRODUCT_CHILD = "Products";
@@ -46,8 +48,9 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
 
-    FirebaseDatabase database;
+    FirebaseDatabase db;
     DatabaseReference productsComments;
+    DatabaseReference dbProduct;
 
     Product currentProduct;
 
@@ -66,14 +69,11 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     private RecyclerView recyclerView;
     private FirebaseRecyclerAdapter<Comment,CommentViewHolder> commentAdapter;
 
-    private TextView mAuthorView;
-    private TextView mTitleView;
-    private TextView mBodyView;
-    private EditText mCommentField;
-    private Button mCommentButton;
-    private RecyclerView mCommentsRecycler;
     private Button button_post_comment;
     private EditText field_comment_text;
+
+    //Contadores
+    private TextView product_heart_count,product_comment_count,product_view_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +81,9 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         setContentView(R.layout.activity_product_detail);
 
         //Firebase
-        database = FirebaseDatabase.getInstance().getInstance();
-        productsComments = database.getReference("product-comments");
-
+        db = FirebaseDatabase.getInstance();
+        productsComments = db.getReference("product-comments");
+        dbProduct= db.getReference("Products");
         //getIntent
         if (getIntent() != null)
             currentProduct = (Product) getIntent().getExtras().getSerializable(KEY_PRODUCT);
@@ -97,6 +97,9 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         product_date =  (TextView) findViewById(R.id.product_date);
         mCvCountdownView = (CountdownView)findViewById(R.id.count_down);
         btn_message = (Button)findViewById(R.id.btn_message);
+        product_heart_count =  (TextView) findViewById(R.id.product_heart_count);
+        product_comment_count =  (TextView) findViewById(R.id.product_comment_count);
+        product_view_count =  (TextView) findViewById(R.id.product_view_count);
 
         //commets
         recyclerView = (RecyclerView)findViewById(R.id.recycler_comments);
@@ -160,16 +163,52 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                     comment.setAuthor(Common.user.getDisplayName());
                     comment.setPhotoUrl(Common.user.getPhotoUrl());
                     comment.setText(field_comment_text.getText().toString());
+                    comment.setDate(System.currentTimeMillis());
                     productsComments.child(currentProduct.getProductId()).push().setValue(comment);
                     field_comment_text.setText("");
-                    System.out.println("COMENT CANTIDAD :"+commentAdapter.getItemCount());
-                    recyclerView.scrollToPosition(commentAdapter.getItemCount());
+                    //product_comment_count.setText(commentAdapter.getItemCount());
+                    //System.out.println("COMENT CANTIDAD :"+commentAdapter.getItemCount());
+                    recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
+
+                    //recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
+                    //recyclerView.s`
+                    //recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
+                    onCommentedProduct(dbProduct);
                 }
             }
         });
+        loadCounters();
+        loadCurrenProduct();
         loadComments();
 
+    }
 
+    private void loadCurrenProduct() {
+        dbProduct.child(currentProduct.getProductId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        System.out.println("CurrentProduct :"+currentProduct.toString());
+                        System.out.println("Datasnapshot :"+dataSnapshot.toString());
+                        currentProduct = dataSnapshot.getValue(Product.class);
+                        if(currentProduct==null) System.out.println("esNull");
+                        else
+                        System.out.println("CurrentProduct :"+currentProduct.toString());
+                        loadCounters();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    private void loadCounters() {
+        product_heart_count.setText(String.valueOf(currentProduct.getLikesCount()));
+        product_view_count.setText(String.valueOf(currentProduct.getViewsCount()));
+        product_comment_count.setText(String.valueOf(currentProduct.getCommentsCount()));
     }
 
     private void loadComments() {
@@ -185,13 +224,35 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                     Glide.with(getBaseContext()).load(model.getPhotoUrl()).apply(RequestOptions.circleCropTransform())
                             .into(viewHolder.photoUrl);
                     viewHolder.bodyView.setText(model.getText());
+                    viewHolder.comment_time.setText(Common.getTiempoTranscurrido(model.getDate()));
                 }
-
             };
 
             commentAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(commentAdapter);
 
+    }
+
+
+    private void onCommentedProduct(DatabaseReference dbProduct) {
+        dbProduct.child(currentProduct.getProductId()).runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Product product = mutableData.getValue(Product.class);
+                System.out.println("product :"+product.toString());
+                if (product==null){
+                    return Transaction.success(mutableData);
+                }
+                product.commentsCount = product.commentsCount +1;
+                //registerKeyViewInStatistics();
+                mutableData.setValue(product);
+                return Transaction.success(mutableData);
+            }
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                //Log.d("onClickSuscribe", databaseError.toString());
+            }
+        });
     }
 
     private void setUiPageViewController() {

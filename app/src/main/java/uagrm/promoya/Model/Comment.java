@@ -10,6 +10,7 @@ public class Comment {
     public String author;
     public String text;
     public String photoUrl;
+    public long date;
 
     public Comment() {
         // Default constructor required for calls to DataSnapshot.getValue(Comment.class)
@@ -20,6 +21,14 @@ public class Comment {
         this.author = author;
         this.text = text;
         this.photoUrl = photoUrl;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public String getUid() {

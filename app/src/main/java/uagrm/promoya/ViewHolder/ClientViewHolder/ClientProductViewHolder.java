@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.like.LikeButton;
 
 import uagrm.promoya.Interface.ItemClickListener;
+import uagrm.promoya.Model.Product;
 import uagrm.promoya.R;
 
 /**
@@ -21,8 +22,6 @@ public class ClientProductViewHolder extends RecyclerView.ViewHolder
         public TextView product_store;
         public ImageView product_image;
         public LikeButton heart_button;
-
-
         private ItemClickListener itemClickListener;
 
 
@@ -44,6 +43,15 @@ public class ClientProductViewHolder extends RecyclerView.ViewHolder
         @Override
         public void onClick(View view){
             itemClickListener.onClick(view,getAdapterPosition(),false);
+        }
+
+        public void bindToProduct(Product product, View.OnClickListener starClickListener) {
+            /*titleView.setText(post.title);
+            authorView.setText(post.author);
+            numStarsView.setText(String.valueOf(post.starCount));
+            bodyView.setText(post.body);*/
+            heart_button.setOnClickListener(starClickListener);
+
         }
 
 }

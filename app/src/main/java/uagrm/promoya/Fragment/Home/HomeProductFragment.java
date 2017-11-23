@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
+import uagrm.promoya.Model.Store;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.R;
 import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
@@ -60,6 +67,8 @@ public class HomeProductFragment extends Fragment{
     List<String> suggesList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
 
+    //life
+
     public HomeProductFragment() {
     }
 
@@ -78,17 +87,11 @@ public class HomeProductFragment extends Fragment{
         rootView=view;
         //Init Firebase
         db = FirebaseDatabase.getInstance();
-        //stores = db.getReference(STORES_CHILD).child(Common.currentUser.getUid());
         products = db.getReference(PRODUCT_CHILD);
-
-        //tolbar
-        //setHasOptionsMenu(true);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.hide();
-
         //Init View
-
         recycler_menu = (RecyclerView)view.findViewById(R.id.recycler_product);
         recycler_menu.setHasFixedSize(true);
 //        layoutManager = new LinearLayoutManager(getContext()); //original
@@ -117,7 +120,6 @@ public class HomeProductFragment extends Fragment{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //When user type their text, we will change suggest list
-                //System.out.println("TEXTO CAMBIADO");
                 List<String> suggest = new ArrayList<String>();
                 for(String search:suggesList)//loop om siggest List
                 {
@@ -181,7 +183,6 @@ public class HomeProductFragment extends Fragment{
             }
         });
 
-
     }
 
     private void startSearch(CharSequence text){
@@ -193,7 +194,6 @@ public class HomeProductFragment extends Fragment{
         ) {
             @Override
             protected void populateViewHolder(ClientProductViewHolder viewHolder, final Product model, int position) {
-
                 viewHolder.product_name.setText(model.getName());
                 Picasso.with(getActivity().getApplicationContext()).load(model.getListImage().get(0))
                         .into(viewHolder.product_image);
@@ -272,17 +272,48 @@ public class HomeProductFragment extends Fragment{
                 viewHolder.product_price.setText(model.getPrice()+ " Bs");
                 viewHolder.product_store.setText("#"+model.getStoreName());
 
-                //viewHOlder.
-                //final  Category clickItem =model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Get CategoryId and send to new Activity
+                        DatabaseReference dbProductViews = db.getReference().child("Products").child(model.getProductId());
+                        onViewedProduct(dbProductViews);
+                        registerKeyViewInStatistics();
                         Intent producDetail = new Intent(getContext(),ProductDetail.class);
-                        //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
                         producDetail.putExtra("PRODUCT",model);
-                        //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
                         startActivity(producDetail);
+                    }
+                });
+                if (model.likes.containsKey(Common.currentUser.getUid())) {
+                    viewHolder.heart_button.setLiked(true);
+                } else {
+                    viewHolder.heart_button.setLiked(false);
+                }
+
+                /*viewHolder.bindToProduct(model, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View starView) {
+                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
+                        onLikedButton(dbProductLikes);
+                    }
+                });*/
+                /*viewHolder.heart_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
+                        onLikedButton(dbProductLikes);
+                    }
+                });*/
+                viewHolder.heart_button.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
+                        onLikedButton(dbProductLikes);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
+                        onLikedButton(dbProductLikes);
                     }
                 });
             }
@@ -290,6 +321,75 @@ public class HomeProductFragment extends Fragment{
         adapter.notifyDataSetChanged();
         recycler_menu.setAdapter(adapter);
     }
+
+    private void onLikedButton(DatabaseReference dbProductLikes) {
+        dbProductLikes.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Product currentProduct = mutableData.getValue(Product.class);
+                if (currentProduct==null){
+                    return Transaction.success(mutableData);
+                }
+                if (currentProduct.likes.containsKey(Common.currentUser.getUid())){
+                    currentProduct.likesCount = currentProduct.likesCount -1;
+                    currentProduct.likes.remove(Common.currentUser.getUid());
+                    //removeKeySubscriptionInStatistics(currentProduct.getProductId());
+                }else{
+                    currentProduct.likesCount = currentProduct.likesCount +1;
+                    currentProduct.likes.put(Common.currentUser.getUid(), true);
+                    registerKeyLikedInStatistics();
+                }
+                mutableData.setValue(currentProduct);
+                return Transaction.success(mutableData);
+            }
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                 //Log.d("onClickSuscribe", databaseError.toString());
+            }
+        });
+    }
+
+    private void onViewedProduct(DatabaseReference dbProductLikes) {
+        dbProductLikes.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                Product currentProduct = mutableData.getValue(Product.class);
+                if (currentProduct==null){
+                    return Transaction.success(mutableData);
+                }
+                    currentProduct.viewsCount = currentProduct.viewsCount +1;
+                    registerKeyViewInStatistics();
+                mutableData.setValue(currentProduct);
+                return Transaction.success(mutableData);
+            }
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                 //Log.d("onClickSuscribe", databaseError.toString());
+            }
+        });
+    }
+
+
+    public void registerKeyLikedInStatistics(){
+        DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
+        statistics.child("statistics")
+                .child("likes")
+                .push()
+                .setValue(System.currentTimeMillis());
+    }
+    public void registerKeyViewInStatistics(){
+        DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
+        statistics.child("statistics")
+                .child("views")
+                .push()
+                .setValue(System.currentTimeMillis());
+    }
+    /*public void removeKeySubscriptionInStatistics(){
+        DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
+        statistics.child("statistics")
+                .child("suscriptions")
+                .child(productId).setValue(null);
+    }*/
 
 
 

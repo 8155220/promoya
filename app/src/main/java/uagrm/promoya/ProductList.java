@@ -169,7 +169,8 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtName = add_menu_layout.findViewById(R.id.edtName);
         edtDescription = add_menu_layout.findViewById(R.id.edtDescription);
         edtPrice = add_menu_layout.findViewById(R.id.edtPrice);
-
+        edt_discount = add_menu_layout.findViewById(R.id.edt_discount);
+        edt_discount.setVisibility(View.INVISIBLE);
         //Binding MultipleImg
         img1 = (ImageView) add_menu_layout.findViewById(R.id.img1);
         img2 = (ImageView) add_menu_layout.findViewById(R.id.img2);
@@ -647,47 +648,6 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
 
     private boolean validateOffer() {
         return true;
-    }
-
-    private void changeImage(final Product item) {
-        if(saveUri !=null){
-            final ProgressDialog mDialog = new ProgressDialog(this);
-            mDialog.setMessage("Subiendo...");
-            mDialog.show();
-
-            String imageName = UUID.randomUUID().toString();
-            final StorageReference imageFolder = storageReference.child("images/"+imageName);
-            imageFolder.putFile(saveUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mDialog.dismiss();
-                            Toast.makeText(ProductList.this,"Subida !!!",Toast.LENGTH_SHORT).show();
-                            imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    item.setImage(uri.toString());
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mDialog.dismiss();
-                            Toast.makeText(ProductList.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress =(100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            mDialog.setMessage("Upload"+progress+"%");
-                        }
-                    })
-            ;
-        }
-
     }
 
 

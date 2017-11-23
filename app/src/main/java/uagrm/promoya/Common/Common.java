@@ -76,6 +76,8 @@ public class Common {
 
     public static String getTiempoTranscurrido(long date)
     {
+        if(System.currentTimeMillis()-date<60000)
+            return "hace instantes";
         if(System.currentTimeMillis()-date<3600000)
         {
             return "hace "+(System.currentTimeMillis()-date)/60000+" minutos";

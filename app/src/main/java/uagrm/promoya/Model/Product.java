@@ -2,17 +2,22 @@ package uagrm.promoya.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Shep on 10/25/2017.
  */
 
 public class Product implements Serializable{
-    private String Name,Image,Description,Price, CategoryId,ProductId,principalCategory,date,storeId,storeName;
+    private String Name,Description,Price,discount, CategoryId,ProductId,principalCategory,date,storeId,storeName;
     private long offerExpire;
     private List<String> listImage;
-
+    public Map<String, Boolean> likes = new HashMap<>();
+    public int likesCount;
+    public int viewsCount;
+    public int commentsCount;
     public Product() {
 
         listImage=new ArrayList<>();
@@ -20,11 +25,11 @@ public class Product implements Serializable{
     }
 
 
-    public Product(String name, String image, String description, String price, String categoryId, String productId, String principalCategory, String date, String storeId, String storeName, long offerExpire, List<String> listImage) {
+    public Product(String name, String image, String description, String price, String discount, String categoryId, String productId, String principalCategory, String date, String storeId, String storeName, long offerExpire, List<String> listImage, int likesCount, int viewsCount, int commentsCount) {
         Name = name;
-        Image = image;
         Description = description;
         Price = price;
+        this.discount = discount;
         CategoryId = categoryId;
         ProductId = productId;
         this.principalCategory = principalCategory;
@@ -33,6 +38,25 @@ public class Product implements Serializable{
         this.storeName = storeName;
         this.offerExpire = offerExpire;
         this.listImage = listImage;
+        this.likesCount = likesCount;
+        this.viewsCount = viewsCount;
+        this.commentsCount = commentsCount;
+    }
+
+    public int getViewsCount() {
+        return viewsCount;
+    }
+
+    public void setViewsCount(int viewsCount) {
+        this.viewsCount = viewsCount;
+    }
+
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
     }
 
     public long getOfferExpire() {
@@ -51,20 +75,20 @@ public class Product implements Serializable{
         Name = name;
     }
 
-    public String getImage() {
-        return Image;
-    }
-
-    public void setImage(String image) {
-        Image = image;
-    }
-
     public String getDescription() {
         return Description;
     }
 
     public void setDescription(String description) {
         Description = description;
+    }
+
+    public int getCommentsCount() {
+        return commentsCount;
+    }
+
+    public void setCommentsCount(int commentsCount) {
+        this.commentsCount = commentsCount;
     }
 
     public String getPrice() {
@@ -135,5 +159,35 @@ public class Product implements Serializable{
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "Name='" + Name + '\'' +
+                ", Description='" + Description + '\'' +
+                ", Price='" + Price + '\'' +
+                ", discount='" + discount + '\'' +
+                ", CategoryId='" + CategoryId + '\'' +
+                ", ProductId='" + ProductId + '\'' +
+                ", principalCategory='" + principalCategory + '\'' +
+                ", date='" + date + '\'' +
+                ", storeId='" + storeId + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", offerExpire=" + offerExpire +
+                ", listImage=" + listImage +
+                ", likes=" + likes +
+                ", likesCount=" + likesCount +
+                ", viewsCount=" + viewsCount +
+                ", commentsCount=" + commentsCount +
+                '}';
     }
 }
