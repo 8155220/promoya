@@ -38,6 +38,8 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ProductDetail"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".StatisticsActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".Chat.HomeChat.ChatHomeActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Chat.ChatDetail.ThreadActivity"

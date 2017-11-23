@@ -3,6 +3,7 @@
 
     <string name="navigation_menu_item_home">Inicio</string>
     <string name="navigation_menu_item_my_store">Mi Tienda</string>
+    <string name="navigation_menu_item_statistics">Estadisticas</string>
     <string name="navigation_menu_item_logout">Salir</string>
 
     <string name="fui_progress_dialog_signing_up">Creating your shiny new account...</string>

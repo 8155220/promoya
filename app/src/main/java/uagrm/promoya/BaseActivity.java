@@ -139,6 +139,19 @@ public class BaseActivity extends AppCompatActivity {
                             return true;
                         }
                         break;
+                    case R.id.navigation_menu_item_statistics:
+                            if (Common.user != null) {
+                                    Intent statistics = new Intent(getApplicationContext(), StatisticsActivity.class);
+                                    //item.setChecked(true);
+                                    statistics.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startActivity(statistics);
+                                overridePendingTransitionEnter();
+
+                                //finish();
+                                    drawerLayout.closeDrawers();
+                                    return true;
+                            }
+                            else break;
                     case R.id.navigation_menu_item_message:
                             if (Common.user != null) {
                                     Intent message = new Intent(getApplicationContext(), ChatHomeActivity.class);

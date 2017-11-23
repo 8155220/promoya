@@ -37,4 +37,10 @@
     <color name="grey">#e4e4e4</color>
     <!--fab colors-->
     <color name="redHeart">#f44336</color>
+
+    //statistics
+    <color name="suscriptionsLine">#f2e600</color>
+    <color name="likesLine">#ff0008</color>
+    <color name="viewsLine">#9718e40e</color>
+    <color name="textColor">#000000</color>
 </resources>
