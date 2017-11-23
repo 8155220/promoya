@@ -169,7 +169,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
         edtName = add_menu_layout.findViewById(R.id.edtName);
         edtDescription = add_menu_layout.findViewById(R.id.edtDescription);
         edtPrice = add_menu_layout.findViewById(R.id.edtPrice);
-        edt_discount = add_menu_layout.findViewById(R.id.edt_discount);
+        edt_discount = add_menu_layout.findViewById(R.id.edtDiscount);
         edt_discount.setVisibility(View.INVISIBLE);
         //Binding MultipleImg
         img1 = (ImageView) add_menu_layout.findViewById(R.id.img1);

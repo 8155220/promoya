@@ -15,6 +15,7 @@ public class MyFirebaseIdService  extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
+
         super.onTokenRefresh();
         String tokenRefreshed = FirebaseInstanceId.getInstance().getToken();
         if(Common.currentUser!=null)
@@ -28,5 +29,11 @@ public class MyFirebaseIdService  extends FirebaseInstanceIdService {
         //Token token = new Token(tokenRefreshed,false);
        // tokens.child(Common.currentUser.getPhone()).setValue(token);
 
+    }
+
+    public static void refresToken(){
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference("users").child(Common.currentUser.getUid()).child("token");
+        tokens.setValue(FirebaseInstanceId.getInstance().getToken());
     }
 }

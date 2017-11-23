@@ -49,6 +49,7 @@ import java.util.UUID;
 import uagrm.promoya.Chat.HomeChat.ChatHomeActivity;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Common.FirebaseDatabaseHelper;
+import uagrm.promoya.Firebase.MyFirebaseIdService;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
 import uagrm.promoya.Model.User;
@@ -102,6 +103,8 @@ public class BaseActivity extends AppCompatActivity {
         if (Common.user == null) {
             System.out.println("ENTRO BaseACTIVITY user==null");
             userRegistered();            //Obtiene los datos del usuario registrado dela db
+        }else {
+            MyFirebaseIdService.refresToken();
         }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
