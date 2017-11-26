@@ -1,5 +1,8 @@
 package uagrm.promoya.Fragment.Store;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,6 +25,8 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import net.glxn.qrgen.android.QRCode;
+
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
@@ -39,6 +44,7 @@ public class StoreHomeFragment extends Fragment
     TextView storeDescription;
     ImageView backgroundImg;
     ImageView logoImg;
+    ImageView store_qr;
     Button store_button_suscribe;
     DatabaseReference db;
 
@@ -69,6 +75,7 @@ public class StoreHomeFragment extends Fragment
         storeName = (TextView)view.findViewById(R.id.store_name);
         storeDescription = (TextView)view.findViewById(R.id.store_description);
         backgroundImg = (ImageView) view.findViewById(R.id.background_img);
+        store_qr = (ImageView) view.findViewById(R.id.store_qr);
         store_button_suscribe = (Button) view.findViewById(R.id.store_button_suscribe);
 
         logoImg = (ImageView) view.findViewById(R.id.logo_img);
@@ -101,6 +108,15 @@ public class StoreHomeFragment extends Fragment
                 }
             });
             store_button_suscribe.setVisibility(View.GONE);
+            Bitmap myBitmap = QRCode.from(Common.storeUrl+Common.user.getUid()).bitmap();
+            store_qr.setImageBitmap(myBitmap);
+            store_qr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Common.storeUrl+Common.user.getUid()));
+                    startActivity(intent);
+                }
+            });
         }
         else {
             storeName.setText(currentStore.getDisplayName());
@@ -121,8 +137,18 @@ public class StoreHomeFragment extends Fragment
                      onClickSuscribe(db);
                 }
             });
+            Bitmap myBitmap = QRCode.from(Common.storeUrl+currentStore.getStoreId()).bitmap();
+            store_qr.setImageBitmap(myBitmap);
+            store_qr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Common.storeUrl+currentStore.getStoreId()));
+                    startActivity(intent);
+                }
+            });
 
         }
+
         /*mMapView = (MapView) view.findViewById(R.id.map);
         if (mMapView!=null)
         {

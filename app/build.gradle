@@ -101,5 +101,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     //Statistics
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    //qr
+    compile 'com.github.kenglxn.QRGen:android:2.3.0'
 }
 apply plugin: 'com.google.gms.google-services'

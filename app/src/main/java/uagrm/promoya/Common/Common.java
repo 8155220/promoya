@@ -53,6 +53,8 @@ public class Common {
     public static uagrm.promoya.Model.User user;
     public static DatabaseReference DB = FirebaseDatabase.getInstance().getReference();
     public static DatabaseReference DBSTORES = FirebaseDatabase.getInstance().getReference().child("stores");
+    //QR
+    public static String storeUrl = "https://uagrm420031149.firebaseapp.com/stores/";
 
     public static final String baseUrl = "https://maps.googleapis.com";
     public static final APIService mService = Common.getFCMService();
