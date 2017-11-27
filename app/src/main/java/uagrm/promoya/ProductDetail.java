@@ -69,7 +69,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     private RecyclerView recyclerView;
     private FirebaseRecyclerAdapter<Comment,CommentViewHolder> commentAdapter;
 
-    private Button button_post_comment;
+    private ImageView button_post_comment;
     private EditText field_comment_text;
 
     //Contadores
@@ -103,7 +103,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
 
         //commets
         recyclerView = (RecyclerView)findViewById(R.id.recycler_comments);
-        button_post_comment = (Button)findViewById(R.id.button_post_comment);
+        button_post_comment = (ImageView) findViewById(R.id.button_post_comment);
         field_comment_text = (EditText)findViewById(R.id.field_comment_text);
 
         recyclerView.setHasFixedSize(true);
