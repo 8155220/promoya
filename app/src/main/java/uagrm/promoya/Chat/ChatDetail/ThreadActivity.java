@@ -125,7 +125,7 @@ public class ThreadActivity extends BaseActivity implements TextWatcher {
 
     private void initializeMessagesRecycler() {
         if (user == null || owner == null) {
-            Log.d("@@@@", "initializeMessagesRecycler: User:" + user + " Owner:" + owner);
+            //Log.d("@@@@", "initializeMessagesRecycler: User:" + user + " Owner:" + owner);
             return;
         }
         Query messagesQuery = mDatabase
@@ -151,7 +151,7 @@ public class ThreadActivity extends BaseActivity implements TextWatcher {
     @OnClick(R.id.activity_thread_send_fab)
     public void onClick() {
         if (user == null || owner == null) {
-            Log.d("@@@@", "onSendClick: User:" + user + " Owner:" + owner);
+            //Log.d("@@@@", "onSendClick: User:" + user + " Owner:" + owner);
             return;
         }
         long timestamp = new Date().getTime();

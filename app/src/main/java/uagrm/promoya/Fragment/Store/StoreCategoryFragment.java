@@ -106,11 +106,26 @@ public class StoreCategoryFragment extends Fragment{
     public StoreCategoryFragment() {
     }
 
-    public StoreCategoryFragment(Store currentStore) {
-        this.currentStore =currentStore;
+
+    public static StoreCategoryFragment newInstance(Store currentStore) {
+        StoreCategoryFragment myFragment = new StoreCategoryFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("currentStore", currentStore);
+        myFragment.setArguments(args);
+        return myFragment;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
 
+        if (getArguments() != null)
+        {
+            currentStore = (Store) getArguments().getSerializable("currentStore");
+        }
+
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

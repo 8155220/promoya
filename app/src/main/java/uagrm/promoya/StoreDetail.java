@@ -46,7 +46,8 @@ public class StoreDetail extends AppCompatActivity {
 
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottonNavigationView);
 
-        StoreHomeFragment storeHomeFragment = new StoreHomeFragment(currentStore);
+        //StoreHomeFragment storeHomeFragment = new StoreHomeFragment(currentStore);
+        StoreHomeFragment storeHomeFragment = StoreHomeFragment.newInstance(currentStore);
         FragmentTransaction fragmentTransaction;
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.content,
@@ -61,13 +62,13 @@ public class StoreDetail extends AppCompatActivity {
                 {
                     case R.id.bottonNavigation_home:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        StoreHomeFragment storeHomeFragment = new StoreHomeFragment(currentStore);
+                        StoreHomeFragment storeHomeFragment = StoreHomeFragment.newInstance(currentStore);
                         fragmentTransaction.replace(R.id.content,
                                 storeHomeFragment,"Inicio");
                         fragmentTransaction.commit();
                         return true;
                     case R.id.bottonNavigation_category:
-                        StoreCategoryFragment storeCategoryFragment = new StoreCategoryFragment(currentStore);
+                        StoreCategoryFragment storeCategoryFragment =StoreCategoryFragment.newInstance(currentStore);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.content,
                                 storeCategoryFragment,"Categorias");

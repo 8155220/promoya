@@ -58,8 +58,25 @@ public class StoreHomeFragment extends Fragment
 
     }
 
-    public StoreHomeFragment(Store currentStore) {
-        this.currentStore = currentStore;
+    public static StoreHomeFragment newInstance(Store currentStore) {
+        StoreHomeFragment myFragment = new StoreHomeFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("currentStore", currentStore);
+        myFragment.setArguments(args);
+
+        return myFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null)
+        {
+            currentStore = (Store) getArguments().getSerializable("currentStore");
+        }
+
     }
 
     @Nullable
