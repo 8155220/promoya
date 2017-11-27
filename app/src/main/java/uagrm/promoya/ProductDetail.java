@@ -1,6 +1,7 @@
 package uagrm.promoya;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +23,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +50,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     TextView product_name, product_price, product_description,product_date;
     Button btn_message;
     ImageView product_image;
+    ImageView product_ubication; //integrando google maps
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
 
@@ -74,11 +80,21 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
 
     //Contadores
     private TextView product_heart_count,product_comment_count,product_view_count;
+    //googleAds
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+
+        //GoogleAds
+        MobileAds.initialize(this, "ca-app-pub-9046813473880403~3692270643");
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
+
 
         //Firebase
         db = FirebaseDatabase.getInstance();
@@ -105,6 +121,19 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         recyclerView = (RecyclerView)findViewById(R.id.recycler_comments);
         button_post_comment = (ImageView) findViewById(R.id.button_post_comment);
         field_comment_text = (EditText)findViewById(R.id.field_comment_text);
+
+        //Ubication :
+        product_ubication = (ImageView) findViewById(R.id.product_ubication);
+
+        String latEiffelTower = "48.858235";
+        String lngEiffelTower = "2.294571";
+        View parent = (View) product_ubication.getParent();
+        int width = parent.getWidth();
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=" +
+                +600+"x200&sensor=false&markers=color:blue%7Clabel:S%7C"+latEiffelTower+","+lngEiffelTower;
+        System.out.println("URL :"+url.toString());
+        Glide.with(getBaseContext()).load(url)
+                .into(product_ubication);
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -183,13 +212,12 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
 
     }
 
+
     private void loadCurrenProduct() {
         dbProduct.child(currentProduct.getProductId())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        System.out.println("CurrentProduct :"+currentProduct.toString());
-                        System.out.println("Datasnapshot :"+dataSnapshot.toString());
                         currentProduct = dataSnapshot.getValue(Product.class);
                         if(currentProduct==null) System.out.println("esNull");
                         else

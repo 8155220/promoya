@@ -35,7 +35,7 @@ import uagrm.promoya.Common.FirebaseDatabaseHelper;
 
 //public class StatisticsActivity extends FragmentActivity {
 public class StatisticsActivity extends AppCompatActivity {
-    private AdView mAdView;
+
 
     long today= System.currentTimeMillis();
     long month = 2592000000L;
@@ -62,11 +62,6 @@ public class StatisticsActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_statistics);
         //admob
-        MobileAds.initialize(this, "ca-app-pub-9046813473880403~3692270643");
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mAdView.loadAd(adRequest);
 
         //AdView adView = new AdView(this);
         ///

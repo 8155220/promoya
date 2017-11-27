@@ -166,11 +166,42 @@
 
             </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primary_text"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:text="Descripcion"/>
+                <TextView
+                    android:id="@+id/product_description"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingMultiplier="1.5"
+                    android:padding="12dp"
+                    android:text="Description"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                
+
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -183,19 +214,15 @@
                         android:padding="10dp"
                         android:textStyle="bold"
                         android:textSize="15dp"
-                        android:text="Descripcion"/>
-                    <TextView
-                        android:id="@+id/product_description"
-                        android:layout_marginTop="12dp"
-                        android:lineSpacingMultiplier="1.5"
-                        android:padding="12dp"
-                        android:text="Description"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="14sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:text="Ubicacion"/>
+                    <ImageView
+                        android:id="@+id/product_ubication"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp" />
+
+
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView> <!--Ubicacion-->
             <android.support.v7.widget.CardView
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
@@ -252,7 +279,7 @@
                         android:layout_gravity="center_vertical"
                         android:text="000"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView> <!--Contadores-->
             <android.support.v7.widget.CardView
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
@@ -292,8 +319,39 @@
                         app:suffixMinute="Minuto"
                         app:suffixSecond="Segundos"/>
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView> <!--Contador Oferta-->
+            <android.support.v7.widget.CardView
+                app:cardElevation="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:text="Publicidad"/>
+
+                    <com.google.android.gms.ads.AdView
+                        xmlns:ads="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/adView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        ads:adSize="SMART_BANNER"
+                        android:gravity="bottom"
+                        android:foregroundGravity="center"
+                        ads:adUnitId="@string/google_ad_id">
+                    </com.google.android.gms.ads.AdView>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView> <!--Publicidad-->
             <!--BeginComments-->
             <android.support.v7.widget.CardView
                 app:cardElevation="5dp"
