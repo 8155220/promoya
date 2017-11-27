@@ -101,5 +101,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     //qr
     compile 'com.github.kenglxn.QRGen:android:2.3.0'
+    //
+    compile 'com.android.support:multidex:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

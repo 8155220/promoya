@@ -218,7 +218,7 @@
                         android:layout_height="30dp"
                         android:layout_margin="2dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_comment_count"/>
+                        app:srcCompat="@drawable/ic_comment_count"/>
                     <TextView
                         android:id="@+id/product_comment_count"
                         android:layout_width="wrap_content"
@@ -231,7 +231,7 @@
                         android:layout_height="30dp"
                         android:layout_margin="2dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_heart_count"/>
+                        app:srcCompat="@drawable/ic_heart_count"/>
                     <TextView
                         android:id="@+id/product_heart_count"
                         android:layout_width="wrap_content"
