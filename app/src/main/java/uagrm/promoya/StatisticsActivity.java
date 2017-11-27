@@ -21,6 +21,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ import uagrm.promoya.Common.FirebaseDatabaseHelper;
 
 //public class StatisticsActivity extends FragmentActivity {
 public class StatisticsActivity extends AppCompatActivity {
+    private AdView mAdView;
 
     long today= System.currentTimeMillis();
     long month = 2592000000L;
@@ -56,7 +61,15 @@ public class StatisticsActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_statistics);
+        //admob
+        MobileAds.initialize(this, "ca-app-pub-9046813473880403~3692270643");
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
 
+        //AdView adView = new AdView(this);
+        ///
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Estadisticas");
         setSupportActionBar(toolbar);

@@ -51,4 +51,7 @@
     <string name="message_message_copied">copiado al portapapeles</string>
     <string name="clipboard_title_copied_message">Mensaje copiado</string>
     <!--EndChat-->
+    <!--Addmob-->
+    <string name="admob_api_id">ca-app-pub-9046813473880403~3692270643</string>
+    <string name="google_ad_id">ca-app-pub-9046813473880403/1173918513</string>
 </resources>

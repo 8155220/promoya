@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import uagrm.promoya.Fragment.Store.StoreCategoryFragment;
 import uagrm.promoya.Fragment.Store.StoreHomeFragment;
 import uagrm.promoya.Fragment.Store.StoreOfferFragment;
@@ -29,10 +32,9 @@ public class StoreDetail extends AppCompatActivity {
 
         setContentView(R.layout.activity_store_detail);
         //setContentView(R.layout.activity_mystore);
-
         if (getIntent() != null)
             currentStore = (Store) getIntent().getExtras().getSerializable(KEY_STORE);
-
+        AdView myAdView = new AdView(this);
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(currentStore.getDisplayName());
