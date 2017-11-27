@@ -94,8 +94,6 @@ dependencies {
     provided 'frankiesardo:icepick-processor:3.2.0'
     //time
     compile 'joda-time:joda-time:2.9.7'
-    //button animation
-    compile 'com.github.jd-alexander:LikeButton:0.2.3'
     //retrofit
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'

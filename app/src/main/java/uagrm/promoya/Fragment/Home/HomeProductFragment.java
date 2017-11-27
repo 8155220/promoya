@@ -5,17 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.share.internal.LikeButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,8 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-import com.like.LikeButton;
-import com.like.OnLikeListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +31,6 @@ import java.util.List;
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
-import uagrm.promoya.Model.Store;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.R;
 import uagrm.promoya.ViewHolder.ClientViewHolder.ClientProductViewHolder;
@@ -204,32 +199,10 @@ public class HomeProductFragment extends Fragment{
                     public void onClick(View view, int position, boolean isLongClick) {
                         //Get CategoryId and send to new Activity
                         Intent producDetail = new Intent(getContext(),ProductDetail.class);
-                        //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
                         producDetail.putExtra("PRODUCT",model);
-                        //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
                         startActivity(producDetail);
                     }
                 });
-
-                /*//Determinar si el usuario actual ha dado un me encorazona a una pregunta y ha configurado
-                //las imagenes de los corazones como debe ser
-                if (model.puntos.containsKey(getUid())){
-                    viewHolder.corazonView.setImageResource(R.drawable.corazon_llenito);
-                }else{
-                    viewHolder.corazonView.setImageResource(R.drawable.corazon_vacio);
-                }
-                //Ahora falta enlazar la Pregunta al ViewHolder que creamos antes,
-                // y configurando el CorazonEscuchador <3
-                viewHolder.enlazarPregunta(model, new View.OnClickListener(){
-                    @Override
-                    public void onClick(View puntosView) {
-                        DatabaseReference preguntasRef = bdReferencia.child("Preguntas").child(preguntaRef.getKey());
-
-                        //Ejecutar las 2 transacciones
-                        alClickearCorazon(preguntasRef);
-                        //alClickearCorazon(usuariosRef);
-                    }
-                });*/
 
             }
         };
@@ -277,33 +250,27 @@ public class HomeProductFragment extends Fragment{
                     public void onClick(View view, int position, boolean isLongClick) {
                         DatabaseReference dbProductViews = db.getReference().child("Products").child(model.getProductId());
                         onViewedProduct(dbProductViews);
-                        registerKeyViewInStatistics();
                         Intent producDetail = new Intent(getContext(),ProductDetail.class);
                         producDetail.putExtra("PRODUCT",model);
                         startActivity(producDetail);
                     }
                 });
                 if (model.likes.containsKey(Common.currentUser.getUid())) {
-                    viewHolder.heart_button.setLiked(true);
+                    viewHolder.heart_button.setImageResource(R.drawable.ic_heart_filled);
+                    //viewHolder.heart_button.setLiked(true);
                 } else {
-                    viewHolder.heart_button.setLiked(false);
+                    //viewHolder.heart_button.setLiked(false);
+                    viewHolder.heart_button.setImageResource(R.drawable.ic_heart_border);
                 }
-
-                /*viewHolder.bindToProduct(model, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View starView) {
-                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
-                        onLikedButton(dbProductLikes);
-                    }
-                });*/
-                /*viewHolder.heart_button.setOnClickListener(new View.OnClickListener() {
+                //viewHolder.heart_button.setOnClikc
+                viewHolder.heart_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
                         onLikedButton(dbProductLikes);
                     }
-                });*/
-                viewHolder.heart_button.setOnLikeListener(new OnLikeListener() {
+                });
+                /*viewHolder.heart_button.setOnLikeListener(new OnLikeListener() {
                     @Override
                     public void liked(LikeButton likeButton) {
                         DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
@@ -315,7 +282,7 @@ public class HomeProductFragment extends Fragment{
                         DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
                         onLikedButton(dbProductLikes);
                     }
-                });
+                });*/
             }
         };
         adapter.notifyDataSetChanged();
@@ -333,11 +300,10 @@ public class HomeProductFragment extends Fragment{
                 if (currentProduct.likes.containsKey(Common.currentUser.getUid())){
                     currentProduct.likesCount = currentProduct.likesCount -1;
                     currentProduct.likes.remove(Common.currentUser.getUid());
-                    //removeKeySubscriptionInStatistics(currentProduct.getProductId());
                 }else{
                     currentProduct.likesCount = currentProduct.likesCount +1;
                     currentProduct.likes.put(Common.currentUser.getUid(), true);
-                    registerKeyLikedInStatistics();
+                    registerKeyLikedInStatistics(currentProduct.getStoreId());
                 }
                 mutableData.setValue(currentProduct);
                 return Transaction.success(mutableData);
@@ -349,7 +315,7 @@ public class HomeProductFragment extends Fragment{
         });
     }
 
-    private void onViewedProduct(DatabaseReference dbProductLikes) {
+    private void onViewedProduct(final DatabaseReference dbProductLikes) {
         dbProductLikes.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
@@ -358,7 +324,7 @@ public class HomeProductFragment extends Fragment{
                     return Transaction.success(mutableData);
                 }
                     currentProduct.viewsCount = currentProduct.viewsCount +1;
-                    registerKeyViewInStatistics();
+                    registerKeyViewInStatistics(currentProduct.getStoreId());
                 mutableData.setValue(currentProduct);
                 return Transaction.success(mutableData);
             }
@@ -370,17 +336,19 @@ public class HomeProductFragment extends Fragment{
     }
 
 
-    public void registerKeyLikedInStatistics(){
+    public void registerKeyLikedInStatistics(String storeId){
         DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
         statistics.child("statistics")
                 .child("likes")
+                .child(storeId)
                 .push()
                 .setValue(System.currentTimeMillis());
     }
-    public void registerKeyViewInStatistics(){
+    public void registerKeyViewInStatistics(String storeId){
         DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
         statistics.child("statistics")
                 .child("views")
+                .child(storeId)
                 .push()
                 .setValue(System.currentTimeMillis());
     }

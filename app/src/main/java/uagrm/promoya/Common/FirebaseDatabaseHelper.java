@@ -16,24 +16,77 @@ import uagrm.promoya.Model.User;
  */
 
 public class FirebaseDatabaseHelper {
-    private static ArrayList<User> users;
+    public static ArrayList<User> users;
+    public static ArrayList<Long> likes;
+    public static ArrayList<Long> views;
+    public static ArrayList<Long> subscription;
     static FirebaseDatabaseHelper instance=null;
+    public final static String STATISTICS="statistics";
+    public final static String LIKES="likes";
+    public final static String VIEWS="views";
+    public final static String SUBSCRIPTION="subscriptions";
     private FirebaseDatabaseHelper() {
         users =new ArrayList<>();
+        likes =new ArrayList<>();
+        views =new ArrayList<>();
+        subscription =new ArrayList<>();
         retrieveUsers();
+        retrieveStatisticsLikes();
+        retrieveStatisticsViews();
+        retrieveStatisticsSubscription();
     }
 
-    private void fetchUserData(DataSnapshot dataSnapshot)
-    {
-        users.clear();
+    private void retrieveStatisticsSubscription() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child(STATISTICS).child(SUBSCRIPTION).child(Common.currentUser.getUid());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    fetchSubscriptionData(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void fetchSubscriptionData(DataSnapshot dataSnapshot) {
+        subscription.clear();
         for (DataSnapshot ds : dataSnapshot.getChildren())
         {
-            User usuario=ds.getValue(User.class);
-            users.add(usuario);
+            Long a = ds.getValue(Long.class);
+            System.out.println("SUBSCRIPTION :" + a);
+            subscription.add(a);
         }
     }
-    public void retrieveUsers()
-    {
+
+    private void retrieveStatisticsViews() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child(STATISTICS).child(VIEWS).child(Common.currentUser.getUid());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                fetchViewsData(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void fetchViewsData(DataSnapshot dataSnapshot) {
+        views.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
+            Long a = ds.getValue(Long.class);
+            views.add(a);
+        }
+    }
+
+
+    public void retrieveUsers() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
         db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -47,6 +100,39 @@ public class FirebaseDatabaseHelper {
 
             }
         });
+    }
+    private void fetchUserData(DataSnapshot dataSnapshot) {
+        users.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
+            User usuario=ds.getValue(User.class);
+            users.add(usuario);
+        }
+    }
+
+    public void retrieveStatisticsLikes()
+    {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference()
+                .child(STATISTICS).child(LIKES).child(Common.currentUser.getUid());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    fetchLikesData(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void fetchLikesData(DataSnapshot dataSnapshot) {
+        likes.clear();
+        for (DataSnapshot ds : dataSnapshot.getChildren())
+        {
+            Long a = ds.getValue(Long.class);
+            likes.add(a);
+        }
     }
 
 
@@ -65,9 +151,6 @@ public class FirebaseDatabaseHelper {
         ArrayList<User> lista = FirebaseDatabaseHelper.getUsers();
         for (int i = 0; i < lista.size(); i++) {
             User user = lista.get(i);
-            System.out.println("LISTASIZE :"+lista.size());
-            System.out.println("usuarioForId :"+ user.getUid());
-            System.out.println("usuarioParametro :"+ uId);
             if(user.getUid().equals(uId))
                 return user;
         }

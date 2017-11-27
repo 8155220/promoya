@@ -125,7 +125,7 @@ public class StoreHomeFragment extends Fragment
                     .into(backgroundImg);
             Glide.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                     .into(logoImg);
-            db.child("subscriptions").addChildEventListener(getChildEventlistenerSuscriptions());
+            db.child("subscriptions").addChildEventListener(getChildEventlistenerSubscriptions());
             if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
                 store_button_suscribe.setText("Suscrito");
             }else{
@@ -157,18 +157,19 @@ public class StoreHomeFragment extends Fragment
             mMapView.getMapAsync(this);
         }*/
     }
-    public ChildEventListener getChildEventlistenerSuscriptions(){
+    public ChildEventListener getChildEventlistenerSubscriptions(){
         return new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("datasnapshot added :"+dataSnapshot.toString());
+
                 Boolean booleanValue = dataSnapshot.getValue(Boolean.class);
                 if (dataSnapshot.getKey().equals(Common.currentUser.getUid())) {
                     FirebaseMessaging.getInstance().subscribeToTopic(currentStore.getStoreId());
                 }
+                if(!currentStore.subscriptions.containsKey(dataSnapshot.getKey()))
+                    //registerKeySubscriptionInStatistics(currentStore.getStoreId());
                 currentStore.subscriptions.put(dataSnapshot.getKey(), booleanValue);
-                registerKeySubscriptionInStatistics();
-                updateSuscriptionButton();
+                updateSubscriptionButton();
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -176,7 +177,7 @@ public class StoreHomeFragment extends Fragment
                     Boolean booleanValue = snapshot.getValue(Boolean.class);
                     currentStore.subscriptions.put(snapshot.getKey(), booleanValue);
                 }
-                updateSuscriptionButton();
+                updateSubscriptionButton();
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -184,8 +185,8 @@ public class StoreHomeFragment extends Fragment
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(currentStore.getStoreId());
                 }
                 currentStore.subscriptions.remove(dataSnapshot.getKey());
-                removeKeySubscriptionInStatistics();
-                updateSuscriptionButton();
+                //removeKeySubscriptionInStatistics(currentStore.getStoreId());
+                updateSubscriptionButton();
             }
 
             @Override
@@ -199,7 +200,7 @@ public class StoreHomeFragment extends Fragment
             }
         };
     }
-    public void updateSuscriptionButton(){
+    public void updateSubscriptionButton(){
 
         if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
             store_button_suscribe.setText("Suscrito");
@@ -220,11 +221,14 @@ public class StoreHomeFragment extends Fragment
                     //Si ya le habia dado Encorazona entonces ya me toca quitarle al clickearlo xD
                     currentStore.subscriptionsCount = currentStore.subscriptionsCount -1;
                     currentStore.subscriptions.remove(Common.currentUser.getUid());
+                    removeKeySubscriptionInStatistics(currentStore.getStoreId());
+
                     //store_button_suscribe.setText("Suscribirse");
                 }else{
                     //Si no le he dado me Encorazona, entonces me toca aumentar un punto
                     currentStore.subscriptionsCount = currentStore.subscriptionsCount +1;
                     currentStore.subscriptions.put(Common.currentUser.getUid(), true);
+                    registerKeySubscriptionInStatistics(currentStore.getStoreId());
                     //store_button_suscribe.setText("Suscrito");
                 }
 
@@ -238,18 +242,22 @@ public class StoreHomeFragment extends Fragment
             }
         });
     }
-    public void registerKeySubscriptionInStatistics(){
+    public void registerKeySubscriptionInStatistics(String storeId){
         DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
         statistics.child("statistics")
-                .child("suscriptions")
-                .child(currentStore.getStoreId())
+                .child("subscriptions")
+                .child(storeId)
+                .child(Common.currentUser.getUid())
                 .setValue(System.currentTimeMillis());
     }
-    public void removeKeySubscriptionInStatistics(){
+    public void removeKeySubscriptionInStatistics(String storeId){
         DatabaseReference statistics = FirebaseDatabase.getInstance().getReference();
         statistics.child("statistics")
-                .child("suscriptions")
-                .child(currentStore.getStoreId()).setValue(null);
+                .child("subscriptions")
+                .child(storeId)
+                .child(Common.currentUser.getUid())
+                .setValue(null);
+        System.out.println("CURRENTUSER ID:"+Common.currentUser.getUid());
 
     }
 /*

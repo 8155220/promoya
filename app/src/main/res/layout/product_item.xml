@@ -70,19 +70,11 @@ android:foreground="?android:attr/selectableItemBackground">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.like.LikeButton
-            android:layout_weight="2"
+        <ImageView
             android:id="@+id/heart_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            app:icon_size="18dp"
-            app:circle_start_color="@color/redHeart"
-            app:dots_primary_color="@color/redHeart"
-            app:dots_secondary_color="@color/redHeart"
-            app:circle_end_color="@color/redHeart"
-            app:anim_scale_factor="2"
-            app:icon_type="heart" />
+            app:srcCompat="@drawable/ic_heart_border"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

@@ -4,9 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.like.LikeButton;
-
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.R;
@@ -21,7 +18,7 @@ public class ClientProductViewHolder extends RecyclerView.ViewHolder
         public TextView product_price;
         public TextView product_store;
         public ImageView product_image;
-        public LikeButton heart_button;
+        public ImageView heart_button;
         private ItemClickListener itemClickListener;
 
 
@@ -31,7 +28,7 @@ public class ClientProductViewHolder extends RecyclerView.ViewHolder
             product_price = (TextView)itemView.findViewById(R.id.product_price);
             product_store = (TextView)itemView.findViewById(R.id.product_store);
             product_image = (ImageView)itemView.findViewById(R.id.product_image);
-            heart_button = (LikeButton)itemView.findViewById(R.id.heart_button);
+            heart_button = (ImageView)itemView.findViewById(R.id.heart_button);
             itemView.setOnClickListener(this);
 
         }
