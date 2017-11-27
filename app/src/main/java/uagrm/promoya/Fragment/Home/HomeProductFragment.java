@@ -101,7 +101,7 @@ public class HomeProductFragment extends Fragment{
 
         //Search
         materialSearchBar = (MaterialSearchBar)view.findViewById(R.id.searchBar);
-        materialSearchBar.setHint("Ingresa tu Pregunta");
+        materialSearchBar.setHint("Ingresa el Producto");
         //materialSearchBar.setSpeechMode(false); no need, because we already define in xml
         loadSuggest();
         materialSearchBar.setLastSuggestions(suggesList);

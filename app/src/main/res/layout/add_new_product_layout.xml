@@ -101,7 +101,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="16dp"
                         android:padding="5dp"
-                        android:src="@drawable/addimg" />
+                        app:srcCompat="@drawable/addimg" />
 
                     <ImageView
                         android:id="@+id/img2"
@@ -112,7 +112,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="16dp"
                         android:padding="5dp"
-                        android:src="@drawable/addimg" />
+                        app:srcCompat="@drawable/addimg" />
 
                     <ImageView
                         android:id="@+id/img3"
@@ -123,7 +123,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="16dp"
                         android:padding="5dp"
-                        android:src="@drawable/addimg" />
+                        app:srcCompat="@drawable/addimg" />
 
                     <ImageView
                         android:id="@+id/img4"
@@ -134,7 +134,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="16dp"
                         android:padding="5dp"
-                        android:src="@drawable/addimg" />
+                        app:srcCompat="@drawable/addimg" />
 
 
                 </LinearLayout>

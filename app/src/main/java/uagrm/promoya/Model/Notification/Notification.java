@@ -8,11 +8,20 @@ public class Notification {
     public String title;
     public String body;
     public String tag;
-
+    public String sound;
     public Notification(String title, String body,String tag) {
         this.title = title;
         this.body = body;
         this.tag= tag;
+        this.sound="default";
+    }
+
+    public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 
     public String getBody() {
