@@ -219,7 +219,9 @@ public class BaseActivity extends AppCompatActivity {
 
                 /*Snackbar.make(getWindow().getDecorView(), "Click En Aceptar", Snackbar.LENGTH_SHORT)
                         .show();*/
-                showCreateStoreDialog();
+                //showCreateStoreDialog();
+                Intent i = new Intent(getApplicationContext(),CreateStore.class);
+                startActivity(i);
             }
 
         });

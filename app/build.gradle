@@ -61,6 +61,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:4.2.0'
     compile 'in.srain.cube:grid-view-with-header-footer:1.0.12'
     //GOOGLE MAPS
+    compile 'com.google.android.gms:play-services-location:11.0.2'
     //compile 'com.google.android.gms:play-services-maps:11.0.2'
 
     //ORDERFOODSNproduc
