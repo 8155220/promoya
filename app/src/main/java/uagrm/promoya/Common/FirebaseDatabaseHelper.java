@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import uagrm.promoya.Model.Store;
 import uagrm.promoya.Model.User;
 
 /**
@@ -17,6 +18,7 @@ import uagrm.promoya.Model.User;
 
 public class FirebaseDatabaseHelper {
     public static ArrayList<User> users;
+    //public static ArrayList<Store> stores;
     public static ArrayList<Long> likes;
     public static ArrayList<Long> views;
     public static ArrayList<Long> subscription;
@@ -27,6 +29,7 @@ public class FirebaseDatabaseHelper {
     public final static String SUBSCRIPTION="subscriptions";
     private FirebaseDatabaseHelper() {
         users =new ArrayList<>();
+        //stores =new ArrayList<>();
         likes =new ArrayList<>();
         views =new ArrayList<>();
         subscription =new ArrayList<>();
@@ -90,10 +93,8 @@ public class FirebaseDatabaseHelper {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users");
         db.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    fetchUserData(dataSnapshot);
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {fetchUserData(dataSnapshot);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

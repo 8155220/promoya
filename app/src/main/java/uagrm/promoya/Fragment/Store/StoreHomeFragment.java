@@ -30,6 +30,8 @@ import net.glxn.qrgen.android.QRCode;
 import java.util.Locale;
 
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Common.FirebaseDatabaseHelper;
+import uagrm.promoya.Model.Notification.Notification;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
 
@@ -252,6 +254,13 @@ public class StoreHomeFragment extends Fragment
                     currentStore.subscriptions.put(Common.currentUser.getUid(), true);
                     registerKeySubscriptionInStatistics(currentStore.getStoreId());
                     //store_button_suscribe.setText("Suscrito");
+
+                    //Notificacion
+                    Notification notification = new Notification(
+                            Common.currentUser.getDisplayName()
+                            ,"se ha suscrito a tu tienda "+currentStore.getDisplayName(),Common.currentUser.getUid());
+                    Common.sendNotification(FirebaseDatabaseHelper.getUser(currentStore.getStoreId()).getToken(),notification);
+
                 }
 
                 //Ahora toca guardar el valor en la nube y reportar que fue exitoso :v

@@ -29,7 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uagrm.promoya.Common.Common;
+import uagrm.promoya.Common.FirebaseDatabaseHelper;
 import uagrm.promoya.Interface.ItemClickListener;
+import uagrm.promoya.Model.Notification.Notification;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.ProductDetail;
 import uagrm.promoya.R;
@@ -257,12 +259,9 @@ public class HomeProductFragment extends Fragment{
                 });
                 if (model.likes.containsKey(Common.currentUser.getUid())) {
                     viewHolder.heart_button.setImageResource(R.drawable.ic_heart_filled);
-                    //viewHolder.heart_button.setLiked(true);
                 } else {
-                    //viewHolder.heart_button.setLiked(false);
                     viewHolder.heart_button.setImageResource(R.drawable.ic_heart_border);
                 }
-                //viewHolder.heart_button.setOnClikc
                 viewHolder.heart_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -270,19 +269,6 @@ public class HomeProductFragment extends Fragment{
                         onLikedButton(dbProductLikes);
                     }
                 });
-                /*viewHolder.heart_button.setOnLikeListener(new OnLikeListener() {
-                    @Override
-                    public void liked(LikeButton likeButton) {
-                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
-                        onLikedButton(dbProductLikes);
-                    }
-
-                    @Override
-                    public void unLiked(LikeButton likeButton) {
-                        DatabaseReference dbProductLikes = db.getReference().child("Products").child(model.getProductId());
-                        onLikedButton(dbProductLikes);
-                    }
-                });*/
             }
         };
         adapter.notifyDataSetChanged();
@@ -300,10 +286,16 @@ public class HomeProductFragment extends Fragment{
                 if (currentProduct.likes.containsKey(Common.currentUser.getUid())){
                     currentProduct.likesCount = currentProduct.likesCount -1;
                     currentProduct.likes.remove(Common.currentUser.getUid());
+
                 }else{
                     currentProduct.likesCount = currentProduct.likesCount +1;
                     currentProduct.likes.put(Common.currentUser.getUid(), true);
                     registerKeyLikedInStatistics(currentProduct.getStoreId());
+                    //Notificacion
+                    Notification notification = new Notification("A "+
+                            Common.currentUser.getDisplayName()
+                            ,"Le gusta tu producto "+currentProduct.getName(),Common.currentUser.getUid());
+                    Common.sendNotification(FirebaseDatabaseHelper.getUser(currentProduct.getStoreId()).getToken(),notification);
                 }
                 mutableData.setValue(currentProduct);
                 return Transaction.success(mutableData);

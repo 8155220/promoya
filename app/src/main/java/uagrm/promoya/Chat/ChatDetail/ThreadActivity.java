@@ -184,7 +184,6 @@ public class ThreadActivity extends BaseActivity implements TextWatcher {
                 owner.getDisplayName() +" (Mensaje)"
                 ,message.getBody(),ownerUid);
         Common.sendNotification(user.getToken(),notification);
-        System.out.println("uSERtOKEN :"+user.getToken());
         inputEditText.setText("");
     }
 
