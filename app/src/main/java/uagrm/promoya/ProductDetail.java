@@ -1,7 +1,6 @@
 package uagrm.promoya;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -123,16 +121,12 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
         field_comment_text = (EditText)findViewById(R.id.field_comment_text);
 
         //Ubication :
-        product_ubication = (ImageView) findViewById(R.id.product_ubication);
+        product_ubication = (ImageView) findViewById(R.id.product_location);
 
         String latEiffelTower = "48.858235";
         String lngEiffelTower = "2.294571";
-        View parent = (View) product_ubication.getParent();
-        int width = parent.getWidth();
-        String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=" +
-                +600+"x200&sensor=false&markers=color:blue%7Clabel:S%7C"+latEiffelTower+","+lngEiffelTower;
-        System.out.println("URL :"+url.toString());
-        Glide.with(getBaseContext()).load(url)
+
+        Glide.with(getBaseContext()).load(Common.getUrlFromLongLat(latEiffelTower,lngEiffelTower))
                 .into(product_ubication);
 
         recyclerView.setHasFixedSize(true);
@@ -195,13 +189,7 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
                     comment.setDate(System.currentTimeMillis());
                     productsComments.child(currentProduct.getProductId()).push().setValue(comment);
                     field_comment_text.setText("");
-                    //product_comment_count.setText(commentAdapter.getItemCount());
-                    //System.out.println("COMENT CANTIDAD :"+commentAdapter.getItemCount());
                     recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
-
-                    //recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
-                    //recyclerView.s`
-                    //recyclerView.smoothScrollToPosition(commentAdapter.getItemCount());
                     onCommentedProduct(dbProduct);
                 }
             }
@@ -337,15 +325,12 @@ public class ProductDetail extends AppCompatActivity implements ViewPager.OnPage
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
-
     @Override
     public void onPageSelected(int position) {
         for (int i = 0; i < dotsCount; i++) {
             dots[i].setImageDrawable(getResources().getDrawable(R.drawable.nonselecteditem_dot));
         }
-
         dots[position].setImageDrawable(getResources().getDrawable(R.drawable.selecteditem_dot));
-
     }
 
     @Override

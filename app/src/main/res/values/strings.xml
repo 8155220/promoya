@@ -54,4 +54,6 @@
     <!--Addmob-->
     <string name="admob_api_id">ca-app-pub-9046813473880403~3692270643</string>
     <string name="google_ad_id">ca-app-pub-9046813473880403/1173918513</string>
+    <string name="ubication_example">Av. Cruz del Sur, Santa Cruz de la Sierra, Bolivia Santa Cruz de la Sierra, Departamento de Santa Cruz Bolivia</string>
+    <string name="loading_ubication">Click Para Obtener Ubicacion</string>
 </resources>

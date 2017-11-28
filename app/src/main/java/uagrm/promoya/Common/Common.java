@@ -160,5 +160,14 @@ public class Common {
                 });
     }
 
+    public static String getUrlFromLongLat(double latitude,double longitude){
+        return "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=15&size=" +
+                +600+"x300&sensor=false&markers=color:red%7Clabel:S%7C"+latitude+","+longitude;
+    }
+    public static String getUrlFromLongLat(String latitude,String longitude){
+        return "http://maps.google.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=15&size=" +
+                +600+"x300&sensor=false&markers=color:red%7Clabel:S%7C"+latitude+","+longitude;
+    }
+
 
 }

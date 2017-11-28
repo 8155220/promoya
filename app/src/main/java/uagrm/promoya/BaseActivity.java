@@ -71,21 +71,6 @@ public class BaseActivity extends AppCompatActivity {
     private TextView navHeaderName;
     private TextView navHeaderEmail;
 
-    //CreateStoreDialog
-    TextView edtName;
-    TextView edtDescription;
-    ImageView imageViewLogo;
-    ImageView imageViewBackground;
-    Uri uriLogoImg;
-    Uri uriBackgroundImg;
-    Button btnUpload;
-    //flags to know which img where clicked;
-    boolean flagLogoImgClicked;
-    boolean flagBackgroundImgClicked;
-    //newStoreModel
-    Store newStore;
-    private static final int GALLERY_REQUEST = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +79,6 @@ public class BaseActivity extends AppCompatActivity {
         //LoadFirebaseDatabaseHelper
         FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelper.getInstance();
 
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -102,7 +86,6 @@ public class BaseActivity extends AppCompatActivity {
 
         loadUserData();
         if (Common.user == null) {
-            System.out.println("ENTRO BaseACTIVITY user==null");
             userRegistered();            //Obtiene los datos del usuario registrado dela db
         }else {
             MyFirebaseIdService.refresToken();
@@ -111,7 +94,6 @@ public class BaseActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-
                 switch (item.getItemId()) {
                     case R.id.navigation_menu_item_home:
                         if (itemSelected == 1) {
@@ -176,7 +158,7 @@ public class BaseActivity extends AppCompatActivity {
                                     drawerLayout.closeDrawers();
                     break;
                     case R.id.navigation_menu_item_logout:
-                        Toast.makeText(getBaseContext(), "Touch", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Hasta la vista ...", Toast.LENGTH_SHORT).show();
                         Intent login = new Intent(getApplicationContext(), Login.class);
                         startActivity(login);
                         logout();
@@ -192,27 +174,18 @@ public class BaseActivity extends AppCompatActivity {
                 //item.setChecked(true);
                 drawerLayout.closeDrawers();
                 return false;
-                //return false;
             }
         });
-
-        flagLogoImgClicked = false;
-        flagBackgroundImgClicked = false;
 
     }
 
     private void showEnableStoreDialog() {
-
-
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(BaseActivity.this);
         alertDialog.setTitle("Habilitar Tienda");
-
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialog_enable_store = inflater.inflate(R.layout.dialog_enable_store, null);
-
         alertDialog.setView(dialog_enable_store);
         alertDialog.setIcon(R.drawable.ic_menu_store); //cambiar
-
         alertDialog.setPositiveButton("Crear Tienda", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
@@ -233,96 +206,6 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
-    }
-
-    private void showCreateStoreDialog() {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(BaseActivity.this);
-        alertDialog.setTitle("Crear Tienda");
-
-        newStore = new Store();
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View dialog_create_store = inflater.inflate(R.layout.dialog_create_store, null);
-
-        edtName = dialog_create_store.findViewById(R.id.edtName);
-        edtDescription = dialog_create_store.findViewById(R.id.edtDescription);
-        imageViewLogo = (ImageView) dialog_create_store.findViewById(R.id.logoImgUrl);
-        imageViewBackground = (ImageView) dialog_create_store.findViewById(R.id.backgroundImgUrl);
-        btnUpload = (Button) dialog_create_store.findViewById(R.id.btnUpload);
-
-        //Listener
-        imageViewLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flagLogoImgClicked = true;
-                CameraOpen();
-            }
-        });
-        imageViewBackground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flagBackgroundImgClicked = true;
-                CameraOpen();
-            }
-        });
-
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage(); //Let user select image from gallery and save Uri of this image
-            }
-        });
-
-
-        alertDialog.setView(dialog_create_store);
-        alertDialog.setIcon(R.drawable.ic_menu_store); //cambiar
-
-        alertDialog.setPositiveButton("Crear Tienda", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-
-                /*Snackbar.make(getWindow().getDecorView(), "Click En Aceptar", Snackbar.LENGTH_SHORT)
-                        .show();*/
-                if (validateCreateStore()) {
-                    newStore.setDescription(edtDescription.getText().toString());
-                    newStore.setDisplayName(edtName.getText().toString());
-                    newStore.setStoreId(Common.currentUser.getUid());
-                    Common.DB.child("stores").child(Common.currentUser.getUid()).setValue(newStore);
-                    Common.DB.child("users").child(Common.currentUser.getUid()).child("hasStore").setValue(1);
-                    Common.DB.child("users").child(Common.currentUser.getUid()).child("storeName").setValue(newStore.getDisplayName());
-                    dialogInterface.dismiss();
-                }
-            }
-        });
-        alertDialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-
-                dialogInterface.dismiss();
-            }
-        });
-        alertDialog.show();
-    }
-
-    private boolean validateCreateStore() {
-        if (edtName.getText().toString().isEmpty()) {
-            Snackbar.make(getWindow().getDecorView(), "Complete : Nombre Tienda", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-        if (edtDescription.getText().toString().isEmpty()) {
-            Snackbar.make(getWindow().getDecorView(), "Complete : Descripcion", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-        if (uriLogoImg == null) {
-            Snackbar.make(getWindow().getDecorView(), "Seleccione logotipo tienda", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-        if (uriBackgroundImg == null) {
-            Snackbar.make(getWindow().getDecorView(), "Selecione imagen fondo tienda", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
     }
 
     private void loadUserData() {
@@ -415,132 +298,8 @@ public class BaseActivity extends AppCompatActivity {
                 mDialog.dismiss();
             }
         });
-        //return flag[0];
-    } //Esta pele falta modificar , tambien de loginactivity
-
-    private void CameraOpen() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .start(this);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //CropperImg
-        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-            Uri imagen1 = data.getData();
-            CropImage.activity(imagen1)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .start(this);
-        }
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                //imagen = result.getUri();
-                if (flagLogoImgClicked) {
-                    uriLogoImg = result.getUri();
-                } else {
-                    uriBackgroundImg = result.getUri();
-                }
-                updateImg();
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
     }
 
 
-    private void updateImg() {
-        if (flagLogoImgClicked) {
-            flagLogoImgClicked = false;
-            imageViewLogo.setImageURI(uriLogoImg);
-        } else if (flagBackgroundImgClicked) {
-            flagBackgroundImgClicked = false;
-            imageViewBackground.setImageURI(uriBackgroundImg);
-        }
-    }
 
-    private void uploadImage() {
-        if (uriLogoImg != null && uriBackgroundImg != null) {
-            final ProgressDialog mDialog = new ProgressDialog(this);
-            mDialog.setMessage("Subiendo...");
-            mDialog.show();
-
-            StorageReference storageReference;
-            storageReference = FirebaseStorage.getInstance().getReference();
-
-            //Subiendo Logo
-            String imageName = UUID.randomUUID().toString();
-            final StorageReference imageFolder = storageReference.child("images/" + imageName);
-            imageFolder.putFile(uriLogoImg)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mDialog.dismiss();
-                            imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    if (newStore != null) {
-                                        newStore.setLogoImgUrl(uri.toString());
-                                    }
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mDialog.dismiss();
-                            Toast.makeText(BaseActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-
-                        }
-                    })
-            ;
-            //Subiendo Logo
-            imageName = UUID.randomUUID().toString();
-            final StorageReference imageFolder2 = storageReference.child("images/" + imageName);
-            imageFolder2.putFile(uriBackgroundImg)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mDialog.dismiss();
-                            imageFolder2.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    if (newStore != null) {
-                                        newStore.setBackgroundImgUrl(uri.toString());
-                                    }
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            mDialog.dismiss();
-                            Toast.makeText(BaseActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        }
-                    })
-            ;
-        } else {
-            Snackbar.make(getWindow().getDecorView(), "Selecciona logotipo y fondo", Snackbar.LENGTH_SHORT).show();
-        }
-    }
 }

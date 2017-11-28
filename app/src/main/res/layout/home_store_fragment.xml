@@ -38,48 +38,81 @@
 
 
         </RelativeLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/store_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="txto"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/store_button_suscribe"
-                android:text="Suscribirse"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/suscribe_button"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp" />
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/store_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="descripcion"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ubicacion :"/>
 
         <android.support.v7.widget.CardView
             app:cardElevation="5dp"
-            app:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="txto"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/store_button_suscribe"
+                    android:text="Suscribirse"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/suscribe_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="45dp"
+                android:id="@+id/store_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="descripcion"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            app:cardElevation="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/primary_text"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:text="Ubicacion"/>
+                <ImageView
+                    android:id="@+id/store_location"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            app:cardElevation="5dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -98,88 +131,14 @@
                     android:text="Codigo QR"/>
                 <ImageView
                     android:id="@+id/store_qr"
-                    android:layout_marginTop="12dp"
-                    android:padding="12dp"
                     android:layout_gravity="center"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp" />
+                    android:layout_width="150dp"
+                    android:layout_height="150dp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
-        <!--<com.google.android.gms.maps.MapView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/map"
-            >
-        </com.google.android.gms.maps.MapView>-->
+
 
     </LinearLayout>
 
 
 </ScrollView>
-
-<!-- OLD
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp"
-    android:fillViewport="false">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/background_img"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/logo_img"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:scaleType="centerCrop" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/store_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="txto"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <TextView
-                    android:id="@+id/store_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="descripcion"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-            </LinearLayout>
-
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ubicacion :"/>
-
-
-        <com.google.android.gms.maps.MapView
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:id="@+id/map"
-            >
-        </com.google.android.gms.maps.MapView>
-
-    </LinearLayout>
-
-
-</ScrollView>
--->

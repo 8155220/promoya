@@ -15,6 +15,7 @@ public class Store implements Serializable{
     String logoImgUrl;
     String storeId;
     String title;
+    double longitude,latitude;
     public int subscriptionsCount;
     public Map<String, Boolean> subscriptions = new HashMap<>(); //cambiar nombre subscriptions->subscriptions
 
@@ -27,6 +28,22 @@ public class Store implements Serializable{
 
     public void setBackgroundImgUrl(String backgroundImgUrl) {
         this.backgroundImgUrl = backgroundImgUrl;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
     }
 
     public int getSubscriptionsCount() {

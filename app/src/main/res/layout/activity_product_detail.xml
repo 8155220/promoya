@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ProductDetail">
 
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
@@ -108,7 +107,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:clipToPadding="false"
@@ -142,13 +140,13 @@
                         />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:padding="10dp"
-                    android:textStyle="bold"
-                    android:text="Cantidad"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:text="Cantidad"/>
                     <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
                         android:layout_width="100dp"
                         android:layout_height="30dp"
@@ -166,36 +164,36 @@
 
             </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
-            app:cardElevation="5dp"
-            app:cardUseCompatPadding="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:orientation="vertical"
+                app:cardElevation="5dp"
+                app:cardUseCompatPadding="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:padding="10dp"
-                    android:textStyle="bold"
-                    android:textSize="15dp"
-                    android:text="Descripcion"/>
-                <TextView
-                    android:id="@+id/product_description"
-                    android:layout_marginTop="12dp"
-                    android:lineSpacingMultiplier="1.5"
-                    android:padding="12dp"
-                    android:text="Description"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="14sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primary_text"
+                        android:padding="10dp"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:text="Descripcion"/>
+                    <TextView
+                        android:id="@+id/product_description"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingMultiplier="1.5"
+                        android:padding="12dp"
+                        android:text="Description"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true"
@@ -216,7 +214,7 @@
                         android:textSize="15dp"
                         android:text="Ubicacion"/>
                     <ImageView
-                        android:id="@+id/product_ubication"
+                        android:id="@+id/product_location"
                         android:layout_width="match_parent"
                         android:layout_height="150dp" />
 
@@ -344,7 +342,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        ads:adSize="SMART_BANNER"
+                        ads:adSize="BANNER"
                         android:gravity="bottom"
                         android:foregroundGravity="center"
                         ads:adUnitId="@string/google_ad_id">
@@ -412,16 +410,17 @@
             <!--EndComments-->
 
             <Button
-            android:id="@+id/btn_message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            android:text="Chat"
-            android:textColor="@color/white" />
+                android:id="@+id/btn_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:text="Chat"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
 
 
 

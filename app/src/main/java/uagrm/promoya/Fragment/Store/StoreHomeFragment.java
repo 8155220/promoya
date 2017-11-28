@@ -27,6 +27,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import net.glxn.qrgen.android.QRCode;
 
+import java.util.Locale;
+
 import uagrm.promoya.Common.Common;
 import uagrm.promoya.R;
 import uagrm.promoya.Model.Store;
@@ -35,21 +37,15 @@ import uagrm.promoya.Model.Store;
  * Created by Mako on 1/13/2017.
  */
 public class StoreHomeFragment extends Fragment
-        //implements OnMapReadyCallback
 {
-
-    //REQUIERO EL ID DE LA TIENDA
-
     TextView storeName;
     TextView storeDescription;
     ImageView backgroundImg;
     ImageView logoImg;
     ImageView store_qr;
+    ImageView store_location;
     Button store_button_suscribe;
     DatabaseReference db;
-
-    //GoogleMap mGoogleMap;
-   // MapView mMapView;
 
     Store currentStore;
 
@@ -94,8 +90,8 @@ public class StoreHomeFragment extends Fragment
         backgroundImg = (ImageView) view.findViewById(R.id.background_img);
         store_qr = (ImageView) view.findViewById(R.id.store_qr);
         store_button_suscribe = (Button) view.findViewById(R.id.store_button_suscribe);
-
         logoImg = (ImageView) view.findViewById(R.id.logo_img);
+        store_location = (ImageView) view.findViewById(R.id.store_location);
         if(currentStore!=null)
         {
             db = FirebaseDatabase.getInstance().getReference().child("stores").child(currentStore.getStoreId());
@@ -118,6 +114,9 @@ public class StoreHomeFragment extends Fragment
                                 .into(backgroundImg);
                         Glide.with(getActivity().getApplicationContext()).load(store.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                                 .into(logoImg);
+                        Glide.with(getActivity().getApplicationContext())
+                                .load(Common.getUrlFromLongLat(store.getLatitude(),store.getLongitude()))
+                                .into(store_location);
                     }
                 }
                 @Override
@@ -134,6 +133,7 @@ public class StoreHomeFragment extends Fragment
                     startActivity(intent);
                 }
             });
+
         }
         else {
             storeName.setText(currentStore.getDisplayName());
@@ -142,6 +142,10 @@ public class StoreHomeFragment extends Fragment
                     .into(backgroundImg);
             Glide.with(getActivity().getApplicationContext()).load(currentStore.getLogoImgUrl()).apply(RequestOptions.circleCropTransform())
                     .into(logoImg);
+            Glide.with(getActivity().getApplicationContext())
+                    .load(Common.getUrlFromLongLat(currentStore.getLatitude(),currentStore.getLongitude()))
+                    .into(store_location);
+
             db.child("subscriptions").addChildEventListener(getChildEventlistenerSubscriptions());
             if (currentStore.subscriptions.containsKey(Common.currentUser.getUid())){
                 store_button_suscribe.setText("Suscrito");
@@ -163,16 +167,17 @@ public class StoreHomeFragment extends Fragment
                     startActivity(intent);
                 }
             });
-
+            store_location.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String geoUri = "http://maps.google.com/maps?q=loc:" + currentStore.getLatitude() + "," + currentStore.getLongitude() + " (" + currentStore.getDisplayName() + ")";
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(geoUri));
+                    startActivity(intent);
+                }
+            });
         }
 
-        /*mMapView = (MapView) view.findViewById(R.id.map);
-        if (mMapView!=null)
-        {
-            mMapView.onCreate(null);
-            mMapView.onResume();
-            mMapView.getMapAsync(this);
-        }*/
+
     }
     public ChildEventListener getChildEventlistenerSubscriptions(){
         return new ChildEventListener() {
@@ -277,17 +282,5 @@ public class StoreHomeFragment extends Fragment
         System.out.println("CURRENTUSER ID:"+Common.currentUser.getUid());
 
     }
-/*
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        MapsInitializer.initialize(getContext());
-        mGoogleMap = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(-17.781822,-63.181690))
-                .title("Estatua libertad")
-                .snippet("I hope something pass"));
-        CameraPosition Liberty =  CameraPosition.builder().target(new LatLng(-17.781822,-63.181690))
-                .zoom(16).bearing(0).tilt(45).build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Liberty));
-    }*/
+
 }
