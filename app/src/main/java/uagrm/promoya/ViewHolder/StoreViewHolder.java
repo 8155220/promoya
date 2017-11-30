@@ -19,12 +19,14 @@ public class StoreViewHolder extends RecyclerView.ViewHolder
 
     public TextView product_name;
     public ImageView product_image;
+    public ImageView product_share;
 
     private ItemClickListener itemClickListener;
     public StoreViewHolder(View itemView) {
         super(itemView);
         product_name = (TextView)itemView.findViewById(R.id.product_name);
         product_image = (ImageView)itemView.findViewById(R.id.product_image);
+        product_share = (ImageView)itemView.findViewById(R.id.product_share);
 
         //itemView.setOnCreateContextMenuListener(this);
         itemView.setOnClickListener(this);

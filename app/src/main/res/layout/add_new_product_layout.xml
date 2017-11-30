@@ -28,7 +28,7 @@
                 android:inputType="text"
                 app:met_baseColor="@color/colorPrimary"
                 app:met_floatingLabel="highlight"
-                app:met_maxCharacters="11"
+                app:met_maxCharacters="25"
                 app:met_primaryColor="@color/colorPrimary"
                 app:met_singleLineEllipsis="true"
                 />
@@ -44,7 +44,7 @@
                 android:inputType="textMultiLine"
                 app:met_baseColor="@color/colorPrimary"
                 app:met_floatingLabel="highlight"
-                app:met_maxCharacters="11"
+                app:met_maxCharacters="300"
                 app:met_primaryColor="@color/colorPrimary"
                 app:met_singleLineEllipsis="true"
                 />
@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content">
 
 
-                <info.hoang8f.widget.FButton
+                <Button
                     android:id="@+id/btnUpload"
                     android:text="Subir Imagenes"
                     android:textColor="@android:color/white"

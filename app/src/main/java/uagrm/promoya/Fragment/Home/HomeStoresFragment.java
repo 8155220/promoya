@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import uagrm.promoya.Common.Common;
 import uagrm.promoya.Interface.ItemClickListener;
 import uagrm.promoya.Model.Product;
 import uagrm.promoya.Model.Store;
@@ -77,55 +78,7 @@ public class HomeStoresFragment extends Fragment{
 
     }
     private void loadMenu() {
-        /*query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // dataSnapshot is the "issue" node with all children with id 0
-                    for (DataSnapshot issue : dataSnapshot.getChildren()) {
-                    // dataSnapshot.getValue(Product.class).getOfferExpire()
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-
-       /* adapter=new FirebaseRecyclerAdapter<Product, ProductViewHolder>(
-                Product.class,
-                R.layout.product_item,
-                ProductViewHolder.class,
-                stores.orderByChild("storeId").equalTo(Utils.getFirebaseUser().getUid())
-                .orderByChild("offerExpire").startAt(System.currentTimeMillis())
-        ) {
-
-
-            @Override
-            protected void populateViewHolder(ProductViewHolder viewHolder, final Product model, int position) {
-                long offerExpire = model.getOfferExpire();
-                if(offerExpire>System.currentTimeMillis())
-                {
-                    viewHolder.product_name.setText(model.getName());
-                    Picasso.with(getActivity().getApplicationContext()).load(model.getImage())
-                            .into(viewHolder.product_image);
-                    viewHolder.setItemClickListener(new ItemClickListener() {
-                        @Override
-                        public void onClick(View view, int position, boolean isLongClick) {
-                            //Get ProductId and send to new Activity
-                            Intent producDetail = new Intent(getContext(),ProductDetail.class);
-                            //Because ProductId is key, so we just get key of this item
-                            // productList.putExtra("ProductId",adapter.getRef(position).getKey());//ORIGINAL
-                            producDetail.putExtra("PRODUCT",model);
-                            //productList.putExtra("currentProduct",model);
-                            startActivity(producDetail);
-                        }
-                    });
-                }
-            }
-        };*/
         adapter=new FirebaseRecyclerAdapter<Store, StoreViewHolder>(
                 Store.class,
                 R.layout.store_item,
@@ -141,15 +94,22 @@ public class HomeStoresFragment extends Fragment{
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Get CategoryId and send to new Activity
-                        //Intent producDetail = new Intent(getContext(),ProductDetail.class);
-                        //producDetail.putExtra("ProductId",adapter.getRef(position).getKey());
-                        //producDetail.putExtra("PRODUCT",model);
-                        //SE PUEDE MEJORAR ESTO SI LE PASAMOS EL MODELO PRODUCTO IMPLEMENTANDO EL SERIALISABLE
-                        //startActivity(producDetail);
                         Intent storeDetail = new Intent(getContext(), StoreDetail.class);
                         storeDetail.putExtra("STORE",model);
                         startActivity(storeDetail);
+                    }
+                });
+                viewHolder.product_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v){
+                        Intent myIntent = new Intent(Intent.ACTION_SEND);
+                        myIntent.setType("text/plain");
+                        String shareBody = Common.storeUrl+model.getStoreId();
+                        String shareSub = model.getDisplayName();
+                        myIntent.putExtra(Intent.EXTRA_SUBJECT,shareSub);
+                        myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                        startActivity(Intent.createChooser(myIntent,"Compartir Usando"));
+
                     }
                 });
             }

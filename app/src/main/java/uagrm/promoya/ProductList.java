@@ -274,24 +274,26 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
     private void uploadImage() {
         if(listUri.size()>0){
             final ProgressDialog mDialog = new ProgressDialog(this);
+
             mDialog.setMessage("Subiendo...");
             mDialog.show();
-
             for (int i = 0; i < listUri.size(); i++) {
+                mDialog.setMessage("Subiendo imagen "+(i+1));
+                mDialog.show();
                 String imageName = UUID.randomUUID().toString();
                 final StorageReference imageFolder = storageReference.child("images/"+imageName);
-                final int finalI = i;
                 imageFolder.putFile(listUri.get(i))
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
 
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                mDialog.dismiss();
+
                                 imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         if(newProduct!=null)
                                         {
+                                            mDialog.dismiss();
                                             uploadAtLeastonePhoto=true;
                                             newProduct.addUrlImg(uri.toString());
                                             //foodList.child(key).child("listImage").setValue(newProduct.getListImage());
@@ -310,7 +312,7 @@ public class ProductList extends AppCompatActivity implements  View.OnClickListe
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress =(100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                //double progress =(100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
 
                             }
                         })

@@ -3,28 +3,53 @@
     xmlns:app ="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-
     app:cardElevation="4dp"
     >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:scaleType="centerCrop"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:id="@+id/product_name"
-            android:text="Nombre Producto"
-            android:textColor="@android:color/white"
-            android:background="#4f0e0d0e"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
+            android:layout_height="match_parent"
+            android:weightSum="10"
+            android:orientation="vertical">
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="match_parent"
+                android:layout_weight="10"
+                android:layout_height="170dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_weight="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/product_name"
+                    android:text="Nombre Tienda"
+                    android:textColor="@android:color/white"
+                    android:background="#4f0e0d0e"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_weight="8"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:id="@+id/product_share"
+                    android:layout_weight="2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/ic_share"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -126,13 +126,13 @@ public class StatisticsActivity extends AppCompatActivity {
         List<Entry> likesData = new ArrayList<Entry>();
         List<Entry> viewsData = new ArrayList<Entry>();
 
-        /*List<Integer> subscriptionDays = inicializarLista(500);
+        List<Integer> subscriptionDays = inicializarLista(500);
         List<Integer> likesDays = inicializarLista(1500);
-        List<Integer> viewsDays = inicializarLista(3000);*/
+        List<Integer> viewsDays = inicializarLista(3000);
 
-        List<Integer> subscriptionDays = getListDay(FirebaseDatabaseHelper.subscription);
-        List<Integer> likesDays = getListDay(FirebaseDatabaseHelper.likes);
-        List<Integer> viewsDays = getListDay(FirebaseDatabaseHelper.views);
+//        List<Integer> subscriptionDays = getListDay(FirebaseDatabaseHelper.subscription);
+//        List<Integer> likesDays = getListDay(FirebaseDatabaseHelper.likes);
+//        List<Integer> viewsDays = getListDay(FirebaseDatabaseHelper.views);
 
         for (int i = 0; i < subscriptionDays.size(); i++) {
             Entry subs = new Entry(new Long(i), new Long(subscriptionDays.get(i)));
