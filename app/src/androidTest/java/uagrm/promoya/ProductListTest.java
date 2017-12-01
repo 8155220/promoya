@@ -27,13 +27,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class ProductListTest {
 
-
-    /*@Rule
-    public ActivityTestRule<ProductList> mProductListTestRule =
-            new ActivityTestRule<>(ProductList.class,true,true); */ // el ultimo true para lanzar la actividad
-    /*@Rule
-    public ActivityTestRule<ProductList> mProductListTestRule =
-            new ActivityTestRule<>(ProductList.class,true,false);*/
     @Rule
     public ActivityTestRule<ProductList> mProductListTestRule =
             new ActivityTestRule<ProductList>(ProductList.class){

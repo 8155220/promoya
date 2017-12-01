@@ -37,19 +37,19 @@ import uagrm.promoya.Common.FirebaseDatabaseHelper;
 public class StatisticsActivity extends AppCompatActivity {
 
 
-    long today= System.currentTimeMillis();
+    long today = System.currentTimeMillis();
     long month = 2592000000L;
-    long lastmonth = today-month;
-    long delta = month/cantDays;
+    long lastmonth = today - month;
+    long delta = month / cantDays;
     Toolbar toolbar;
 
     private CombinedChart mChart;
-    public static final int cantDays=30;
+    public static final int cantDays = 30;
     //
     protected Typeface mTfRegular;
     protected Typeface mTfLight;
 
-    protected String[] mMonths = new String[] {
+    protected String[] mMonths = new String[]{
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
             , "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"
             , "23", "24", "25", "26", "27", "28", "29", "30"
@@ -120,6 +120,7 @@ public class StatisticsActivity extends AppCompatActivity {
         mChart.setData(data);
         mChart.invalidate();
     }
+
     private LineData generateSubscriptionsLine() {
 
         List<Entry> subscriptionData = new ArrayList<Entry>();
@@ -138,7 +139,7 @@ public class StatisticsActivity extends AppCompatActivity {
             Entry subs = new Entry(new Long(i), new Long(subscriptionDays.get(i)));
             Entry likes = new Entry(new Long(i), new Long(likesDays.get(i)));
             Entry views = new Entry(new Long(i), new Long(viewsDays.get(i)));
-                subscriptionData.add(subs);
+            subscriptionData.add(subs);
             likesData.add(likes);
             viewsData.add(views);
         }
@@ -191,29 +192,28 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
 
-    public List<Integer> inicializarLista(int cantidad){
+    public List<Integer> inicializarLista(int cantidad) {
         List<Long> listaLlaves = new ArrayList<>();
         for (int i = 0; i < cantidad; i++) {
-            listaLlaves.add(randomLong(lastmonth,today));
+            listaLlaves.add(randomLong(lastmonth, today));
         }
         return getListDay(listaLlaves);
     }
 
-    public List<Integer> getListDay(List<Long> listaLlaves){
-        long today= System.currentTimeMillis();
+    public List<Integer> getListDay(List<Long> listaLlaves) {
+        long today = System.currentTimeMillis();
         long month = 2592000000L;
-        long lastmonth = today-month;
+        long lastmonth = today - month;
         List<Integer> elegidos = new ArrayList<>();
         for (int i = 0; i < cantDays; i++) {
             elegidos.add(0);
         }
 
         for (int i = 0; i < listaLlaves.size(); i++) {
-            if(listaLlaves.get(i)<today && listaLlaves.get(i)>lastmonth){
-                if(whatDayItBelongs(listaLlaves.get(i))>=0)
-                {
+            if (listaLlaves.get(i) < today && listaLlaves.get(i) > lastmonth) {
+                if (whatDayItBelongs(listaLlaves.get(i)) >= 0) {
                     int dia = whatDayItBelongs(listaLlaves.get(i));
-                    elegidos.set(dia,elegidos.get(dia)+1);
+                    elegidos.set(dia, elegidos.get(dia) + 1);
                 }
             }
         }
@@ -221,25 +221,24 @@ public class StatisticsActivity extends AppCompatActivity {
 
     }
 
-    public int whatDayItBelongs(long a){
+    public int whatDayItBelongs(long a) {
         for (int i = 1; i <= cantDays; i++) {
-            if(a <lastmonth+delta*i )
-            {
-                return i-1;
+            if (a < lastmonth + delta * i) {
+                return i - 1;
             }
 
         }
         return -1;
     }
 
-    public long randomLong(){
+    public long randomLong() {
 
         long LOWER_RANGE = lastmonth;
         long UPPER_RANGE = today;
         Random random = new Random();
         long randomValue =
                 LOWER_RANGE +
-                        (long)(random.nextDouble()*(UPPER_RANGE - LOWER_RANGE));
+                        (long) (random.nextDouble() * (UPPER_RANGE - LOWER_RANGE));
         return randomValue;
     }
 
